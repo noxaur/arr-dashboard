@@ -265,7 +265,10 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
       }));
     }
 
-    return (data.records || data || []).slice(0, 10).map((item: any, i: number) => ({
+    return (data.records || data || [])
+      .filter((item: any) => !["indexerRss", "indexerSearch"].includes(item.eventType))
+      .slice(0, 10)
+      .map((item: any, i: number) => ({
       id: i,
       service: serviceId,
       type: item.eventType === "downloadFolderImported" ? "import" as const :
