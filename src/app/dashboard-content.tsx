@@ -62,6 +62,21 @@ export function DashboardContent() {
     return `${(bytes / 1073741824).toFixed(1)} GB`;
   };
 
+  const sharedIds = new Set<string>();
+  if (data?.services) {
+    const diskMap = new Map<string, string[]>();
+    data.services.forEach((s: any) => {
+      if (s.disk?.total !== "N/A" && s.disk?.usedBytes) {
+        const key = `${s.disk.total}-${s.disk.usedBytes}`;
+        if (!diskMap.has(key)) diskMap.set(key, []);
+        diskMap.get(key)!.push(s.id);
+      }
+    });
+    for (const ids of diskMap.values()) {
+      if (ids.length > 1) ids.forEach((id) => sharedIds.add(id));
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
@@ -146,6 +161,7 @@ export function DashboardContent() {
               const health = svcData?.health;
               const queue = svcData?.queue || [];
               const disk = svcData?.disk;
+              const isShared = sharedIds.has(id);
               const healthColorMap: Record<string, string> = {
                 healthy: "oklch(72% 0.16 145)",
                 warning: "oklch(78% 0.16 85)",
@@ -155,59 +171,65 @@ export function DashboardContent() {
               const healthColor = health ? (healthColorMap[health.status] || "oklch(48% 0.008 175)") : "oklch(48% 0.008 175)";
 
               return (
-                <article key={id} className="card flex flex-col gap-3 p-4">
-                  <div className="flex items-start justify-between">
-                    <Link href={`/${id}`} className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold" style={{ backgroundColor: `${service.color}18`, color: service.color, border: `1px solid ${service.color}30` }}>
-                        {service.icon}
-                      </div>
-                      <div>
-                        <h3 className="text-sm font-medium text-text-primary">{service.name}</h3>
-                        <p className="text-xs text-text-muted">{service.description}</p>
-                      </div>
-                    </Link>
-                    <div className="flex items-center gap-2">
-                      <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
-                      <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
-                    </div>
-                  </div>
-
-                  {loading ? (
-                    <div className="h-6 animate-pulse rounded-md bg-[var(--surface-overlay)]" />
-                  ) : health?.message && health.message !== "All systems operational" ? (
-                    <div className="rounded-md border border-status-warning/20 bg-status-warning/5 px-3 py-2">
-                      <p className="text-xs text-status-warning">{health.message}</p>
-                    </div>
-                  ) : null}
-
-                  <div className="flex items-center gap-4">
-                    {queue.length > 0 && (
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
-                        <span className="text-xs text-text-muted">in queue</span>
-                      </div>
-                    )}
-                    {disk?.total !== "N/A" && disk?.percent > 0 && (
-                      <div className="flex flex-1 items-center gap-2">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-overlay">
-                          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk.percent > 80 ? "oklch(62% 0.22 25)" : disk.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
+                  <article key={id} className="card flex flex-col gap-3 p-4">
+                    <div className="flex items-start justify-between">
+                      <Link href={`/${id}`} className="flex items-center gap-3">
+                        <div className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold" style={{ backgroundColor: `${service.color}18`, color: service.color, border: `1px solid ${service.color}30` }}>
+                          {service.icon}
                         </div>
-                        <span className="text-xs text-text-muted">{disk.used}</span>
+                        <div>
+                          <h3 className="text-sm font-medium text-text-primary">{service.name}</h3>
+                          <p className="text-xs text-text-muted">{service.description}</p>
+                        </div>
+                      </Link>
+                      <div className="flex items-center gap-2">
+                        <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
+                        <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
                       </div>
-                    )}
-                  </div>
+                    </div>
 
-                  <ServiceActions serviceId={id} hasQueue={queue.length > 0} />
+                    {loading ? (
+                      <div className="h-6 animate-pulse rounded-md bg-[var(--surface-overlay)]" />
+                    ) : health?.message && health.message !== "All systems operational" ? (
+                      <div className="rounded-md border border-status-warning/20 bg-status-warning/5 px-3 py-2">
+                        <p className="text-xs text-status-warning">{health.message}</p>
+                      </div>
+                    ) : null}
 
-                  <div className="flex items-center justify-between border-t border-border pt-3">
-                    <span className="text-xs text-text-muted">
-                      {svcData?.activity?.length > 0 ? `${svcData.activity.length} recent events` : "No recent activity"}
-                    </span>
-                    <Link href={`/${id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
-                      Open Settings
-                    </Link>
-                  </div>
-                </article>
+                    <div className="flex items-center gap-4">
+                      {queue.length > 0 && (
+                        <div className="flex items-baseline gap-1.5">
+                          <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
+                          <span className="text-xs text-text-muted">in queue</span>
+                        </div>
+                      )}
+                      {disk?.total !== "N/A" && disk?.percent > 0 && !isShared && (
+                        <div className="flex flex-1 items-center gap-2">
+                          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-overlay">
+                            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk.percent > 80 ? "oklch(62% 0.22 25)" : disk.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
+                          </div>
+                          <span className="text-xs text-text-muted">{disk.used}</span>
+                        </div>
+                      )}
+                      {isShared && (
+                        <span className="text-xs text-text-muted flex items-center gap-1">
+                          <span className="inline-block h-2 w-2 rounded-full bg-[var(--accent)]" />
+                          Shared storage
+                        </span>
+                      )}
+                    </div>
+
+                    <ServiceActions serviceId={id} hasQueue={queue.length > 0} />
+
+                    <div className="flex items-center justify-between border-t border-border pt-3">
+                      <span className="text-xs text-text-muted">
+                        {svcData?.activity?.length > 0 ? `${svcData.activity.length} recent events` : "No recent activity"}
+                      </span>
+                      <Link href={`/${id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
+                        Open Settings
+                      </Link>
+                    </div>
+                  </article>
               );
             })}
           </div>
