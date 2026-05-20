@@ -14,12 +14,22 @@ async function arrFetch(
   if (!service) throw new Error(`Unknown service: ${serviceId}`);
 
   const baseUrl = service.url.replace(/\/$/, "");
+  if (!baseUrl) {
+    throw new Error(`Missing URL for ${serviceId} (env: ${service.id.toUpperCase()}_URL)`);
+  }
+
+  const apiKey = process.env[service.apiKeyEnv];
+  if (!apiKey) {
+    throw new Error(`Missing API key for ${serviceId} (env: ${service.apiKeyEnv})`);
+  }
+
   const url = `${baseUrl}${service.apiEndpoint}${endpoint}`;
 
   return fetch(url, {
     ...options,
+    signal: AbortSignal.timeout(10000),
     headers: {
-      "X-Api-Key": process.env[service.apiKeyEnv] || "",
+      "X-Api-Key": apiKey,
       Authorization: getBasicAuth(serviceId),
       "Content-Type": "application/json",
       ...options?.headers,
@@ -27,6 +37,8 @@ async function arrFetch(
     cache: "no-store",
   });
 }
+
+export { arrFetch };
 
 export async function checkHealth(serviceId: string): Promise<HealthStatus> {
   if (USE_MOCK) return mockHealth[serviceId];
@@ -100,10 +112,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
+    const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
     for (const mount of data) {
-      if (!uniqueDisks.has(mount.totalSpace)) {
-        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      if (!uniqueDisks.has(mount.path)) {
+        uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
     }
 
@@ -293,8 +305,9 @@ export async function pauseQueue(serviceId: string): Promise<boolean> {
   if (USE_MOCK) return true;
 
   try {
-    const res = await arrFetch(serviceId, "/config/downloadclient", {
-      method: "PUT",
+    const res = await arrFetch(serviceId, "/command", {
+      method: "POST",
+      body: JSON.stringify({ name: "PauseAllDownloadClients" }),
     });
     return res.ok;
   } catch {

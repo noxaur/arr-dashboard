@@ -328,7 +328,7 @@ export default async function DashboardPage() {
                 const color = colorMap[event.type] || "var(--text-muted)";
                 return (
                   <li
-                    key={`${event.service}-${event.id}-${index}`}
+                    key={`${event.service}-${event.timestamp}-${event.title}-${event.message}-${index}`}
                     className="flex items-start gap-3 px-5 py-3"
                   >
                     <div

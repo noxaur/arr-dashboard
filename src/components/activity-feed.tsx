@@ -56,7 +56,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
 
           return (
             <li
-              key={event.id}
+              key={`${event.service}-${event.timestamp}-${event.title}-${event.message}-${index}`}
               className="flex items-start gap-3 px-4 py-3"
               style={{
                 animationDelay: `${index * 50}ms`,
