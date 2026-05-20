@@ -4,6 +4,16 @@ import { getJellyfinSystemInfo, getJellyfinSessions } from "@/lib/jellyfin";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ServiceActions } from "@/components/service-actions";
+import { RadarrIcon, SonarrIcon, ProwlarrIcon, BazarrIcon, JellyseerrIcon, JellyfinIcon } from "@/components/service-icons";
+
+const serviceIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  radarr: RadarrIcon,
+  sonarr: SonarrIcon,
+  prowlarr: ProwlarrIcon,
+  bazarr: BazarrIcon,
+  jellyseerr: JellyseerrIcon,
+  jellyfin: JellyfinIcon,
+};
 
 export const revalidate = 30;
 
@@ -143,7 +153,7 @@ export default async function DashboardPage() {
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent-bg)]">
-                    <span className="text-sm font-semibold" style={{ color: "var(--accent)" }}>J</span>
+                    <JellyfinIcon className="h-5 w-5" />
                   </div>
                   <div>
                     <h3 className="text-sm font-medium">Host System</h3>
@@ -188,14 +198,17 @@ export default async function DashboardPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <div
-                      className="flex h-9 w-9 items-center justify-center rounded-lg font-mono text-sm font-semibold"
+                      className="flex h-9 w-9 items-center justify-center rounded-lg"
                       style={{
                         backgroundColor: `${service.color}14`,
                         color: service.color,
                         border: `1px solid ${service.color}22`,
                       }}
                     >
-                      {service.icon}
+                      {(() => {
+                        const IconComponent = serviceIconMap[id];
+                        return IconComponent ? <IconComponent className="h-5 w-5" /> : <span className="text-sm font-semibold font-mono">{service.icon}</span>;
+                      })()}
                     </div>
                     <div>
                       <h3 className="text-sm font-medium">
