@@ -31,7 +31,7 @@ cp .env.local.example .env.local
 npm run dev
 ```
 
-Open [http://localhost:4167](http://localhost:4167)
+Open [http://localhost:5487](http://localhost:5487)
 
 ### Docker Deployment
 
