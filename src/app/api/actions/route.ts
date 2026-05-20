@@ -3,6 +3,15 @@ import { pauseQueue, refreshMonitored, searchMissing } from "@/lib/api";
 
 export async function POST(request: Request) {
   try {
+    const origin = request.headers.get("origin") || request.headers.get("referer");
+    const host = request.headers.get("host");
+    if (origin && host) {
+      const originHost = new URL(origin).host;
+      if (originHost !== host) {
+        return NextResponse.json({ error: "Cross-origin requests not allowed" }, { status: 403 });
+      }
+    }
+
     const body = await request.json();
     const { service, action } = body;
 
