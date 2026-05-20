@@ -62,6 +62,21 @@ export function DashboardContent() {
     return `${(bytes / 1073741824).toFixed(1)} GB`;
   };
 
+  const sharedIds = new Set<string>();
+  if (data?.services) {
+    const diskMap = new Map<string, string[]>();
+    data.services.forEach((s: any) => {
+      if (s.disk?.total !== "N/A" && s.disk?.usedBytes) {
+        const key = `${s.disk.total}-${s.disk.usedBytes}`;
+        if (!diskMap.has(key)) diskMap.set(key, []);
+        diskMap.get(key)!.push(s.id);
+      }
+    });
+    for (const ids of diskMap.values()) {
+      if (ids.length > 1) ids.forEach((id) => sharedIds.add(id));
+    }
+  }
+
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
@@ -140,39 +155,22 @@ export function DashboardContent() {
         <section className="mb-8">
           <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">Services</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {(() => {
-              // Compute shared storage groups
-              const diskMap = new Map<string, string[]>();
-              data?.services?.forEach((s: any) => {
-                if (s.disk?.total !== "N/A" && s.disk?.usedBytes) {
-                  const key = `${s.disk.total}-${s.disk.usedBytes}`;
-                  if (!diskMap.has(key)) diskMap.set(key, []);
-                  diskMap.get(key)!.push(s.id);
-                }
-              });
-              const sharedIds = new Set<string>();
-              for (const ids of diskMap.values()) {
-                if (ids.length > 1) {
-                  ids.forEach((id) => sharedIds.add(id));
-                }
-              }
+            {serviceOrder.map((id) => {
+              const service = services[id];
+              const svcData = data?.services?.find((s: any) => s.id === id);
+              const health = svcData?.health;
+              const queue = svcData?.queue || [];
+              const disk = svcData?.disk;
+              const isShared = sharedIds.has(id);
+              const healthColorMap: Record<string, string> = {
+                healthy: "oklch(72% 0.16 145)",
+                warning: "oklch(78% 0.16 85)",
+                error: "oklch(62% 0.22 25)",
+                offline: "oklch(48% 0.008 175)",
+              };
+              const healthColor = health ? (healthColorMap[health.status] || "oklch(48% 0.008 175)") : "oklch(48% 0.008 175)";
 
-              return serviceOrder.map((id) => {
-                const service = services[id];
-                const svcData = data?.services?.find((s: any) => s.id === id);
-                const health = svcData?.health;
-                const queue = svcData?.queue || [];
-                const disk = svcData?.disk;
-                const isShared = sharedIds.has(id);
-                const healthColorMap: Record<string, string> = {
-                  healthy: "oklch(72% 0.16 145)",
-                  warning: "oklch(78% 0.16 85)",
-                  error: "oklch(62% 0.22 25)",
-                  offline: "oklch(48% 0.008 175)",
-                };
-                const healthColor = health ? (healthColorMap[health.status] || "oklch(48% 0.008 175)") : "oklch(48% 0.008 175)";
-
-                return (
+              return (
                   <article key={id} className="card flex flex-col gap-3 p-4">
                     <div className="flex items-start justify-between">
                       <Link href={`/${id}`} className="flex items-center gap-3">
@@ -232,9 +230,8 @@ export function DashboardContent() {
                       </Link>
                     </div>
                   </article>
-                );
-              });
-            })()}
+              );
+            })}
           </div>
         </section>
 
