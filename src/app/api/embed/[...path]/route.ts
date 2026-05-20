@@ -22,7 +22,7 @@ function rewriteSetCookie(header: string, service: string): string {
     .replace(/; SameSite=Lax/gi, "; SameSite=None; Secure")
     .replace(/; SameSite=Strict/gi, "; SameSite=None; Secure")
     .replace(/; Domain=[^;]+/gi, "")
-    .replace(/; Path=\//gi, `; Path=/api/embed/${service}/`);
+    .replace(/; Path=\/(;|$)/gi, `; Path=/api/embed/${service}/$1`);
 }
 
 async function proxyRequest(req: NextRequest, service: string, path: string) {
@@ -128,28 +128,27 @@ async function proxyRequest(req: NextRequest, service: string, path: string) {
 
     let rewritten = text;
 
-    // Remove upstream inline scripts that set window.ServiceName = { urlBase: '' }
+    // 1. Remove upstream inline scripts that set window.ServiceName = { urlBase: '' }
     rewritten = rewritten.replace(
       new RegExp(`<script>window\\.${serviceName}\\s*=\\s*\\{[\\s\\S]*?\\};?\\s*<\\/script>`, "gi"),
       ""
     );
 
-    // Inject <base> tag as first child of <head>
-    rewritten = rewritten.replace("<head>", `<head><base href="${proxyRoot}/">`);
-
-    // Inject urlBase override before other scripts
-    rewritten = rewritten.replace(
-      "</head>",
-      `</head><script>(function(){var n="${serviceName}";if(!window[n])window[n]={};window[n].urlBase="${proxyRoot}";})();</script>`
-    );
-
-    // Rewrite root-relative URLs (src="/...", href="/...", url("/...")) to go through proxy
-    // These are NOT affected by <base> tag
+    // 2. Rewrite root-relative URLs BEFORE injecting <base> (avoids double-rewriting the <base> href)
     rewritten = rewritten
       .replace(/(src|href)="\/([^/"' ])/g, `$1="${proxyRoot}/$2`)
       .replace(/url\('\/([^')]+)/g, `url('${proxyRoot}/$1`)
       .replace(/url\("\/([^")]+)/g, `url("${proxyRoot}/$1`)
       .replace(/url\(\/([^')")]+)/g, `url(${proxyRoot}/$1`);
+
+    // 3. Inject window.ServiceName override as the FIRST <script> in <head>, BEFORE any other scripts
+    rewritten = rewritten.replace(
+      /<script/,
+      `<script>(function(){var n="${serviceName}";if(!window[n])window[n]={};window[n].urlBase="${proxyRoot}";window[n].apiRoot="${proxyRoot}${SERVICE_API_ROOTS[service] || "/api"}";})();</script><script`
+    );
+
+    // 4. Inject <base> tag as first child of <head>
+    rewritten = rewritten.replace("<head>", `<head><base href="${proxyRoot}/">`);
 
     return new NextResponse(rewritten, {
       status: upstreamRes.status,
