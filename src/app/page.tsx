@@ -63,9 +63,7 @@ export default async function DashboardPage() {
   const totalQueue = Object.values(queueMap).flat().length;
   const activeDownloads = Object.values(queueMap).flat().filter((q: any) => q.status === "downloading").length;
   const healthAlerts = Object.values(healthMap).filter((h: any) => h.status === "warning" || h.status === "error").length;
-  const totalDiskUsed = Object.values(diskMap).reduce((acc: number, d: any) => {
-    return acc + (d.usedBytes || 0);
-  }, 0);
+  const totalDiskUsed = diskMap.radarr?.usedBytes || 0;
 
   const allActivity = Object.entries(activityMap)
     .flatMap(([service, events]) => events.map((e: any) => ({ ...e, service })))
