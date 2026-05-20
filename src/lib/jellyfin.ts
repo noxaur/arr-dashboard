@@ -23,6 +23,7 @@ async function jellyfinFetch(endpoint: string): Promise<Response | null> {
     }
   }
 
+  console.error(`Jellyfin fetch failed after ${maxRetries + 1} attempts:`, lastError?.message);
   return null;
 }
 

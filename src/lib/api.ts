@@ -43,6 +43,10 @@ async function arrFetch(
       });
       return res;
     } catch (error) {
+      const msg = error instanceof Error ? error.message : "";
+      const isConfigError = msg.startsWith("Missing") || msg.startsWith("Unknown service");
+      if (isConfigError) throw error;
+
       lastError = error instanceof Error ? error : new Error(String(error));
       if (attempt < maxRetries) {
         await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
