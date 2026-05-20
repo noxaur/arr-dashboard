@@ -4,6 +4,15 @@ import { services, serviceOrder } from "@/lib/services";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ServiceActions } from "@/components/service-actions";
+import { RadarrIcon, SonarrIcon, ProwlarrIcon, BazarrIcon, JellyseerrIcon, JellyfinIcon } from "@/components/service-icons";
+
+const iconMap: Record<string, React.FC<{ className?: string }>> = {
+  radarr: RadarrIcon,
+  sonarr: SonarrIcon,
+  prowlarr: ProwlarrIcon,
+  bazarr: BazarrIcon,
+  jellyseerr: JellyseerrIcon,
+};
 
 const typeIcons: Record<string, string> = {
   download: "↓",
@@ -133,8 +142,8 @@ export function DashboardContent() {
           <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">Host System</h2>
           <article className="card p-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold" style={{ backgroundColor: "oklch(62% 0.14 340)18", color: "oklch(62% 0.14 340)", border: "1px solid oklch(62% 0.14 340)30" }}>
-                J
+              <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: "oklch(62% 0.14 340)18", color: "oklch(62% 0.14 340)", border: "1px solid oklch(62% 0.14 340)30" }}>
+                <JellyfinIcon className="h-5 w-5" />
               </div>
               <div>
                 <h3 className="text-sm font-medium text-text-primary">{data?.jellyfin?.serverName || "Jellyfin"}</h3>
@@ -174,8 +183,11 @@ export function DashboardContent() {
                   <article key={id} className="card flex flex-col gap-3 p-4">
                     <div className="flex items-start justify-between">
                       <Link href={`/${id}`} className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold" style={{ backgroundColor: `${service.color}18`, color: service.color, border: `1px solid ${service.color}30` }}>
-                          {service.icon}
+                        <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: `${service.color}18`, color: service.color, border: `1px solid ${service.color}30` }}>
+                          {(() => {
+                            const IconComponent = iconMap[id];
+                            return IconComponent ? <IconComponent className="h-5 w-5" /> : <span className="font-mono text-sm font-semibold">{service.icon}</span>;
+                          })()}
                         </div>
                         <div>
                           <h3 className="text-sm font-medium text-text-primary">{service.name}</h3>
