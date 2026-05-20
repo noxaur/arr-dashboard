@@ -53,7 +53,7 @@ export default async function DashboardPage() {
   const systemMap: Record<string, any> = {};
 
   serviceOrder.forEach((id, i) => {
-    healthMap[id] = healthResults[i].status === "fulfilled" ? healthResults[i].value : { status: "offline", message: "Failed to connect", version: "unknown", responseTime: 0 };
+    healthMap[id] = healthResults[i].status === "fulfilled" ? healthResults[i].value : { status: "error" as const, message: "Health check failed", version: "unknown", responseTime: 0 };
     queueMap[id] = queueResults[i].status === "fulfilled" ? queueResults[i].value : [];
     diskMap[id] = diskResults[i].status === "fulfilled" ? diskResults[i].value : { used: "0 MB", total: "N/A", percent: 0 };
     activityMap[id] = activityResults[i].status === "fulfilled" ? activityResults[i].value : [];

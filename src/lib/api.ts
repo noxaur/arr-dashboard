@@ -25,17 +25,32 @@ async function arrFetch(
 
   const url = `${baseUrl}${service.apiEndpoint}${endpoint}`;
 
-  return fetch(url, {
-    ...options,
-    signal: AbortSignal.timeout(10000),
-    headers: {
-      "X-Api-Key": apiKey,
-      Authorization: getBasicAuth(serviceId),
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-    cache: "no-store",
-  });
+  const maxRetries = 2;
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const res = await fetch(url, {
+        ...options,
+        signal: AbortSignal.timeout(15000),
+        headers: {
+          "X-Api-Key": apiKey,
+          Authorization: getBasicAuth(serviceId),
+          "Content-Type": "application/json",
+          ...options?.headers,
+        },
+        cache: "no-store",
+      });
+      return res;
+    } catch (error) {
+      lastError = error instanceof Error ? error : new Error(String(error));
+      if (attempt < maxRetries) {
+        await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      }
+    }
+  }
+
+  throw lastError || new Error(`Failed to fetch ${serviceId}`);
 }
 
 export { arrFetch };
@@ -84,9 +99,11 @@ export async function checkHealth(serviceId: string): Promise<HealthStatus> {
       responseTime,
     };
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Connection failed";
+    const isTimeout = message.includes("timed out") || message.includes("AbortError");
     return {
-      status: "offline",
-      message: error instanceof Error ? error.message : "Connection failed",
+      status: "error" as const,
+      message: isTimeout ? "Request timed out" : `Fetch error: ${message}`,
       version: "unknown",
       responseTime: 0,
     };
