@@ -40,7 +40,7 @@ Open [http://localhost:4167](http://localhost:4167)
 docker compose up -d --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:5487](http://localhost:5487)
 
 #### Docker Configuration
 
@@ -59,7 +59,7 @@ services:
     container_name: arr-ecosystem-dashboard
     restart: unless-stopped
     ports:
-      - "3000:3000"
+      - "5487:5487"
     environment:
       - RADARR_URL=...
       - RADARR_API_KEY=...
