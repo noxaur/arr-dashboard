@@ -15,12 +15,12 @@ const typeIcons: Record<string, string> = {
 };
 
 const typeColors: Record<string, string> = {
-  download: "oklch(68% 0.18 145)",
-  import: "oklch(72% 0.16 145)",
-  search: "oklch(68% 0.14 230)",
-  refresh: "oklch(65% 0.01 175)",
-  error: "oklch(62% 0.22 25)",
-  request: "oklch(62% 0.14 300)",
+  download: "var(--success)",
+  import: "var(--success)",
+  search: "var(--accent)",
+  refresh: "var(--text-muted)",
+  error: "var(--pink)",
+  request: "var(--accent-soft)",
 };
 
 function formatTime(isoString: string): string {
@@ -39,7 +39,7 @@ function formatTime(isoString: string): string {
 export function ActivityFeed({ events }: ActivityFeedProps) {
   return (
     <section className="card flex flex-col">
-      <div className="flex items-center justify-between border-b border-border px-4 py-3">
+      <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
         <h2 className="text-sm font-medium text-text-primary">
           Activity Feed
         </h2>
@@ -48,11 +48,11 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
         </span>
       </div>
 
-      <ul className="divide-y divide-border" role="list">
+      <ul className="divide-y divide-[var(--border)]" role="list">
         {events.map((event, index) => {
           const service = services[event.service];
           const icon = typeIcons[event.type] || "·";
-          const color = typeColors[event.type] || "oklch(65% 0.01 175)";
+          const color = typeColors[event.type] || "var(--text-muted)";
 
           return (
             <li
@@ -65,7 +65,7 @@ export function ActivityFeed({ events }: ActivityFeedProps) {
               <div
                 className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-xs font-medium"
                 style={{
-                  backgroundColor: `${color}15`,
+                  backgroundColor: `var(--accent-bg)`,
                   color,
                 }}
               >

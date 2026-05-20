@@ -9,11 +9,11 @@ const healthAlerts = Object.values(mockHealth).filter(
 
 export function TopBar() {
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-surface/80 backdrop-blur-sm">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--surface)]/80 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-accent-subtle">
-            <span className="text-sm font-semibold text-accent">*arr</span>
+          <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
+            <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>*arr</span>
           </div>
           <h1 className="text-base font-semibold text-text-primary">
             Ecosystem Dashboard
@@ -39,7 +39,7 @@ export function TopBar() {
             />
           </div>
 
-          <div className="h-5 w-px bg-border" />
+          <div className="h-5 w-px bg-[var(--border)]" />
 
           <span className="text-xs text-text-muted">
             {serviceOrder.length} services

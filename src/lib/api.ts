@@ -162,7 +162,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
   }
 }
 
-function formatBytes(bytes: number): string {
+export function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 MB";
   const gb = bytes / 1073741824;
   if (gb >= 1000) return `${(gb / 1000).toFixed(1)} TB`;
