@@ -1,7 +1,11 @@
 import { serviceOrder, services } from "@/lib/services";
 import { checkHealth, getQueue, getActivity, getDiskSpace, getSystemInfo } from "@/lib/api";
+import { getJellyfinSystemInfo, getJellyfinSessions } from "@/lib/jellyfin";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ServiceActions } from "@/components/service-actions";
+
+export const revalidate = 30;
 
 function formatTime(iso: string) {
   const diff = Date.now() - new Date(iso).getTime();
@@ -39,6 +43,9 @@ export default async function DashboardPage() {
     serviceOrder.map((id) => getSystemInfo(id))
   );
 
+  const jellyfinInfo = await getJellyfinSystemInfo();
+  const activeStreams = await getJellyfinSessions();
+
   const healthMap: Record<string, any> = {};
   const queueMap: Record<string, any[]> = {};
   const diskMap: Record<string, any> = {};
@@ -57,10 +64,7 @@ export default async function DashboardPage() {
   const activeDownloads = Object.values(queueMap).flat().filter((q: any) => q.status === "downloading").length;
   const healthAlerts = Object.values(healthMap).filter((h: any) => h.status === "warning" || h.status === "error").length;
   const totalDiskUsed = Object.values(diskMap).reduce((acc: number, d: any) => {
-    const num = parseFloat(d.used);
-    if (d.used.includes("TB")) return acc + num * 1000;
-    if (d.used.includes("GB")) return acc + num;
-    return acc;
+    return acc + (d.usedBytes || 0);
   }, 0);
 
   const allActivity = Object.entries(activityMap)
@@ -109,7 +113,12 @@ export default async function DashboardPage() {
             <div className="flex items-center gap-2">
               <span className="text-xs text-[var(--text-muted)]">Disk</span>
               <span className="metric-value text-sm font-medium">
-                {totalDiskUsed > 1000 ? `${(totalDiskUsed / 1000).toFixed(1)} TB` : `${totalDiskUsed.toFixed(0)} GB`}
+                {totalDiskUsed === 0 ? "—" : totalDiskUsed >= 1099511627776 ? `${(totalDiskUsed / 1099511627776).toFixed(2)} TB` : `${(totalDiskUsed / 1073741824).toFixed(1)} GB`}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[var(--text-muted)]">
+                Updated {new Date().toLocaleTimeString()}
               </span>
             </div>
             <ThemeToggle />
@@ -130,6 +139,32 @@ export default async function DashboardPage() {
 
         {/* Service cards grid */}
         <div className="mb-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {jellyfinInfo && (
+            <article className="card p-5">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[var(--accent-bg)]">
+                    <span className="text-sm font-semibold" style={{ color: "var(--accent)" }}>J</span>
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-medium">Host System</h3>
+                    <p className="text-xs text-[var(--text-muted)]">{jellyfinInfo.serverName}</p>
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs text-[var(--text-muted)]">
+                <span className="font-mono text-[11px]">v{jellyfinInfo.version}</span>
+                <span>{jellyfinInfo.os}</span>
+                <span>{jellyfinInfo.architecture}</span>
+                {activeStreams > 0 && (
+                  <span className="rounded-md bg-[var(--success-bg)] px-1.5 py-0.5 text-[10px] font-medium" style={{ color: "var(--success)" }}>
+                    {activeStreams} stream{activeStreams > 1 ? "s" : ""}
+                  </span>
+                )}
+              </div>
+            </article>
+          )}
+
           {serviceOrder.map((id) => {
             const service = services[id];
             const health = healthMap[id];
@@ -210,11 +245,6 @@ export default async function DashboardPage() {
                   {systemMap[id].os !== "unknown" && (
                     <span>{systemMap[id].os}</span>
                   )}
-                  {systemMap[id].docker && (
-                    <span className="rounded-md bg-[var(--accent-bg)] px-1.5 py-0.5 text-[10px] font-medium" style={{ color: "var(--accent)" }}>
-                      Docker
-                    </span>
-                  )}
                 </div>
 
                 <div className="flex items-center gap-4">
@@ -226,7 +256,7 @@ export default async function DashboardPage() {
                       <span className="text-xs text-[var(--text-muted)]">in queue</span>
                     </div>
                   )}
-                  {disk.total !== "N/A" && disk.percent > 0 && (
+                  {disk.total !== "N/A" && disk.percent > 0 ? (
                     <div className="flex flex-1 items-center gap-2">
                       <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--bg-elevated)]">
                         <div
@@ -246,18 +276,12 @@ export default async function DashboardPage() {
                         {disk.percent}% · {disk.used}
                       </span>
                     </div>
-                  )}
+                  ) : disk.total === "N/A" ? (
+                    <span className="text-xs text-[var(--text-muted)]">—</span>
+                  ) : null}
                 </div>
 
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {queue.length > 0 && (
-                    <button className="btn-ghost">Pause</button>
-                  )}
-                  <button className="btn-ghost">Refresh</button>
-                  {(id === "radarr" || id === "sonarr") && (
-                    <button className="btn-ghost">Search</button>
-                  )}
-                </div>
+                <ServiceActions serviceId={id} hasQueue={queue.length > 0} />
 
                 <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
                   <span className="text-xs text-[var(--text-muted)]">

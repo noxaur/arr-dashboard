@@ -8,9 +8,6 @@ export async function GET() {
       getDiskSpace("sonarr"),
     ]);
 
-    let totalBytes = 0;
-    let usedBytes = 0;
-
     const parseBytes = (value: string): number => {
       const num = parseFloat(value);
       if (value.includes("TB")) return num * 1073741824 * 1000;
@@ -19,10 +16,19 @@ export async function GET() {
       return 0;
     };
 
+    // Deduplicate by total bytes — Radarr and Sonarr report the same underlying disk
+    const seenTotals = new Set<number>();
+    let totalBytes = 0;
+    let usedBytes = 0;
+
     for (const disk of [radarr, sonarr]) {
       if (disk.total !== "N/A") {
-        totalBytes += parseBytes(disk.total);
-        usedBytes += parseBytes(disk.used);
+        const diskTotal = parseBytes(disk.total);
+        if (!seenTotals.has(diskTotal)) {
+          seenTotals.add(diskTotal);
+          totalBytes += diskTotal;
+          usedBytes += parseBytes(disk.used);
+        }
       }
     }
 

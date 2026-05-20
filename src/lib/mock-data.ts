@@ -29,6 +29,8 @@ export interface DiskSpace {
   used: string;
   total: string;
   percent: number;
+  usedBytes?: number;
+  mounts?: Array<{ path: string; used: string; total: string }>;
 }
 
 export interface ServiceStatus {

@@ -100,11 +100,18 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
+    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
+    for (const mount of data) {
+      if (!uniqueDisks.has(mount.totalSpace)) {
+        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      }
+    }
+
     let totalBytes = 0;
     let freeBytes = 0;
-    for (const mount of data) {
-      totalBytes += mount.totalSpace || 0;
-      freeBytes += mount.freeSpace || 0;
+    for (const disk of uniqueDisks.values()) {
+      totalBytes += disk.totalSpace;
+      freeBytes += disk.freeSpace;
     }
 
     const usedBytes = totalBytes - freeBytes;
@@ -114,6 +121,8 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       used: formatBytes(usedBytes),
       total: formatBytes(totalBytes),
       percent,
+      usedBytes,
+      mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace) })),
     };
   } catch {
     return { used: "0 MB", total: "N/A", percent: 0 };
@@ -187,7 +196,7 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
     } else if (serviceId === "bazarr") {
       res = await arrFetch(serviceId, "/system/logs?start=0&limit=10");
     } else if (serviceId === "jellyseerr") {
-      res = await arrFetch(serviceId, "/request?take=10&skip=0&sort=modified&includeAll=true");
+      res = await arrFetch(serviceId, "/activity?take=10&skip=0&sort=createdAt");
     } else {
       res = await arrFetch(serviceId, "/history?pageSize=10");
     }
@@ -197,14 +206,19 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
     const data = await res.json();
 
     if (serviceId === "jellyseerr") {
-      return (data.results || []).map((item: any, i: number) => ({
-        id: i,
-        service: serviceId,
-        type: "request" as const,
-        title: item.status === 2 ? "Request approved" : item.status === 3 ? "Request available" : "New request",
-        message: `${item.media?.title || "Unknown"} — ${item.status === 2 ? "approved" : item.status === 3 ? "available" : "pending"}`,
-        timestamp: item.updatedAt || item.createdAt || new Date().toISOString(),
-      }));
+      const items = data.results || data.items || [];
+      return items.map((item: any, i: number) => {
+        const activityType = item.activity || item.type || "";
+        const media = item.media || item.request?.media || {};
+        return {
+          id: i,
+          service: serviceId,
+          type: "request" as const,
+          title: activityType || "Activity",
+          message: `${media?.title || media?.media?.title || "Unknown"} — ${activityType}`,
+          timestamp: item.timestamp || item.createdAt || item.updatedAt || new Date().toISOString(),
+        };
+      });
     }
 
     if (serviceId === "bazarr") {
