@@ -13,20 +13,21 @@ async function arrFetch(
   const service = services[serviceId];
   if (!service) throw new Error(`Unknown service: ${serviceId}`);
 
+  const baseUrl = service.url.replace(/\/$/, "");
+  if (!baseUrl) {
+    throw new Error(`Missing URL for ${serviceId} (env: ${service.id.toUpperCase()}_URL)`);
+  }
+
   const apiKey = process.env[service.apiKeyEnv];
   if (!apiKey) {
     throw new Error(`Missing API key for ${serviceId} (env: ${service.apiKeyEnv})`);
   }
 
-  const baseUrl = service.url.replace(/\/$/, "");
   const url = `${baseUrl}${service.apiEndpoint}${endpoint}`;
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
 
   return fetch(url, {
     ...options,
-    signal: controller.signal,
+    signal: AbortSignal.timeout(10000),
     headers: {
       "X-Api-Key": apiKey,
       Authorization: getBasicAuth(serviceId),
@@ -34,7 +35,7 @@ async function arrFetch(
       ...options?.headers,
     },
     cache: "no-store",
-  }).finally(() => clearTimeout(timeout));
+  });
 }
 
 export { arrFetch };

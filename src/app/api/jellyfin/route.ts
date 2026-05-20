@@ -12,20 +12,17 @@ export async function GET() {
     return NextResponse.json({ error: "Missing JELLYFIN_URL" }, { status: 500 });
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 10000);
-
   try {
     const [systemRes, sessionsRes] = await Promise.all([
       fetch(`${JELLYFIN_URL}/System/Info`, {
         headers: { "X-Emby-Token": JELLYFIN_KEY },
         cache: "no-store",
-        signal: controller.signal,
+        signal: AbortSignal.timeout(10000),
       }),
       fetch(`${JELLYFIN_URL}/Sessions?controllableByUserId=`, {
         headers: { "X-Emby-Token": JELLYFIN_KEY },
         cache: "no-store",
-        signal: controller.signal,
+        signal: AbortSignal.timeout(10000),
       }),
     ]);
 
@@ -42,7 +39,5 @@ export async function GET() {
     });
   } catch {
     return NextResponse.json({ error: "Failed to fetch Jellyfin info" }, { status: 500 });
-  } finally {
-    clearTimeout(timeout);
   }
 }
