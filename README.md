@@ -42,6 +42,50 @@ docker compose up -d --build
 
 Open [http://localhost:3000](http://localhost:3000)
 
+#### Docker Configuration
+
+- **Multi-stage build**: Builder stage installs deps and compiles, runner stage uses standalone output
+- **Non-root user**: Runs as `nextjs` (uid 1001) for security
+- **Node 20 Alpine**: Minimal base image (~50MB)
+- **Standalone output**: Uses Next.js standalone mode for smaller production image
+- **Restart policy**: `unless-stopped` — auto-restarts on failure or system reboot
+
+#### Docker Compose Structure
+
+```yaml
+services:
+  dashboard:
+    build: .
+    container_name: arr-ecosystem-dashboard
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - RADARR_URL=...
+      - RADARR_API_KEY=...
+      # ... all other env vars
+```
+
+#### Updating
+
+```bash
+# Pull latest code and rebuild
+docker compose up -d --build
+
+# Or use cache and only rebuild changed layers
+docker compose build --no-cache && docker compose up -d
+```
+
+#### Logs
+
+```bash
+# View logs
+docker logs -f arr-ecosystem-dashboard
+
+# View last 100 lines
+docker logs --tail 100 arr-ecosystem-dashboard
+```
+
 ## Environment Variables
 
 | Variable | Description | Default |
