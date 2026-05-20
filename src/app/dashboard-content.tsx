@@ -72,30 +72,30 @@ export function DashboardContent() {
             </div>
             <h1 className="text-base font-semibold">*arr Dashboard</h1>
           </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <span className={`status-dot ${data?.healthAlerts === 0 ? "healthy" : "warning"}`} />
-              <span className="text-xs text-[var(--text-muted)]">Queue</span>
+              <span className="text-xs text-[var(--text-muted)] hidden sm:inline">Queue</span>
               <span className="metric-value text-sm font-medium">{loading ? "—" : data?.totalQueue ?? 0}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
               <span className="status-dot healthy" />
               <span className="text-xs text-[var(--text-muted)]">Downloading</span>
               <span className="metric-value text-sm font-medium">{loading ? "—" : data?.activeDownloads ?? 0}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               {(data?.healthAlerts ?? 0) > 0 && <span className="status-dot warning" />}
-              <span className="text-xs text-[var(--text-muted)]">Alerts</span>
+              <span className="text-xs text-[var(--text-muted)] hidden sm:inline">Alerts</span>
               <span className={`metric-value text-sm font-medium ${(data?.healthAlerts ?? 0) > 0 ? "text-[var(--error)]" : ""}`}>
                 {loading ? "—" : data?.healthAlerts ?? 0}
               </span>
             </div>
-            <div className="h-5 w-px bg-[var(--border)]" />
-            <div className="flex items-center gap-2">
+            <div className="hidden lg:block h-5 w-px bg-[var(--border)]" />
+            <div className="hidden lg:flex items-center gap-2">
               <span className="text-xs text-[var(--text-muted)]">Disk</span>
               <span className="metric-value text-sm font-medium">{loading ? "—" : formatDisk(data?.totalDiskUsed ?? 0)}</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="hidden xl:flex items-center gap-2">
               <span className="text-xs text-[var(--text-muted)]">
                 Updated {lastUpdated?.toLocaleTimeString() ?? "—"}
               </span>
