@@ -298,8 +298,9 @@ export async function pauseQueue(serviceId: string): Promise<boolean> {
   if (USE_MOCK) return true;
 
   try {
-    const res = await arrFetch(serviceId, "/config/downloadclient", {
-      method: "PUT",
+    const res = await arrFetch(serviceId, "/command", {
+      method: "POST",
+      body: JSON.stringify({ name: "PauseAllDownloadClients" }),
     });
     return res.ok;
   } catch {
