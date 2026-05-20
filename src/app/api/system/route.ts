@@ -1,31 +1,6 @@
 import { NextResponse } from "next/server";
 import { services } from "@/lib/services";
-import { getBasicAuth } from "@/lib/auth";
-
-async function arrFetch(
-  serviceId: string,
-  endpoint: string
-): Promise<Response> {
-  const service = services[serviceId];
-  if (!service) throw new Error(`Unknown service: ${serviceId}`);
-
-  const apiKey = process.env[service.apiKeyEnv];
-  if (!apiKey) {
-    throw new Error(`Missing API key for ${serviceId} (env: ${service.apiKeyEnv})`);
-  }
-
-  const baseUrl = service.url.replace(/\/$/, "");
-  const url = `${baseUrl}${service.apiEndpoint}${endpoint}`;
-
-  return fetch(url, {
-    headers: {
-      "X-Api-Key": apiKey,
-      Authorization: getBasicAuth(serviceId),
-      "Content-Type": "application/json",
-    },
-    cache: "no-store",
-  });
-}
+import { arrFetch } from "@/lib/api";
 
 export async function GET() {
   const results: Record<string, { version: string; os: string; docker: boolean; uptime: string; status: string }> = {};

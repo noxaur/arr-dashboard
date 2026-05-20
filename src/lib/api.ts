@@ -21,8 +21,12 @@ async function arrFetch(
   const baseUrl = service.url.replace(/\/$/, "");
   const url = `${baseUrl}${service.apiEndpoint}${endpoint}`;
 
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   return fetch(url, {
     ...options,
+    signal: controller.signal,
     headers: {
       "X-Api-Key": apiKey,
       Authorization: getBasicAuth(serviceId),
@@ -30,8 +34,10 @@ async function arrFetch(
       ...options?.headers,
     },
     cache: "no-store",
-  });
+  }).finally(() => clearTimeout(timeout));
 }
+
+export { arrFetch };
 
 export async function checkHealth(serviceId: string): Promise<HealthStatus> {
   if (USE_MOCK) return mockHealth[serviceId];
@@ -105,10 +111,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
+    const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
     for (const mount of data) {
-      if (!uniqueDisks.has(mount.totalSpace)) {
-        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      if (!uniqueDisks.has(mount.path)) {
+        uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
     }
 
