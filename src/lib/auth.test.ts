@@ -1,0 +1,82 @@
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { getBasicAuth, getBasicCredentials } from "./auth";
+
+describe("getBasicAuth", () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it("returns Basic auth header with per-service credentials", () => {
+    process.env.BASIC_USER_RADARR = "radarr-user";
+    process.env.BASIC_PASS_RADARR = "radarr-pass";
+
+    const result = getBasicAuth("radarr");
+    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(decoded).toBe("radarr-user:radarr-pass");
+  });
+
+  it("falls back to global credentials when per-service not set", () => {
+    process.env.ARR_BASIC_USER = "global-user";
+    process.env.ARR_BASIC_PASS = "global-pass";
+
+    const result = getBasicAuth("sonarr");
+    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(decoded).toBe("global-user:global-pass");
+  });
+
+  it("per-service credentials take precedence over global", () => {
+    process.env.BASIC_USER_RADARR = "radarr-user";
+    process.env.BASIC_PASS_RADARR = "radarr-pass";
+    process.env.ARR_BASIC_USER = "global-user";
+    process.env.ARR_BASIC_PASS = "global-pass";
+
+    const result = getBasicAuth("radarr");
+    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(decoded).toBe("radarr-user:radarr-pass");
+  });
+
+  it("returns Basic auth with empty credentials when nothing is configured", () => {
+    const result = getBasicAuth("bazarr");
+    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(decoded).toBe(":");
+  });
+});
+
+describe("getBasicCredentials", () => {
+  const originalEnv = { ...process.env };
+
+  beforeEach(() => {
+    process.env = { ...originalEnv };
+  });
+
+  afterEach(() => {
+    process.env = originalEnv;
+  });
+
+  it("returns per-service credentials", () => {
+    process.env.BASIC_USER_SONARR = "sonarr-user";
+    process.env.BASIC_PASS_SONARR = "sonarr-pass";
+
+    const result = getBasicCredentials("sonarr");
+    expect(result).toEqual({ user: "sonarr-user", pass: "sonarr-pass" });
+  });
+
+  it("falls back to global credentials", () => {
+    process.env.ARR_BASIC_USER = "global-user";
+    process.env.ARR_BASIC_PASS = "global-pass";
+
+    const result = getBasicCredentials("prowlarr");
+    expect(result).toEqual({ user: "global-user", pass: "global-pass" });
+  });
+
+  it("returns empty strings when nothing is configured", () => {
+    const result = getBasicCredentials("jellyseerr");
+    expect(result).toEqual({ user: "", pass: "" });
+  });
+});
