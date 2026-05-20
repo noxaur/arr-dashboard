@@ -124,7 +124,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
   }
 
   try {
-    const res = await arrFetch(serviceId, "/diskspace");
+    const res = await arrFetch(serviceId, `/diskspace?t=${Date.now()}`);
     if (!res.ok) return { used: "0 MB", total: "N/A", percent: 0 };
 
     const data: Array<{ path: string; freeSpace: number; totalSpace: number }> = await res.json();
