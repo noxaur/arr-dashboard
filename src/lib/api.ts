@@ -133,10 +133,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
+    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
     for (const mount of data) {
-      if (!uniqueDisks.has(mount.path)) {
-        uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      if (!uniqueDisks.has(mount.totalSpace)) {
+        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
     }
 
