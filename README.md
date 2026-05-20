@@ -45,8 +45,10 @@ Open [http://localhost:3000](http://localhost:3000)
 | `PROWLARR_URL` | Prowlarr instance URL | `https://jellyprowlarr-admin.opsec.rent` |
 | `BAZARR_URL` | Bazarr instance URL | `https://jellybazarr.opsec.rent` |
 | `JELLYSEERR_URL` | Jellyseerr instance URL | `https://jellyseerr.opsec.rent` |
-| `ARR_BASIC_USER` | Basic auth username | `server` |
-| `ARR_BASIC_PASS` | Basic auth password | — |
+| `ARR_BASIC_USER` | Global basic auth username | — |
+| `ARR_BASIC_PASS` | Global basic auth password | — |
+| `BASIC_USER_<SERVICE>` | Per-service basic auth username (overrides global) | — |
+| `BASIC_PASS_<SERVICE>` | Per-service basic auth password (overrides global) | — |
 | `RADARR_API_KEY` | Radarr API key | — |
 | `SONARR_API_KEY` | Sonarr API key | — |
 | `PROWLARR_API_KEY` | Prowlarr API key | — |

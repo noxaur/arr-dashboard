@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getBasicAuth } from "@/lib/auth";
 
 const SERVICES: Record<string, string> = {
   radarr: process.env.RADARR_URL || "https://jellyradarr-admin.opsec.rent",
@@ -15,10 +16,6 @@ const SERVICE_API_ROOTS: Record<string, string> = {
   bazarr: "/api",
   jellyseerr: "/api/v1",
 };
-
-const BASIC_USER = process.env.ARR_BASIC_USER || "";
-const BASIC_PASS = process.env.ARR_BASIC_PASS || "";
-const basicAuth = `Basic ${Buffer.from(`${BASIC_USER}:${BASIC_PASS}`).toString("base64")}`;
 
 function rewriteSetCookie(header: string, service: string): string {
   return header
@@ -43,7 +40,7 @@ async function proxyRequest(req: NextRequest, service: string, path: string) {
   headers.delete("content-length");
   headers.delete("origin");
   headers.delete("referer");
-  headers.set("Authorization", basicAuth);
+  headers.set("Authorization", getBasicAuth(service));
 
   let body: BodyInit | undefined;
   if (["POST", "PUT", "PATCH"].includes(req.method)) {

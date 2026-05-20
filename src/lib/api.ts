@@ -1,12 +1,9 @@
 import { services } from "./services";
+import { getBasicAuth } from "./auth";
 import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace } from "./mock-data";
 import { mockHealth, mockQueue, mockActivity } from "./mock-data";
 
 const USE_MOCK = process.env.USE_MOCK_DATA === "true";
-
-const BASIC_USER = process.env.ARR_BASIC_USER || "";
-const BASIC_PASS = process.env.ARR_BASIC_PASS || "";
-const basicAuth = `Basic ${Buffer.from(`${BASIC_USER}:${BASIC_PASS}`).toString("base64")}`;
 
 async function arrFetch(
   serviceId: string,
@@ -23,7 +20,7 @@ async function arrFetch(
     ...options,
     headers: {
       "X-Api-Key": process.env[service.apiKeyEnv] || "",
-      Authorization: basicAuth,
+      Authorization: getBasicAuth(serviceId),
       "Content-Type": "application/json",
       ...options?.headers,
     },
