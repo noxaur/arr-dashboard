@@ -27,6 +27,8 @@ function formatTime(iso: string) {
 export function DashboardContent() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const fetchData = async () => {
     try {
@@ -34,7 +36,13 @@ export function DashboardContent() {
       if (res.ok) {
         const json = await res.json();
         setData(json);
+        setError(null);
+        setLastUpdated(new Date());
+      } else {
+        setError(`Failed to load: ${res.status}`);
       }
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Network error");
     } finally {
       setLoading(false);
     }
@@ -42,7 +50,9 @@ export function DashboardContent() {
 
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 30000);
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible") fetchData();
+    }, 30000);
     return () => clearInterval(interval);
   }, []);
 
@@ -87,7 +97,7 @@ export function DashboardContent() {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-xs text-[var(--text-muted)]">
-                Updated {new Date().toLocaleTimeString()}
+                Updated {lastUpdated?.toLocaleTimeString() ?? "—"}
               </span>
             </div>
             <ThemeToggle />
@@ -96,6 +106,13 @@ export function DashboardContent() {
       </header>
 
       <main className="mx-auto max-w-[1152px] px-6 py-8">
+        {error && (
+          <div className="mb-6 rounded-md border border-status-error/20 bg-status-error/5 px-4 py-3">
+            <p className="text-sm text-status-error">{error}</p>
+            <button onClick={fetchData} className="mt-2 text-xs underline">Retry</button>
+          </div>
+        )}
+
         {/* Host System Card */}
         <section className="mb-8">
           <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">Host System</h2>
