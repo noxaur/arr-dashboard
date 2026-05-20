@@ -10,7 +10,7 @@
 ## Docker
 
 - Before committing changes, build and verify the Docker image works: `docker compose up -d --build`
-- Test the container starts and serves the dashboard on port 3000
+- Test the container starts and serves the dashboard on port 5487
 - All environment variables must be defined in `docker-compose.yml` (source of truth for production)
 - `.env.local` is for local development only
 
