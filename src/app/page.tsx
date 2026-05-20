@@ -208,7 +208,7 @@ export default async function DashboardPage() {
                     >
                       {(() => {
                         const IconComponent = serviceIconMap[id];
-                        return IconComponent ? <IconComponent className="h-5 w-5" /> : service.icon;
+                        return IconComponent ? <IconComponent className="h-5 w-5" /> : <span className="text-sm font-semibold font-mono">{service.icon}</span>;
                       })()}
                     </div>
                     <div>
