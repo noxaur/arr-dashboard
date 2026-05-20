@@ -1,15 +1,17 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { getBasicAuth, getBasicCredentials } from "./auth";
 
 describe("getBasicAuth", () => {
-  const originalEnv = { ...process.env };
-
   beforeEach(() => {
-    process.env = { ...originalEnv };
+    vi.resetModules();
+    vi.stubEnv("BASIC_USER_RADARR", undefined as any);
+    vi.stubEnv("BASIC_PASS_RADARR", undefined as any);
+    vi.stubEnv("ARR_BASIC_USER", undefined as any);
+    vi.stubEnv("ARR_BASIC_PASS", undefined as any);
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
   });
 
   it("returns Basic auth header with per-service credentials", () => {
@@ -49,14 +51,16 @@ describe("getBasicAuth", () => {
 });
 
 describe("getBasicCredentials", () => {
-  const originalEnv = { ...process.env };
-
   beforeEach(() => {
-    process.env = { ...originalEnv };
+    vi.resetModules();
+    vi.stubEnv("BASIC_USER_SONARR", undefined as any);
+    vi.stubEnv("BASIC_PASS_SONARR", undefined as any);
+    vi.stubEnv("ARR_BASIC_USER", undefined as any);
+    vi.stubEnv("ARR_BASIC_PASS", undefined as any);
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    vi.unstubAllEnvs();
   });
 
   it("returns per-service credentials", () => {
