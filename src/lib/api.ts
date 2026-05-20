@@ -13,13 +13,18 @@ async function arrFetch(
   const service = services[serviceId];
   if (!service) throw new Error(`Unknown service: ${serviceId}`);
 
+  const apiKey = process.env[service.apiKeyEnv];
+  if (!apiKey) {
+    throw new Error(`Missing API key for ${serviceId} (env: ${service.apiKeyEnv})`);
+  }
+
   const baseUrl = service.url.replace(/\/$/, "");
   const url = `${baseUrl}${service.apiEndpoint}${endpoint}`;
 
   return fetch(url, {
     ...options,
     headers: {
-      "X-Api-Key": process.env[service.apiKeyEnv] || "",
+      "X-Api-Key": apiKey,
       Authorization: getBasicAuth(serviceId),
       "Content-Type": "application/json",
       ...options?.headers,
