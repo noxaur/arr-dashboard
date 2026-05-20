@@ -6,9 +6,15 @@ A unified dashboard for managing your *arr ecosystem — Radarr, Sonarr, Prowlar
 
 - **Unified Health View** — See the status of all services at a glance
 - **Live Queue Data** — Active downloads, missing items, disk usage
-- **Embedded Service Pages** — Full service UI accessible via iframe proxy with session handling
+- **Host System Info** — Jellyfin server details and active stream count
+- **Recent Activity Feed** — Aggregated history from all services
+- **Service Actions** — Pause downloads, refresh monitored, search missing
 - **Light/Dark Mode** — System-aware with manual toggle
-- **Request Management** — Planned integration with Jellyseerr for movie/TV requests
+- **Client-Side Dashboard** — Skeleton loading, 30s polling, visibility-aware
+- **Retry Logic** — Exponential backoff (2 retries), 15s timeout, error vs offline distinction
+- **Shared Storage Detection** — Identifies services on the same disk, avoids duplicate metrics
+- **Mobile Responsive** — Progressive disclosure of header metrics by breakpoint
+- **SVG Service Logos** — Custom icons for each service
 
 ## Quick Start
 
@@ -45,6 +51,8 @@ Open [http://localhost:3000](http://localhost:3000)
 | `PROWLARR_URL` | Prowlarr instance URL | `https://jellyprowlarr-admin.opsec.rent` |
 | `BAZARR_URL` | Bazarr instance URL | `https://jellybazarr.opsec.rent` |
 | `JELLYSEERR_URL` | Jellyseerr instance URL | `https://jellyseerr.opsec.rent` |
+| `JELLYFIN_URL` | Jellyfin instance URL | — |
+| `JELLYFIN_API_KEY` | Jellyfin API key | — |
 | `ARR_BASIC_USER` | Global basic auth username | — |
 | `ARR_BASIC_PASS` | Global basic auth password | — |
 | `BASIC_USER_<SERVICE>` | Per-service basic auth username (overrides global) | — |
@@ -67,19 +75,16 @@ Open [http://localhost:3000](http://localhost:3000)
 │  └─────┬─────┘  └─────┬─────┘  └────┬─────┘ │
 │        │              │              │        │
 │  ┌─────▼──────────────▼──────────────▼─────┐ │
-│  │         API Route Proxy Layer           │ │
-│  │  /api/radarr  /api/sonarr  /api/...     │ │
+│  │      /api/dashboard (aggregated)        │ │
+│  │  Single endpoint for all service data   │ │
 │  └──────────────────┬──────────────────────┘ │
 │                     │                         │
 │  ┌──────────────────▼──────────────────────┐ │
-│  │        Iframe Embed Proxy               │ │
-│  │  /api/embed/[service]/[...path]         │ │
-│  │  - Cookie rewriting (SameSite=None)     │ │
-│  │  - X-Frame-Options removal              │ │
-│  │  - URL rewriting for SPA routing        │ │
-│  │  - initialize.json patching             │ │
-│  └──────────────────┬──────────────────────┘ │
-└─────────────────────┼────────────────────────┘
+│  │        Service Redirect Pages           │ │
+│  │  Server components with redirect()      │ │
+│  │  /radarr, /sonarr, /prowlarr, ...       │ │
+│  └─────────────────────────────────────────┘ │
+└─────────────────────┬────────────────────────┘
                       │
         ┌─────────────┼─────────────┐
         ▼             ▼             ▼
@@ -91,8 +96,9 @@ Open [http://localhost:3000](http://localhost:3000)
 ## Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
-- **Styling:** Tailwind CSS + OKLCH color system
-- **Language:** TypeScript
+- **Styling:** Tailwind CSS + OKLCH color system with CSS variables
+- **Language:** TypeScript strict mode
+- **Testing:** Vitest
 - **Deployment:** Docker (multi-stage build, standalone output)
 
 ## Scripts
@@ -103,3 +109,5 @@ Open [http://localhost:3000](http://localhost:3000)
 | `npm run build` | Build for production |
 | `npm run start` | Start production server |
 | `npm run lint` | Run ESLint |
+| `npm run test` | Run Vitest test suite |
+| `npm run test:watch` | Run Vitest in watch mode |
