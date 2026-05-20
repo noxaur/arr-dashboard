@@ -10,24 +10,24 @@ const config: Config = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: "oklch(18% 0.01 175)",
-          elevated: "oklch(22% 0.01 175)",
-          overlay: "oklch(28% 0.01 175)",
+          DEFAULT: "var(--surface)",
+          elevated: "var(--bg-elevated)",
+          overlay: "var(--surface-hover)",
         },
         border: {
-          DEFAULT: "oklch(30% 0.015 175)",
-          strong: "oklch(38% 0.02 175)",
+          DEFAULT: "var(--border)",
+          strong: "var(--border-strong)",
         },
         text: {
-          primary: "oklch(88% 0.01 175)",
-          secondary: "oklch(65% 0.01 175)",
-          muted: "oklch(48% 0.008 175)",
+          primary: "var(--text-primary)",
+          secondary: "var(--text-secondary)",
+          muted: "var(--text-muted)",
         },
         accent: {
-          DEFAULT: "oklch(62% 0.14 175)",
-          hover: "oklch(68% 0.15 175)",
-          active: "oklch(56% 0.13 175)",
-          subtle: "oklch(62% 0.14 175 / 0.12)",
+          DEFAULT: "var(--accent)",
+          hover: "var(--accent-soft)",
+          active: "var(--accent)",
+          subtle: "var(--accent-bg)",
         },
         status: {
           healthy: "oklch(72% 0.16 145)",
