@@ -91,24 +91,30 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
   }
 
   try {
-    const res = await arrFetch(serviceId, "/system/status");
+    const res = await arrFetch(serviceId, "/diskspace");
     if (!res.ok) return { used: "0 MB", total: "N/A", percent: 0 };
 
-    const data = await res.json();
+    const data: Array<{ path: string; freeSpace: number; totalSpace: number }> = await res.json();
 
-    if (data.diskSpace) {
-      const total = data.diskSpace[0]?.totalBytes || 0;
-      const free = data.diskSpace[0]?.freeSpace || 0;
-      const used = total - free;
-      const percent = total > 0 ? Math.round((used / total) * 100) : 0;
-      return {
-        used: formatBytes(used),
-        total: formatBytes(total),
-        percent,
-      };
+    if (!Array.isArray(data) || data.length === 0) {
+      return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    return { used: "0 MB", total: "N/A", percent: 0 };
+    let totalBytes = 0;
+    let freeBytes = 0;
+    for (const mount of data) {
+      totalBytes += mount.totalSpace || 0;
+      freeBytes += mount.freeSpace || 0;
+    }
+
+    const usedBytes = totalBytes - freeBytes;
+    const percent = totalBytes > 0 ? Math.round((usedBytes / totalBytes) * 100) : 0;
+
+    return {
+      used: formatBytes(usedBytes),
+      total: formatBytes(totalBytes),
+      percent,
+    };
   } catch {
     return { used: "0 MB", total: "N/A", percent: 0 };
   }
@@ -226,6 +232,47 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   } catch {
     return [];
   }
+}
+
+export interface SystemInfo {
+  os: string;
+  docker: boolean;
+  uptime: string;
+}
+
+export async function getSystemInfo(serviceId: string): Promise<SystemInfo> {
+  if (USE_MOCK) {
+    return { os: "Linux", docker: true, uptime: "3d 14h" };
+  }
+
+  if (serviceId === "prowlarr" || serviceId === "jellyseerr" || serviceId === "bazarr") {
+    return { os: "unknown", docker: false, uptime: "N/A" };
+  }
+
+  try {
+    const res = await arrFetch(serviceId, "/system/status");
+    if (!res.ok) return { os: "unknown", docker: false, uptime: "N/A" };
+
+    const data = await res.json();
+    return {
+      os: data.osName || data.platform || "unknown",
+      docker: data.isDocker || data.docker || false,
+      uptime: data.uptime ? `${data.uptime}` : formatUptime(data.startTime),
+    };
+  } catch {
+    return { os: "unknown", docker: false, uptime: "N/A" };
+  }
+}
+
+function formatUptime(startTime?: string): string {
+  if (!startTime) return "N/A";
+  const start = new Date(startTime).getTime();
+  const now = Date.now();
+  const diff = now - start;
+  const hours = Math.floor(diff / 3600000);
+  const days = Math.floor(hours / 24);
+  if (days > 0) return `${days}d ${hours % 24}h`;
+  return `${hours}h ${Math.floor((diff % 3600000) / 60000)}m`;
 }
 
 export async function pauseQueue(serviceId: string): Promise<boolean> {

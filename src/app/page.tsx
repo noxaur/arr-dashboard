@@ -1,5 +1,5 @@
 import { serviceOrder, services } from "@/lib/services";
-import { checkHealth, getQueue, getActivity, getDiskSpace } from "@/lib/api";
+import { checkHealth, getQueue, getActivity, getDiskSpace, getSystemInfo } from "@/lib/api";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 
@@ -35,17 +35,22 @@ export default async function DashboardPage() {
   const activityResults = await Promise.allSettled(
     serviceOrder.map((id) => getActivity(id))
   );
+  const systemResults = await Promise.allSettled(
+    serviceOrder.map((id) => getSystemInfo(id))
+  );
 
   const healthMap: Record<string, any> = {};
   const queueMap: Record<string, any[]> = {};
   const diskMap: Record<string, any> = {};
   const activityMap: Record<string, any[]> = {};
+  const systemMap: Record<string, any> = {};
 
   serviceOrder.forEach((id, i) => {
     healthMap[id] = healthResults[i].status === "fulfilled" ? healthResults[i].value : { status: "offline", message: "Failed to connect", version: "unknown", responseTime: 0 };
     queueMap[id] = queueResults[i].status === "fulfilled" ? queueResults[i].value : [];
     diskMap[id] = diskResults[i].status === "fulfilled" ? diskResults[i].value : { used: "0 MB", total: "N/A", percent: 0 };
     activityMap[id] = activityResults[i].status === "fulfilled" ? activityResults[i].value : [];
+    systemMap[id] = systemResults[i].status === "fulfilled" ? systemResults[i].value : { os: "unknown", docker: false, uptime: "N/A" };
   });
 
   const totalQueue = Object.values(queueMap).flat().length;
@@ -197,6 +202,21 @@ export default async function DashboardPage() {
                   </div>
                 )}
 
+                {/* System info row */}
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-[var(--text-muted)]">
+                  {health.version !== "unknown" && (
+                    <span className="font-mono text-[11px]">v{health.version}</span>
+                  )}
+                  {systemMap[id].os !== "unknown" && (
+                    <span>{systemMap[id].os}</span>
+                  )}
+                  {systemMap[id].docker && (
+                    <span className="rounded-md bg-[var(--accent-bg)] px-1.5 py-0.5 text-[10px] font-medium" style={{ color: "var(--accent)" }}>
+                      Docker
+                    </span>
+                  )}
+                </div>
+
                 <div className="flex items-center gap-4">
                   {queue.length > 0 && (
                     <div className="flex items-baseline gap-1.5">
@@ -222,8 +242,8 @@ export default async function DashboardPage() {
                           }}
                         />
                       </div>
-                      <span className="text-xs text-[var(--text-muted)]">
-                        {disk.used}
+                      <span className="whitespace-nowrap text-xs text-[var(--text-muted)]">
+                        {disk.percent}% · {disk.used}
                       </span>
                     </div>
                   )}
@@ -245,8 +265,8 @@ export default async function DashboardPage() {
                       ? `${activity.length} recent events`
                       : "No recent activity"}
                   </span>
-                  <Link href={`/${id}`} className="btn-ghost">
-                    Open Settings
+                  <Link href={`/${id}`} className="btn-ghost text-xs">
+                    Open ↗
                   </Link>
                 </div>
               </article>
