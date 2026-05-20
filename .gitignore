@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Next.js
+.next/
+out/
+dist/
+
+# Environment files (NEVER commit secrets)
+.env.local
+.env.*.local
+!.env.local.example
+
+# Docker compose (contains credentials)
+docker-compose.yml
+docker-compose.override.yml
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts
+*.heapsnapshot
+tsconfig.tsbuildinfo
+
+# Debug
+debug/
+
+# Testing
+coverage/
+
+# Hive / Superpowers (local tooling)
+.hive/
+.superpowers/
