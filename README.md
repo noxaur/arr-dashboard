@@ -6,11 +6,11 @@
 
 ### Desktop
 
-![Desktop Demo](docs/media/demo-web.mp4)
+https://github.com/user-attachments/assets/46605941-3ba5-4795-9e75-4734fa6c3dd0
 
 ### Mobile
 
-![Mobile Demo](docs/media/demo-web-mobile.mp4)
+https://github.com/user-attachments/assets/222cc855-aa5f-4227-a41d-4929ee4d998e
 
 ## Screenshots
 
