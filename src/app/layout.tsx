@@ -12,9 +12,6 @@ const rubik = Rubik({
 export const metadata: Metadata = {
   title: "*arr Ecosystem Dashboard",
   description: "Unified dashboard for Radarr, Sonarr, Prowlarr, Bazarr, and Jellyseerr",
-  icons: {
-    icon: "/favicon.svg",
-  },
 };
 
 export default function RootLayout({
@@ -24,6 +21,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={rubik.variable}>
+      <head>
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+      </head>
       <body className="min-h-screen font-sans antialiased">
         {children}
       </body>
