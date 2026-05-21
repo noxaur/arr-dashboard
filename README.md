@@ -4,17 +4,31 @@
 
 ## Demo
 
-### Desktop (Light Mode)
+### Desktop
 
-![Dashboard Light Mode](docs/media/dashboard-desktop.png)
-
-### Desktop (Dark Mode)
-
-![Dashboard Dark Mode](docs/media/dashboard-dark.png)
+<video src="docs/media/demo-web.webm" controls width="640"></video>
 
 ### Mobile
 
-![Dashboard Mobile](docs/media/dashboard-mobile.png)
+<video src="docs/media/demo-web-mobile.webm" controls width="320"></video>
+
+## Screenshots
+
+### Desktop
+
+| | |
+|---|---|
+| ![Dashboard Light](docs/media/dashboard-overview-desktop-gallery.png) | ![Dashboard Dark](docs/media/dashboard-overview-dark-gallery.png) |
+| *Dashboard overview (light mode)* | *Dashboard overview (dark mode)* |
+| ![Activity Feed](docs/media/activity-feed-desktop-gallery.png) | |
+| *Recent activity feed* | |
+
+### Mobile
+
+| | |
+|---|---|
+| ![Mobile Light](docs/media/dashboard-overview-mobile-gallery.png) | ![Mobile Dark](docs/media/dashboard-overview-mobile-dark-gallery.png) |
+| *Mobile dashboard (light mode)* | *Mobile dashboard (dark mode)* |
 
 ## Features
 
