@@ -26,7 +26,7 @@ export async function GET() {
   const totalQueue = services.flatMap((s) => s.queue).length;
   const activeDownloads = services.flatMap((s) => s.queue).filter((q: any) => q.status === "downloading").length;
   const healthAlerts = services.filter((s) => s.health.status === "warning" || s.health.status === "error").length;
-  const totalDiskUsed = services.find((s) => s.id === "radarr")?.disk?.usedBytes || 0;
+  const totalDiskUsed = services.reduce((sum, s) => sum + (s.disk?.usedBytes || 0), 0);
 
   const allActivity = services
     .flatMap((s) => s.activity.map((e: any) => ({ ...e, service: s.id })))

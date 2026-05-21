@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { services, serviceOrder } from "@/lib/services";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { formatBytes } from "@/lib/api";
 import { ServiceActions } from "@/components/service-actions";
 import {
   RadarrIcon,
@@ -72,12 +73,6 @@ export function DashboardContent() {
     return () => clearInterval(interval);
   }, []);
 
-  const formatDisk = (bytes: number) => {
-    if (bytes === 0) return "—";
-    if (bytes >= 1099511627776) return `${(bytes / 1099511627776).toFixed(2)} TB`;
-    return `${(bytes / 1073741824).toFixed(1)} GB`;
-  };
-
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
@@ -109,7 +104,7 @@ export function DashboardContent() {
             <div className="hidden lg:block h-5 w-px bg-[var(--border)]" />
             <div className="hidden lg:flex items-center gap-2">
               <span className="text-xs text-[var(--text-muted)]">Disk</span>
-              <span className="metric-value text-sm font-medium">{loading ? "—" : formatDisk(data?.totalDiskUsed ?? 0)}</span>
+              <span className="metric-value text-sm font-medium">{loading ? "—" : (data?.totalDiskUsed ?? 0) === 0 ? "—" : formatBytes(data?.totalDiskUsed ?? 0)}</span>
             </div>
             <div className="hidden xl:flex items-center gap-2">
               <span className="text-xs text-[var(--text-muted)]">
@@ -134,7 +129,7 @@ export function DashboardContent() {
           <h2 className="eyebrow mb-4">Host System</h2>
           <article className="card p-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: "oklch(62% 0.14 340)18" }}>
+              <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: "oklch(62% 0.14 340 / 0.18)" }}>
                 <JellyfinIcon className="h-5 w-5" />
               </div>
               <div>
@@ -175,7 +170,7 @@ export function DashboardContent() {
                 <article key={id} className="card flex flex-col gap-3 p-4">
                   <div className="flex items-start justify-between">
                     <Link href={`/${id}`} className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: `${service.color}18` }}>
+                      <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: `${service.color.slice(0, -1)} / 0.18)` }}>
                         {ServiceIcon && <ServiceIcon className="h-5 w-5" />}
                       </div>
                       <div>

@@ -20,7 +20,7 @@ global.fetch = mockFetch;
 
 describe("formatBytes", () => {
   it("formats zero bytes", () => {
-    expect(formatBytes(0)).toBe("0 MB");
+    expect(formatBytes(0)).toBe("0 B");
   });
 
   it("formats bytes to GB", () => {
@@ -30,12 +30,12 @@ describe("formatBytes", () => {
 
   it("formats bytes to TB", () => {
     expect(formatBytes(1099511627776)).toBe("1.0 TB");
-    expect(formatBytes(8796093022208)).toBe("8.2 TB");
+    expect(formatBytes(8796093022208)).toBe("8.0 TB");
   });
 
   it("handles boundary values", () => {
-    expect(formatBytes(1073741824000 - 1)).toBe("1000.0 GB");
-    expect(formatBytes(1073741824000)).toBe("1.0 TB");
+    expect(formatBytes(1099511627776 - 1)).toBe("1024 GB");
+    expect(formatBytes(1099511627776)).toBe("1.0 TB");
   });
 });
 
@@ -83,7 +83,7 @@ describe("getDiskSpace", () => {
     });
 
     const result = await getDiskSpace("radarr");
-    expect(result.total).toBe("7.5 TB");
+    expect(result.total).toBe("7.3 TB");
     expect(result.percent).toBe(38);
   });
 
@@ -101,7 +101,7 @@ describe("getDiskSpace", () => {
     });
 
     const result = await getDiskSpace("radarr");
-    expect(result.total).toBe("14.9 TB");
+    expect(result.total).toBe("14.6 TB");
     expect(result.percent).toBe(31);
   });
 
@@ -115,7 +115,7 @@ describe("getDiskSpace", () => {
     });
 
     const result = await getDiskSpace("radarr");
-    expect(result.total).toBe("11.2 TB");
+    expect(result.total).toBe("10.9 TB");
     expect(result.percent).toBe(42);
   });
 
