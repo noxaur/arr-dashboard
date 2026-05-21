@@ -124,7 +124,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
   }
 
   try {
-    const res = await arrFetch(serviceId, "/diskspace");
+    const res = await arrFetch(serviceId, `/diskspace?t=${Date.now()}`);
     if (!res.ok) return { used: "0 MB", total: "N/A", percent: 0 };
 
     const data: Array<{ path: string; freeSpace: number; totalSpace: number }> = await res.json();
@@ -265,7 +265,10 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
       }));
     }
 
-    return (data.records || data || []).slice(0, 10).map((item: any, i: number) => ({
+    return (data.records || data || [])
+      .filter((item: any) => !["indexerRss", "indexerSearch"].includes(item.eventType))
+      .slice(0, 10)
+      .map((item: any, i: number) => ({
       id: i,
       service: serviceId,
       type: item.eventType === "downloadFolderImported" ? "import" as const :
