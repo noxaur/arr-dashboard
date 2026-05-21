@@ -6,11 +6,11 @@
 
 ### Desktop
 
-[![Desktop Demo](docs/media/dashboard-overview-desktop-gallery.png)](docs/media/demo-web.mp4)
+![Desktop Demo](docs/media/demo-web.mp4)
 
 ### Mobile
 
-[![Mobile Demo](docs/media/dashboard-overview-mobile-gallery.png)](docs/media/demo-web-mobile.mp4)
+![Mobile Demo](docs/media/demo-web-mobile.mp4)
 
 ## Screenshots
 
