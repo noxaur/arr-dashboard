@@ -1,6 +1,20 @@
 # *arr Ecosystem Dashboard
 
-A unified dashboard for managing your *arr ecosystem — Radarr, Sonarr, Prowlarr, Bazarr, and Jellyseerr — all in one place.
+> A unified dashboard for managing your *arr ecosystem — Radarr, Sonarr, Prowlarr, Bazarr, and Jellyseerr — all in one place.
+
+## Demo
+
+### Desktop (Light Mode)
+
+![Dashboard Light Mode](docs/media/dashboard-desktop.png)
+
+### Desktop (Dark Mode)
+
+![Dashboard Dark Mode](docs/media/dashboard-dark.png)
+
+### Mobile
+
+![Dashboard Mobile](docs/media/dashboard-mobile.png)
 
 ## Features
 
@@ -16,18 +30,33 @@ A unified dashboard for managing your *arr ecosystem — Radarr, Sonarr, Prowlar
 - **Mobile Responsive** — Progressive disclosure of header metrics by breakpoint
 - **SVG Service Logos** — Custom icons for each service
 
-## Quick Start
+## Getting Started
 
-### Local Development
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) 20+
+- [npm](https://www.npmjs.com/) or [Docker](https://www.docker.com/)
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone <repository-url>
+cd arr-ecosystem-dashboard
+
 # Install dependencies
 npm install
 
 # Copy environment file and configure
 cp .env.local.example .env.local
+```
 
-# Start dev server
+Edit `.env.local` with your service URLs and API keys.
+
+### Usage
+
+```bash
+# Start development server
 npm run dev
 ```
 
@@ -42,71 +71,117 @@ docker compose up -d --build
 
 Open [http://localhost:5487](http://localhost:5487)
 
-#### Docker Configuration
-
+**Docker Configuration:**
 - **Multi-stage build**: Builder stage installs deps and compiles, runner stage uses standalone output
 - **Non-root user**: Runs as `nextjs` (uid 1001) for security
 - **Node 20 Alpine**: Minimal base image (~50MB)
 - **Standalone output**: Uses Next.js standalone mode for smaller production image
 - **Restart policy**: `unless-stopped` — auto-restarts on failure or system reboot
 
-#### Docker Compose Structure
-
-```yaml
-services:
-  dashboard:
-    build: .
-    container_name: arr-ecosystem-dashboard
-    restart: unless-stopped
-    ports:
-      - "5487:5487"
-    environment:
-      - RADARR_URL=...
-      - RADARR_API_KEY=...
-      # ... all other env vars
-```
-
-#### Updating
-
+**Updating:**
 ```bash
-# Pull latest code and rebuild
 docker compose up -d --build
-
-# Or use cache and only rebuild changed layers
-docker compose build --no-cache && docker compose up -d
 ```
 
-#### Logs
-
+**Logs:**
 ```bash
-# View logs
 docker logs -f arr-ecosystem-dashboard
-
-# View last 100 lines
 docker logs --tail 100 arr-ecosystem-dashboard
 ```
 
-## Environment Variables
+## Project Structure
 
-| Variable | Description | Default |
-|---|---|---|
-| `RADARR_URL` | Radarr instance URL | `https://jellyradarr-admin.opsec.rent` |
-| `SONARR_URL` | Sonarr instance URL | `https://jellysonarr-admin.opsec.rent` |
-| `PROWLARR_URL` | Prowlarr instance URL | `https://jellyprowlarr-admin.opsec.rent` |
-| `BAZARR_URL` | Bazarr instance URL | `https://jellybazarr.opsec.rent` |
-| `JELLYSEERR_URL` | Jellyseerr instance URL | `https://jellyseerr.opsec.rent` |
-| `JELLYFIN_URL` | Jellyfin instance URL | — |
-| `JELLYFIN_API_KEY` | Jellyfin API key | — |
-| `ARR_BASIC_USER` | Global basic auth username | — |
-| `ARR_BASIC_PASS` | Global basic auth password | — |
-| `BASIC_USER_<SERVICE>` | Per-service basic auth username (overrides global) | — |
-| `BASIC_PASS_<SERVICE>` | Per-service basic auth password (overrides global) | — |
-| `RADARR_API_KEY` | Radarr API key | — |
-| `SONARR_API_KEY` | Sonarr API key | — |
-| `PROWLARR_API_KEY` | Prowlarr API key | — |
-| `BAZARR_API_KEY` | Bazarr API key | — |
-| `JELLYSEERR_API_KEY` | Jellyseerr API key | — |
-| `USE_MOCK_DATA` | Use mock data instead of live API | `false` |
+```
+├── AGENTS.md                    # AI agent rules
+├── CODEBASE.md                  # Codebase overview
+├── DESIGN.md                    # Sentri design system spec
+├── docker-compose.yml           # Docker compose configuration
+├── Dockerfile                   # Multi-stage Docker build
+├── package.json
+├── tailwind.config.ts           # Tailwind with CSS variable colors, Rubik font
+├── tsconfig.json                # TypeScript strict mode
+├── vitest.config.ts             # Vitest test configuration
+├── public/
+│   └── favicon.svg              # App favicon
+├── docs/
+│   └── media/                   # Screenshots and demo media
+└── src/
+    ├── app/
+    │   ├── globals.css            # CSS variables, component classes
+    │   ├── layout.tsx             # Root layout with Rubik font
+    │   ├── page.tsx               # Home page
+    │   ├── dashboard-content.tsx  # Main client dashboard component
+    │   ├── api/                   # API routes
+    │   │   ├── actions/route.ts     # POST: pause/refresh/search
+    │   │   ├── dashboard/route.ts   # GET: aggregated dashboard data
+    │   │   ├── diskspace/route.ts   # GET: deduplicated disk space
+    │   │   ├── health/route.ts      # GET: service health checks
+    │   │   ├── jellyfin/route.ts    # GET: Jellyfin info + sessions
+    │   │   ├── queues/route.ts      # GET: queue data
+    │   │   └── system/route.ts      # GET: system status
+    │   ├── radarr/page.tsx          # Redirect to Radarr
+    │   ├── sonarr/page.tsx          # Redirect to Sonarr
+    │   ├── prowlarr/page.tsx        # Redirect to Prowlarr
+    │   ├── bazarr/page.tsx          # Redirect to Bazarr
+    │   └── jellyseerr/page.tsx      # Redirect to Jellyseerr
+    ├── components/
+    │   ├── service-actions.tsx      # Pause/Refresh/Search buttons
+    │   ├── service-icons.tsx        # SVG service icons
+    │   └── theme-toggle.tsx         # Light/dark mode toggle
+    └── lib/
+        ├── api.ts                   # Core API helpers
+        ├── api.test.ts              # API tests
+        ├── auth.ts                  # Basic auth resolution
+        ├── auth.test.ts             # Auth tests
+        ├── jellyfin.ts              # Jellyfin API helpers
+        ├── mock-data.ts             # Mock data for dev/testing
+        └── services.ts              # Service configuration registry
+```
+
+## Available Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server on port 5487 |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Run ESLint |
+| `npm run test` | Run Vitest test suite |
+| `npm run test:watch` | Run Vitest in watch mode |
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `RADARR_URL` | Radarr instance URL | Yes |
+| `SONARR_URL` | Sonarr instance URL | Yes |
+| `PROWLARR_URL` | Prowlarr instance URL | Yes |
+| `BAZARR_URL` | Bazarr instance URL | Yes |
+| `JELLYSEERR_URL` | Jellyseerr instance URL | Yes |
+| `RADARR_API_KEY` | Radarr API key | Yes |
+| `SONARR_API_KEY` | Sonarr API key | Yes |
+| `PROWLARR_API_KEY` | Prowlarr API key | Yes |
+| `BAZARR_API_KEY` | Bazarr API key | Yes |
+| `JELLYSEERR_API_KEY` | Jellyseerr API key | Yes |
+| `JELLYFIN_URL` | Jellyfin instance URL | No |
+| `JELLYFIN_API_KEY` | Jellyfin API key | No |
+| `ARR_BASIC_USER` | Global basic auth username | No |
+| `ARR_BASIC_PASS` | Global basic auth password | No |
+| `BASIC_USER_<SERVICE>` | Per-service basic auth username | No |
+| `BASIC_PASS_<SERVICE>` | Per-service basic auth password | No |
+| `USE_MOCK_DATA` | Use mock data instead of live API | No (default: `false`) |
+
+### Services
+
+| Service | ID | API Version | Color |
+|---------|--------|-------------|-------|
+| Radarr | radarr | `/api/v3` | Orange |
+| Sonarr | sonarr | `/api/v3` | Teal |
+| Prowlarr | prowlarr | `/api/v1` | Purple |
+| Bazarr | bazarr | `/api` | Blue |
+| Jellyseerr | jellyseerr | `/api/v1` | Pink |
 
 ## Architecture
 
@@ -137,21 +212,38 @@ docker logs --tail 100 arr-ecosystem-dashboard
    └────────┘   └────────┘   └────────┘
 ```
 
+**Data Flow:**
+- `Promise.allSettled` ensures one service failure doesn't break the dashboard
+- All external fetches use `arrFetch()` with 2 retries, exponential backoff, 15s timeout
+- Client polls `/api/dashboard` every 30s when page is visible
+- `USE_MOCK_DATA=true` returns mock data instead of live API calls
+
+**API Routes:**
+
+| Route | Method | Purpose |
+|-------|--------|---------|
+| `/api/dashboard` | GET | Aggregated data: all services + Jellyfin |
+| `/api/health` | GET | Health check; `?service=radarr` for single |
+| `/api/queues` | GET | Queue data; `?service=radarr` for single |
+| `/api/actions` | POST | Execute actions: `{service, action}` |
+| `/api/system` | GET | System status for all services |
+| `/api/jellyfin` | GET | Jellyfin server info + active streams |
+| `/api/diskspace` | GET | Deduplicated disk space |
+
 ## Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
-- **Styling:** Tailwind CSS + OKLCH color system with CSS variables
 - **Language:** TypeScript strict mode
-- **Testing:** Vitest
-- **Deployment:** Docker (multi-stage build, standalone output)
+- **Styling:** Tailwind CSS 3.4 + OKLCH color system with CSS variables
+- **Font:** Rubik (Google Fonts, weights 400/500/600/700)
+- **Testing:** Vitest 4.1.7 (node environment)
+- **Linter:** ESLint 9 + eslint-config-next
+- **Deployment:** Docker (multi-stage build, Node 20 Alpine, standalone output)
 
-## Scripts
+## Contributing
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start development server on port 5487 |
-| `npm run build` | Build for production |
-| `npm run start` | Start production server |
-| `npm run lint` | Run ESLint |
-| `npm run test` | Run Vitest test suite |
-| `npm run test:watch` | Run Vitest in watch mode |
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+## License
+
+This project is licensed under the [LICENSE](LICENSE) License.
