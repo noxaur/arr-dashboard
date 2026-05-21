@@ -30,15 +30,22 @@ async function arrFetch(
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
+      const auth = getBasicAuth(serviceId);
+      const headers: Record<string, string> = {
+        "X-Api-Key": apiKey,
+        "Content-Type": "application/json",
+      };
+      if (options?.headers) {
+        Object.assign(headers, options.headers);
+      }
+      if (auth) {
+        headers.Authorization = auth;
+      }
+
       const res = await fetch(url, {
         ...options,
         signal: AbortSignal.timeout(15000),
-        headers: {
-          "X-Api-Key": apiKey,
-          Authorization: getBasicAuth(serviceId),
-          "Content-Type": "application/json",
-          ...options?.headers,
-        },
+        headers,
         cache: "no-store",
       });
       return res;
@@ -163,10 +170,15 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
 }
 
 export function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 MB";
-  const gb = bytes / 1073741824;
-  if (gb >= 1000) return `${(gb / 1000).toFixed(1)} TB`;
-  return `${gb.toFixed(1)} GB`;
+  if (bytes === 0) return "0 B";
+  const units = ["B", "KB", "MB", "GB", "TB"];
+  let unitIndex = 0;
+  let value = bytes;
+  while (value >= 1024 && unitIndex < units.length - 1) {
+    value /= 1024;
+    unitIndex++;
+  }
+  return `${value.toFixed(value >= 100 ? 0 : 1)} ${units[unitIndex]}`;
 }
 
 export async function getQueue(serviceId: string): Promise<QueueItem[]> {
