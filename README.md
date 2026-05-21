@@ -6,11 +6,11 @@
 
 ### Desktop
 
-<video src="https://raw.githubusercontent.com/noxaur/arr-dashboard/main/docs/media/demo-web.webm" controls width="640"></video>
+<video src="https://raw.githubusercontent.com/noxaur/arr-dashboard/main/docs/media/demo-web.mp4" controls width="640"></video>
 
 ### Mobile
 
-<video src="https://raw.githubusercontent.com/noxaur/arr-dashboard/main/docs/media/demo-web-mobile.webm" controls width="320"></video>
+<video src="https://raw.githubusercontent.com/noxaur/arr-dashboard/main/docs/media/demo-web-mobile.mp4" controls width="320"></video>
 
 ## Screenshots
 
