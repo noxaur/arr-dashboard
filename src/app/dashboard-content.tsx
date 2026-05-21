@@ -84,7 +84,7 @@ export function DashboardContent() {
         <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
-              <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
+              <JellyfinIcon className="h-5 w-5" />
             </div>
             <h1 className="text-base font-semibold">*arr Dashboard</h1>
           </div>

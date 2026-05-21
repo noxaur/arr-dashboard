@@ -19,72 +19,140 @@ export function SonarrIcon({ className }: { className?: string }) {
 
 export function ProwlarrIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-      <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0zm0 472c-119.3 0-216-96.7-216-216S136.7 40 256 40s216 96.7 216 216-96.7 216-216 216z" fill="#e8a838"/>
-      <path d="M256 80c-97.2 0-176 78.8-176 176s78.8 176 176 176 176-78.8 176-176S353.2 80 256 80zm0 312c-75.1 0-136-60.9-136-136S180.9 120 256 120s136 60.9 136 136-60.9 136-136 136z" fill="#e8a838"/>
-      <path d="M256 160c-53 0-96 43-96 96s43 96 96 96 96-43 96-96-43-96-96-96zm0 152c-30.9 0-56-25.1-56-56s25.1-56 56-56 56 25.1 56 56-25.1 56-56 56z" fill="#e8a838"/>
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 512 512">
+      <style>{`.st4{fill:#dee6e3}.st5{fill:#d4541e}.st6{fill:#852e1b}.st7{fill:#fff}.st11{fill:#6f2717}.st13{fill:#94401d}.st15{fill:#c74d1f}.st17{fill:#fddd04}.st18{fill:#391913}`}</style>
+      <circle cx="256" cy="256" r="245.8" style={{fillRule:"evenodd",clipRule:"evenodd",fill:"#ffe6d5"}}/>
+      <path d="m87.5 300.9 44.2-51.9 331.7-1.1-43.1 53z" style={{fill:"#83331b"}}/>
+      <path d="M87.5 300.9v139.4c25.2 1.1 44.4 10.7 44.4 22.2h257.6c-2-2.9-3.1-6.1-3.1-9.3 0-12 14.7-22.1 33.9-23.1V300.9z" style={{fill:"#f8a37b"}}/>
+      <path d="M278.1 324.4c5.4-2.9 13.6-11.6 8.5-20.3-.9-1.6-1.9-2.6-2.8-3.2H306c-2.9 6.4-13.4 14.1-13.4 14.1s-.9 1.7-5.5 5.3c-2.5 2.1-6.3 3.4-9 4.1m-65.7-.3c-2.7-1.3-6.7-3.4-9.5-6.4-4.7-5-5.6-11.4-5.6-11.4L194 301h13.3c-.9.6-1.8 1.6-2.7 3.2-5 8.3 2.5 16.7 7.8 19.9m60.9-2.6c-2.9-.3-8.3-1-13.7-2.8-8-2.7-12.6-8.7-12.6-8.7s-8.9 5.5-20.9 7.6c-4 .7-6.6 1-8.3 1h-.1c-.2-4-1.1-8.3-1.1-8.3s-2.3-7.2-5.6-9.4h69c-3.4 2.2-5.6 9.4-5.6 9.4s-1.3 6.7-1.1 11.2" style={{fill:"#da845d"}}/>
+      <path d="M216.7 310.4s2.5 13.2 0 14.9-18.9-9.7-12.2-21.1c6.7-11.5 12.2 6.2 12.2 6.2" className="st4"/>
+      <path d="M274.4 310.4s-2.5 13.2 0 14.9 18.9-9.7 12.2-21.1c-6.7-11.5-12.2 6.2-12.2 6.2" className="st4"/>
+      <path d="M177.2 200c3.1 14.6-6.3 28.9-20.9 31.9-14.6 3.1-28.8-6.3-31.9-20.9s6.3-28.9 20.9-31.9c14.5-3 28.8 6.3 31.9 20.9" className="st5"/>
+      <path d="M166.6 183.8c-5.9-4.3-13.6-6.2-21.4-4.6-14.6 3.1-23.9 17.3-20.9 31.9.7 3.2 1.9 6.1 3.5 8.7 12-4.1 30-13.7 38.8-36" className="st6"/>
+      <path d="M165.5 202.5c1.7 8.1-3.5 16.1-11.6 17.8s-16.1-3.5-17.8-11.6 3.5-16.1 11.6-17.8 16.1 3.5 17.8 11.6" className="st7"/>
+      <path d="M350 195c-6.3 0-12.1-4-14.2-10.2-2.6-7.8 1.6-16.2 9.4-18.8 4.3-1.5 25.3-9.8 19-29.4-4.5-14.1-13.1-16.2-38.4-18.9-4.6-.5-9.5-1-14.4-1.7-17.9-2.6-31.1-10-39.2-22-11.8-17.6-7.2-37.5-6.6-39.8 2-8 10.1-12.8 18.1-10.8s12.8 10.2 10.8 18.1c0 0-2 9.3 2.6 16 3.2 4.6 9.4 7.7 18.5 9 4.5.6 9 1.1 13.4 1.6 23.5 2.5 52.9 5.6 63.7 39.4 11.5 36-16.4 59.7-38 66.8-1.6.5-3.1.7-4.7.7" style={{fill:"#e2591e"}}/>
+      <path d="m297.1 77.5-.4-.7c-9.8 6.3-22.2 7.6-29.2 7.8 1.2 3.1 2.7 6.3 4.8 9.3 2.6 3.9 5.9 7.3 9.6 10.3 13.1-2.2 23.6-12 29.4-18.6-6.8-1.6-11.6-4.3-14.2-8.1" className="st6"/>
+      <path d="M328.8 118c10.7 1.2 18.2 2.4 23.5 4.6 3.7-6.1 8.8-16.3 10.7-27.7-7.9-3.2-16.4-4.7-24.7-5.8.8 7.4.3 20.2-9.5 28.9" className="st6"/>
+      <path d="M394.1 154.9c1.7-6.8 1.8-14.4-.1-22.6-2.9 2.4-6.7 4.5-11.5 5.8-8.1 2.1-13.8 2-17.5 1.4 1.6 8-1.6 14-5.9 18.2 13.3 5.7 26.2 1.7 35-2.8" className="st6"/>
+      <path d="M225.2 177.3s39.5-46.6 119.7-35.3c80.1 11.3 110 115.9 110 115.9L420.5 301H225.2z" style={{fill:"#ef5d22"}}/>
+      <path d="M237.8 166.1c8.5-2.3 22-4.2 42.9-2.8 50.6 3.5 116.3 84.6 116.3 84.6S367.9 155.3 275.2 147c-16.6 5.4-29.1 12.9-37.4 19.1" className="st6"/>
+      <path d="M316.4 196.4c-3.1 14.6 6.3 28.8 20.9 31.9s28.9-6.3 31.9-20.9-6.3-28.8-20.9-31.9c-14.5-3-28.8 6.3-31.9 20.9" className="st5"/>
+      <path d="M327 180.1c5.9-4.3 13.6-6.2 21.4-4.6 14.6 3.1 23.9 17.3 20.9 31.9-.7 3.2-1.9 6.1-3.5 8.7-12-4-30-13.7-38.8-36" className="st6"/>
+      <path d="M328.1 198.8c-1.7 8.1 3.5 16.1 11.6 17.8s16.1-3.5 17.8-11.6-3.5-16.1-11.6-17.8-16.1 3.5-17.8 11.6" className="st7"/>
+      <path d="m121.6 300.9-13.2-13.5s42.2-85.9 100.4-105.7c58.1-19.9 103.8 9.9 132.1 34.3 28.3 24.3 44.7 73.5 44.7 73.5l-10.4 11.4z" style={{fill:"#f46a2f"}}/>
+      <path d="M188.5 216.1s47.6-37.5 56.9-37.5s54.8 32.9 54.8 32.9l-7.5 9.1s-39.7-32.2-47.3-32.2-44.9 32.2-44.9 32.2z" className="st6"/>
+      <path d="M108.4 287.4 36.8 240.7l36.8-12.3s-11.7-38.3 22.5-56.6 49.4.5 54.1 11.4 4.7 39.7 4.7 39.7h40.8s-.4-42.9 17.1-55.1c17.6-12.3 44-13.9 54.3 8.9 10.3 22.9 0 42.7 0 42.7l46.7 23.3-10.4 11.4H121.6z" className="st7"/>
+      <path d="M216.7 247.9c0 9-7.3 16.2-16.2 16.2-9 0-16.2-7.3-16.2-16.2 0-9 7.3-16.2 16.2-16.2 9 0 16.2 7.3 16.2 16.2" className="st17"/>
+      <path d="M212.1 247.9c0 6.4-5.2 11.6-11.6 11.6s-11.6-5.2-11.6-11.6 5.2-11.6 11.6-11.6 11.6 5.2 11.6 11.6" className="st18"/>
+      <path d="M198.1 240.7c0 2.6-2.1 4.8-4.8 4.8s-4.8-2.1-4.8-4.8c0-2.6 2.1-4.8 4.8-4.8s4.8 2.2 4.8 4.8" className="st7"/>
+      <path d="M309 247.9c0 9-7.3 16.2-16.2 16.2-9 0-16.2-7.3-16.2-16.2 0-9 7.3-16.2 16.2-16.2S309 239 309 247.9" className="st17"/>
+      <path d="M304.3 247.9c0 6.4-5.2 11.6-11.6 11.6s-11.6-5.2-11.6-11.6 5.2-11.6 11.6-11.6 11.6 5.2 11.6 11.6" className="st18"/>
+      <path d="M290.3 240.7c0 2.6-2.1 4.8-4.8 4.8-2.6 0-4.8-2.1-4.8-4.8 0-2.6 2.1-4.8 4.8-4.8 2.6 0 4.8 2.2 4.8 4.8" className="st7"/>
+      <path d="M221.7 265.5s-15.5 4-21.2 18.7 2 25.4 15 28.4c12.9 3 31.5-6.7 31.5-6.7s15.3 14.9 33.7 11.2 24.4-24.8 15.5-37.5-30.8-14.1-30.8-14.1-33.3 9.5-43.7 0" className="st7"/>
+      <path d="M267.2 281.7s12-14.1 4.2-20.2-15.1 4.4-24.9 3.5c-9.7-.9-19.9-8.5-24.1-1.6s6.3 15.2 6.3 15.2 2.5-7.3 8.7-3.8c6.3 3.5 1 10.9 1 10.9s4.6 3 8.4 3.6 9.6-4.2 9.6-4.2-3-8.4 3.4-11.6c6.5-3.3 7.4 8.2 7.4 8.2" className="st6"/>
+      <path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256 256-114.6 256-256S397.4 0 256 0m0 51.2c113.1 0 204.8 91.7 204.8 204.8S369.1 460.8 256 460.8 51.2 369.1 51.2 256 142.9 51.2 256 51.2" style={{fillRule:"evenodd",clipRule:"evenodd",fill:"#e66001"}}/>
     </svg>
   );
 }
 
 export function BazarrIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-      <path d="M256 32C132.3 32 32 132.3 32 256s100.3 224 224 224 224-100.3 224-224S379.7 32 256 32zm0 400c-97 0-176-79-176-176S159 80 256 80s176 79 176 176-79 176-176 176z" fill="#4a90d9"/>
-      <path d="M360 240H272v-88c0-8.8-7.2-16-16-16s-16 7.2-16 16v88h-88c-8.8 0-16 7.2-16 16s7.2 16 16 16h88v88c0 8.8 7.2 16 16 16s16-7.2 16-16v-88h88c8.8 0 16-7.2 16-16s-7.2-16-16-16z" fill="#4a90d9"/>
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+      <defs><clipPath id="a"><path d="M0 512h512V0H0z"/></clipPath></defs>
+      <g clipPath="url(#a)" transform="matrix(.09375 0 0 -.09375 0 48.02)">
+        <path fill="#fff" d="M506 256C506 117.93 394.07 6 256 6S6 117.93 6 256s111.93 250 250 250 250-111.93 250-250"/>
+        <path fill="none" stroke="#000" strokeMiterlimit="10" strokeWidth="12" d="M506 256C506 117.93 394.07 6 256 6S6 117.93 6 256s111.93 250 250 250 250-111.93 250-250z"/>
+        <path d="M406.2 119.47a2368 2368 0 0 0-300.82 0c-25.418 1.747-50.24 24.551-53.31 50.048-6.847 60.087-6.847 120.17 0 180.26 3.07 25.496 27.892 48.3 53.31 50.048a2368 2368 0 0 0 300.82 0c25.419-1.748 50.24-24.552 53.311-50.048 6.846-60.087 6.846-120.17 0-180.26-3.071-25.497-27.893-48.3-53.311-50.048"/>
+        <path fill="#fff" d="M348.36 145.31H163.22c-5.452 0-9.914 4.461-9.914 9.913v.001c0 5.452 4.462 9.913 9.914 9.913h185.14c5.452 0 9.913-4.461 9.913-9.913v-.001c0-5.452-4.461-9.913-9.913-9.913m48.18 39.81H115.049c-5.5 0-9.999 4.5-9.999 9.999s4.499 9.999 9.999 9.999H396.54c5.5 0 9.999-4.499 9.999-9.999 0-5.499-4.499-9.999-9.999-9.999"/>
+      </g>
     </svg>
   );
 }
 
 export function JellyseerrIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 512 512">
       <linearGradient id="js-a" x1="-2250.684" x2="-2262.794" y1="3541.691" y2="3658.527" gradientTransform="translate(4136.83 -5913.335)scale(1.75)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#502d95"/>
-        <stop offset=".1" stopColor="#6d37ac"/>
-        <stop offset=".57" stopColor="#6786d1"/>
+        <stop offset="0" style={{stopColor:"#502d95"}}/>
+        <stop offset=".1" style={{stopColor:"#6d37ac"}}/>
+        <stop offset=".57" style={{stopColor:"#6786d1"}}/>
       </linearGradient>
-      <path d="m212.3 276.5-24.2-5.4s-5.6 35.5-7.7 53.4c-3.4 28.8-7.5 68.7-5.9 99.2 1.8 33.6 10.9 65.9 14 65.9s-1.6-20.6.4-65.8c1.3-30.2 6.4-66.4 12.4-99.2 3-16.2 11.6-47.9 11.6-47.9h-.5v-.2z" fill="url(#js-a)"/>
+      <path d="m212.3 276.5-24.2-5.4s-5.6 35.5-7.7 53.4c-3.4 28.8-7.5 68.7-5.9 99.2 1.8 33.6 10.9 65.9 14 65.9s-1.6-20.6.4-65.8c1.3-30.2 6.4-66.4 12.4-99.2 3-16.2 11.6-47.9 11.6-47.9h-.5v-.2z" style={{fill:"url(#js-a)"}}/>
       <linearGradient id="js-b" x1="-2180.472" x2="-2192.582" y1="3548.918" y2="3665.802" gradientTransform="translate(4136.83 -5913.335)scale(1.75)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#502d95"/>
-        <stop offset=".1" stopColor="#6d37ac"/>
-        <stop offset=".57" stopColor="#6786d1"/>
+        <stop offset="0" style={{stopColor:"#502d95"}}/>
+        <stop offset=".1" style={{stopColor:"#6d37ac"}}/>
+        <stop offset=".57" style={{stopColor:"#6786d1"}}/>
       </linearGradient>
-      <path d="M314.5 274h7.4c10 37.2 11.8 90.7 9.7 131.1-2.3 44.4-14.5 87.2-18.5 87.2-3.9 0 2.2-27.2-.6-87.1-2-39.9-10.4-77.5-11.3-131.2z" fill="url(#js-b)"/>
+      <path d="M314.5 274h7.4c10 37.2 11.8 90.7 9.7 131.1-2.3 44.4-14.5 87.2-18.5 87.2-3.9 0 2.2-27.2-.6-87.1-2-39.9-10.4-77.5-11.3-131.2z" style={{fill:"url(#js-b)"}}/>
       <linearGradient id="js-c" x1="-1845.424" x2="-1845.424" y1="3277.037" y2="3383.343" gradientTransform="translate(4254.9 -6660.12)scale(2.12)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#763dcd"/>
-        <stop offset=".22" stopColor="#8d61eb"/>
-        <stop offset=".37" stopColor="#8c86ec"/>
-        <stop offset=".64" stopColor="#748ce8"/>
-        <stop offset=".9" stopColor="#6ba1e6"/>
+        <stop offset="0" style={{stopColor:"#763dcd"}}/>
+        <stop offset=".22" style={{stopColor:"#8d61eb"}}/>
+        <stop offset=".37" style={{stopColor:"#8c86ec"}}/>
+        <stop offset=".64" style={{stopColor:"#748ce8"}}/>
+        <stop offset=".9" style={{stopColor:"#6ba1e6"}}/>
       </linearGradient>
-      <path d="M336.9 157.7h11.9c16 59.4 23.4 145.3 19.9 210-3.8 71.3-23.2 139.7-29.7 139.7s3.4-43.6-1-139.6c-3-64.1-21.1-124.2-22.5-210.2z" fill="url(#js-c)"/>
+      <path d="M336.9 157.7h11.9c16 59.4 23.4 145.3 19.9 210-3.8 71.3-23.2 139.7-29.7 139.7s3.4-43.6-1-139.6c-3-64.1-21.1-124.2-22.5-210.2z" style={{fill:"url(#js-c)"}}/>
       <linearGradient id="js-d" x1="-1898.699" x2="-1898.699" y1="3277.037" y2="3383.343" gradientTransform="translate(4254.9 -6660.12)scale(2.12)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#763dcd"/>
-        <stop offset=".22" stopColor="#8d61eb"/>
-        <stop offset=".37" stopColor="#8c86ec"/>
-        <stop offset=".64" stopColor="#748ce8"/>
-        <stop offset=".9" stopColor="#6ba1e6"/>
+        <stop offset="0" style={{stopColor:"#763dcd"}}/>
+        <stop offset=".22" style={{stopColor:"#8d61eb"}}/>
+        <stop offset=".37" style={{stopColor:"#8c86ec"}}/>
+        <stop offset=".64" style={{stopColor:"#748ce8"}}/>
+        <stop offset=".9" style={{stopColor:"#6ba1e6"}}/>
       </linearGradient>
-      <path d="M173.9 157.7h11.9c-1.4 86-19.5 146.1-22.5 210.2-4.4 96-1 139.6-1 139.6-6.5 0-25.9-68.4-29.7-139.7-3.5-64.7 3.9-150.6 19.9-210z" fill="url(#js-d)"/>
-      <linearGradient id="js-e" x1="-1951.974" x2="-1951.974" y1="3277.037" y2="3383.343" gradientTransform="translate(4254.9 -6660.12)scale(2.12)" gradientUnits="userSpaceOnUse">
-        <stop offset="0" stopColor="#763dcd"/>
-        <stop offset=".22" stopColor="#8d61eb"/>
-        <stop offset=".37" stopColor="#8c86ec"/>
-        <stop offset=".64" stopColor="#748ce8"/>
-        <stop offset=".9" stopColor="#6ba1e6"/>
+      <path d="M235.3 156.3h-11.9c-16 59.4-23.4 145.3-19.9 210 3.8 71.3 23.2 139.7 29.7 139.7s-3.4-43.6 1-139.6c3-64.1 21.1-124.2 22.5-210.2z" style={{fill:"url(#js-d)"}}/>
+      <linearGradient id="js-e" x1="-1926.378" x2="-1926.378" y1="3277.037" y2="3383.343" gradientTransform="translate(4254.9 -6660.12)scale(2.12)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#763dcd"}}/>
+        <stop offset=".22" style={{stopColor:"#8d61eb"}}/>
+        <stop offset=".37" style={{stopColor:"#8c86ec"}}/>
+        <stop offset=".64" style={{stopColor:"#748ce8"}}/>
+        <stop offset=".9" style={{stopColor:"#6ba1e6"}}/>
       </linearGradient>
-      <path d="M255.4 101.3h11.9c16 59.4 23.4 145.3 19.9 210-3.8 71.3-23.2 139.7-29.7 139.7s3.4-43.6-1-139.6c-3-64.1-21.1-124.2-22.5-210.2z" fill="url(#js-e)"/>
+      <path d="m198.5 129.3-27.1-9.7s-10 63.5-13.7 95.3c-6 51.4-17.9 122.6-15 177.1 3.2 60 19.6 117.7 24.9 117.7s-2.9-36.7.9-117.6c2.5-53.9 19-105 24.6-177.2 2.2-28.6 6.6-85.7 6.6-85.7z" style={{fill:"url(#js-e)"}}/>
+      <linearGradient id="js-f" x1="-1872.943" x2="-1872.943" y1="3277.037" y2="3383.343" gradientTransform="translate(4254.9 -6660.12)scale(2.12)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#763dcd"}}/>
+        <stop offset=".22" style={{stopColor:"#8d61eb"}}/>
+        <stop offset=".37" style={{stopColor:"#8c86ec"}}/>
+        <stop offset=".64" style={{stopColor:"#748ce8"}}/>
+        <stop offset=".9" style={{stopColor:"#6ba1e6"}}/>
+      </linearGradient>
+      <path d="m288.2 157.7-24.5 4.1s3.2 47.6 3.2 74.6c0 43.9 1.7 88.1 1.6 134.2-.2 52.9 8.7 141.4 13.3 141.4s19.5-114 22.6-182.2c2.1-45.5-4.7-85.3-5.8-112.5-1.1-24.2-4.5-56.9-4.5-56.9z" style={{fill:"url(#js-f)"}}/>
+      <linearGradient id="js-g" x1="-1732.471" x2="-1599.094" y1="3393.286" y2="3541.455" gradientTransform="translate(3285.26 -5965.385)scale(1.79)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#c395fc"}}/>
+        <stop offset="1" style={{stopColor:"#4f65f5"}}/>
+      </linearGradient>
+      <path d="M423.1 172.1c0 61.7-10.5 65.5-27.6 91.6-12.4 18.8 12.7 33.3 2.6 38.5-11.9 6.2-8.2-5-31.9-11.4-10.3-2.7-32.8.3-41.8 2.1-9 1.7-36.4-13.6-43.7-15.5-10.9-3-37.5 11.2-53.8 11.2s-33.2-14.2-54.8-8.3c-25.7 6.9-56.6 23.6-61.3 18.1-9-10.5 19.7-18.5 9-37.2-6.7-11.8-30-43-30.7-74.5C86.8 85.5 170.6 0 260.5 0S423 77.9 423 165" style={{fill:"url(#js-g)"}}/>
+      <linearGradient id="js-h" x1="-926.423" x2="-926.423" y1="7284.174" y2="7478.694" gradientTransform="matrix(.51 0 0 .51 663.61 -3677.805)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#fff",stopOpacity:0.4}}/>
+        <stop offset="1" style={{stopColor:"#fff",stopOpacity:0}}/>
+      </linearGradient>
+      <path d="M254.9 32.1c-49.1 0-117.7 50.8-117.7 99.9 0 5.5-4.4 9.9-9.9 9.9s-9.9-4.4-9.9-9.9c0-60 77.4-119.5 137.4-119.5 5.5 0 9.9 4.4 9.9 9.9s-4.4 9.7-9.8 9.7" style={{fillRule:"evenodd",clipRule:"evenodd",fill:"url(#js-h)"}}/>
+      <linearGradient id="js-i" x1="-1322.688" x2="-1442.779" y1="4677.401" y2="4765.662" gradientTransform="translate(1658.49 -4637.5)scale(1.02)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#f9f9f9"}}/>
+        <stop offset="1" style={{stopColor:"#f9f9f9",stopOpacity:0}}/>
+      </linearGradient>
+      <path d="M327.5 217.7c-5.2 8.5-12.3 15.3-20.6 20-3.6 2-7.4 3.5-11.3 4.7-11.8 5.3-24.9 8.1-38.2 8.3-45.6.8-83.5-28.4-85-65.3-.7-18.1 10.1-37 18.5-51.4 7.1-12.3 19.3-33.4 35.4-41.8 32.8-17.2 77 1 99.1 40.9 6.4 11.6 10.5 24.2 11.8 36.9 1 4.1 1.6 8.3 1.6 12.6.2 10.9-3.1 21.8-9.2 31.5-.7 1.2-1.3 2.4-2.1 3.6" style={{fill:"url(#js-i)"}}/>
+      <linearGradient id="js-j" x1="-1279.521" x2="-1221.462" y1="3874.15" y2="3933.406" gradientTransform="translate(2048.95 -5398.585)scale(1.43)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#0043a2"}}/>
+        <stop offset="1" style={{stopColor:"#00133a"}}/>
+      </linearGradient>
+      <path d="M255.4 127c28.4 0 51.4 23.1 51.4 51.4s-23.1 51.4-51.4 51.4-51.4-23-51.4-51.4c0-5.3.8-10.3 2.2-15.2 4 9 13 15.2 23.4 15.2 14.2 0 25.7-11.6 25.7-25.7 0-10.4-6.2-19.5-15.2-23.4 4.9-1.5 10-2.2 15.3-2.3" style={{fill:"url(#js-j)"}}/>
     </svg>
   );
 }
 
 export function JellyfinIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-      <path d="M256 0C114.6 0 0 114.6 0 256s114.6 224 256 224 256-114.6 256-256S397.4 0 256 0zm0 440c-101.5 0-184-82.5-184-184S154.5 72 256 72s184 82.5 184 184-82.5 184-184 184z" fill="#aa5cc3"/>
-      <path d="M256 120c-75.1 0-136 60.9-136 136s60.9 136 136 136 136-60.9 136-136-60.9-136-136-136z" fill="#aa5cc3"/>
-      <path d="M256 168c-48.6 0-88 39.4-88 88s39.4 88 88 88 88-39.4 88-88-39.4-88-88-88zm0 136c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" fill="#00a4dc"/>
+    <svg className={className} xmlns="http://www.w3.org/2000/svg" xmlSpace="preserve" viewBox="0 0 512 512">
+      <linearGradient id="jf-a" x1="97.487" x2="522.047" y1="483.902" y2="729.018" gradientTransform="translate(0 -278)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#aa5cc3"}}/>
+        <stop offset="1" style={{stopColor:"#00a4dc"}}/>
+      </linearGradient>
+      <path d="M256 196.2c-22.4 0-94.8 131.3-83.8 153.4s156.8 21.9 167.7 0-61.3-153.4-83.9-153.4" style={{fill:"url(#jf-a)"}}/>
+      <linearGradient id="jf-b" x1="94.186" x2="518.747" y1="489.619" y2="734.735" gradientTransform="translate(0 -278)" gradientUnits="userSpaceOnUse">
+        <stop offset="0" style={{stopColor:"#aa5cc3"}}/>
+        <stop offset="1" style={{stopColor:"#00a4dc"}}/>
+      </linearGradient>
+      <path d="M256 0C188.3 0-29.8 395.4 3.4 462.2s472.3 66 505.2 0S323.8 0 256 0m165.6 404.3c-21.6 43.2-309.3 43.8-331.1 0S211.7 101.4 256 101.4 443.2 361 421.6 404.3" style={{fill:"url(#jf-b)"}}/>
     </svg>
   );
 }

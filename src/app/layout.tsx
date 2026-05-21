@@ -12,6 +12,9 @@ const rubik = Rubik({
 export const metadata: Metadata = {
   title: "*arr Ecosystem Dashboard",
   description: "Unified dashboard for Radarr, Sonarr, Prowlarr, Bazarr, and Jellyseerr",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

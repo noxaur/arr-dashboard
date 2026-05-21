@@ -1,5 +1,6 @@
 import { mockQueue, mockHealth, mockActivity } from "@/lib/mock-data";
 import { serviceOrder } from "@/lib/services";
+import { JellyfinIcon } from "@/components/service-icons";
 
 const totalQueue = mockQueue.length;
 const activeDownloads = mockQueue.filter((q) => q.status === "downloading").length;
@@ -13,7 +14,7 @@ export function TopBar() {
       <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-6">
         <div className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
-            <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>*arr</span>
+            <JellyfinIcon className="h-5 w-5" />
           </div>
           <h1 className="text-base font-semibold text-text-primary">
             Ecosystem Dashboard
