@@ -19,7 +19,8 @@ describe("getBasicAuth", () => {
     process.env.BASIC_PASS_RADARR = "radarr-pass";
 
     const result = getBasicAuth("radarr");
-    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(result).not.toBeNull();
+    const decoded = Buffer.from(result!.replace("Basic ", ""), "base64").toString();
     expect(decoded).toBe("radarr-user:radarr-pass");
   });
 
@@ -28,7 +29,8 @@ describe("getBasicAuth", () => {
     process.env.ARR_BASIC_PASS = "global-pass";
 
     const result = getBasicAuth("sonarr");
-    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(result).not.toBeNull();
+    const decoded = Buffer.from(result!.replace("Basic ", ""), "base64").toString();
     expect(decoded).toBe("global-user:global-pass");
   });
 
@@ -39,14 +41,14 @@ describe("getBasicAuth", () => {
     process.env.ARR_BASIC_PASS = "global-pass";
 
     const result = getBasicAuth("radarr");
-    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
+    expect(result).not.toBeNull();
+    const decoded = Buffer.from(result!.replace("Basic ", ""), "base64").toString();
     expect(decoded).toBe("radarr-user:radarr-pass");
   });
 
-  it("returns Basic auth with empty credentials when nothing is configured", () => {
+  it("returns null when no credentials are configured", () => {
     const result = getBasicAuth("bazarr");
-    const decoded = Buffer.from(result.replace("Basic ", ""), "base64").toString();
-    expect(decoded).toBe(":");
+    expect(result).toBeNull();
   });
 });
 

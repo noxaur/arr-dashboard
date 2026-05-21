@@ -33,14 +33,6 @@ export interface DiskSpace {
   mounts?: Array<{ path: string; used: string; total: string }>;
 }
 
-export interface ServiceStatus {
-  id: string;
-  health: HealthStatus;
-  queueCount: number;
-  diskSpace: DiskSpace;
-  recentActivity: ActivityEvent[];
-}
-
 const now = new Date();
 
 function timeAgo(minutes: number): string {
@@ -241,41 +233,3 @@ export const mockActivity: ActivityEvent[] = [
     timestamp: timeAgo(145),
   },
 ];
-
-export const mockServiceStatuses: Record<string, ServiceStatus> = {
-  radarr: {
-    id: "radarr",
-    health: mockHealth.radarr,
-    queueCount: 3,
-    diskSpace: { used: "2.4 TB", total: "8.0 TB", percent: 30 },
-    recentActivity: mockActivity.filter((a) => a.service === "radarr").slice(0, 3),
-  },
-  sonarr: {
-    id: "sonarr",
-    health: mockHealth.sonarr,
-    queueCount: 3,
-    diskSpace: { used: "3.1 TB", total: "8.0 TB", percent: 39 },
-    recentActivity: mockActivity.filter((a) => a.service === "sonarr").slice(0, 3),
-  },
-  prowlarr: {
-    id: "prowlarr",
-    health: mockHealth.prowlarr,
-    queueCount: 0,
-    diskSpace: { used: "0 MB", total: "N/A", percent: 0 },
-    recentActivity: mockActivity.filter((a) => a.service === "prowlarr").slice(0, 3),
-  },
-  bazarr: {
-    id: "bazarr",
-    health: mockHealth.bazarr,
-    queueCount: 0,
-    diskSpace: { used: "12 GB", total: "8.0 TB", percent: 0 },
-    recentActivity: mockActivity.filter((a) => a.service === "bazarr").slice(0, 3),
-  },
-  jellyseerr: {
-    id: "jellyseerr",
-    health: mockHealth.jellyseerr,
-    queueCount: 0,
-    diskSpace: { used: "2.1 GB", total: "8.0 TB", percent: 0 },
-    recentActivity: mockActivity.filter((a) => a.service === "jellyseerr").slice(0, 3),
-  },
-};

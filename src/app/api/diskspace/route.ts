@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getDiskSpace } from "@/lib/api";
+import { getDiskSpace, formatBytes } from "@/lib/api";
 
 export async function GET() {
   try {
@@ -10,7 +10,7 @@ export async function GET() {
 
     const parseBytes = (value: string): number => {
       const num = parseFloat(value);
-      if (value.includes("TB")) return num * 1073741824 * 1000;
+      if (value.includes("TB")) return num * 1099511627776;
       if (value.includes("GB")) return num * 1073741824;
       if (value.includes("MB")) return num * 1048576;
       return 0;
@@ -47,11 +47,4 @@ export async function GET() {
       { status: 500 }
     );
   }
-}
-
-function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 MB";
-  const gb = bytes / 1073741824;
-  if (gb >= 1000) return `${(gb / 1000).toFixed(1)} TB`;
-  return `${gb.toFixed(1)} GB`;
 }
