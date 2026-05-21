@@ -1,6 +1,21 @@
 import Link from "next/link";
 import { services } from "@/lib/services";
 import type { ServiceStatus } from "@/lib/mock-data";
+import {
+  RadarrIcon,
+  SonarrIcon,
+  ProwlarrIcon,
+  BazarrIcon,
+  JellyseerrIcon,
+} from "@/components/service-icons";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  radarr: RadarrIcon,
+  sonarr: SonarrIcon,
+  prowlarr: ProwlarrIcon,
+  bazarr: BazarrIcon,
+  jellyseerr: JellyseerrIcon,
+};
 
 interface ServiceCardProps {
   status: ServiceStatus;
@@ -9,6 +24,8 @@ interface ServiceCardProps {
 export function ServiceCard({ status }: ServiceCardProps) {
   const service = services[status.id];
   if (!service) return null;
+
+  const ServiceIcon = iconMap[status.id];
 
   const healthColor = {
     healthy: "oklch(72% 0.16 145)",
@@ -22,14 +39,12 @@ export function ServiceCard({ status }: ServiceCardProps) {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold"
+            className="flex h-9 w-9 items-center justify-center rounded-md"
             style={{
               backgroundColor: `${service.color}18`,
-              color: service.color,
-              border: `1px solid ${service.color}30`,
             }}
           >
-            {service.icon}
+            {ServiceIcon && <ServiceIcon className="h-5 w-5" />}
           </div>
           <div>
             <h3 className="text-sm font-medium text-text-primary">
@@ -54,8 +69,8 @@ export function ServiceCard({ status }: ServiceCardProps) {
       </div>
 
       {status.health.message !== "All systems operational" && (
-        <div className="rounded-md border border-status-warning/20 bg-status-warning/5 px-3 py-2">
-          <p className="text-xs text-status-warning">{status.health.message}</p>
+        <div className="rounded-md border border-[var(--warning)]/20 bg-[var(--warning)]/5 px-3 py-2">
+          <p className="text-xs text-[var(--warning)]">{status.health.message}</p>
         </div>
       )}
 
@@ -71,7 +86,7 @@ export function ServiceCard({ status }: ServiceCardProps) {
 
         {status.diskSpace.total !== "N/A" && status.diskSpace.percent > 0 && (
           <div className="flex flex-1 items-center gap-2">
-            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-overlay">
+            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-hover)]">
               <div
                 className="h-full rounded-full transition-all duration-300"
                 style={{
@@ -108,7 +123,7 @@ export function ServiceCard({ status }: ServiceCardProps) {
         )}
       </div>
 
-      <div className="flex items-center justify-between border-t border-border pt-3">
+      <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
         <span className="text-xs text-text-muted">
           {status.recentActivity.length > 0
             ? `${status.recentActivity.length} recent events`

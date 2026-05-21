@@ -4,6 +4,22 @@ import { services, serviceOrder } from "@/lib/services";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { ServiceActions } from "@/components/service-actions";
+import {
+  RadarrIcon,
+  SonarrIcon,
+  ProwlarrIcon,
+  BazarrIcon,
+  JellyseerrIcon,
+  JellyfinIcon,
+} from "@/components/service-icons";
+
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  radarr: RadarrIcon,
+  sonarr: SonarrIcon,
+  prowlarr: ProwlarrIcon,
+  bazarr: BazarrIcon,
+  jellyseerr: JellyseerrIcon,
+};
 
 const typeIcons: Record<string, string> = {
   download: "↓",
@@ -62,28 +78,13 @@ export function DashboardContent() {
     return `${(bytes / 1073741824).toFixed(1)} GB`;
   };
 
-  const sharedIds = new Set<string>();
-  if (data?.services) {
-    const diskMap = new Map<string, string[]>();
-    data.services.forEach((s: any) => {
-      if (s.disk?.total !== "N/A" && s.disk?.usedBytes) {
-        const key = `${s.disk.total}-${s.disk.usedBytes}`;
-        if (!diskMap.has(key)) diskMap.set(key, []);
-        diskMap.get(key)!.push(s.id);
-      }
-    });
-    for (const ids of diskMap.values()) {
-      if (ids.length > 1) ids.forEach((id) => sharedIds.add(id));
-    }
-  }
-
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--accent-bg)]">
-              <span className="text-sm font-semibold" style={{ color: "var(--accent)" }}>⬡</span>
+            <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
+              <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
             </div>
             <h1 className="text-base font-semibold">*arr Dashboard</h1>
           </div>
@@ -122,19 +123,19 @@ export function DashboardContent() {
 
       <main className="mx-auto max-w-[1152px] px-6 py-8">
         {error && (
-          <div className="mb-6 rounded-md border border-status-error/20 bg-status-error/5 px-4 py-3">
-            <p className="text-sm text-status-error">{error}</p>
-            <button onClick={fetchData} className="mt-2 text-xs underline">Retry</button>
+          <div className="mb-6 rounded-md border border-[var(--error)]/20 bg-[var(--error)]/5 px-4 py-3">
+            <p className="text-sm text-[var(--error)]">{error}</p>
+            <button onClick={fetchData} className="mt-2 text-sm underline">Retry</button>
           </div>
         )}
 
         {/* Host System Card */}
         <section className="mb-8">
-          <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">Host System</h2>
+          <h2 className="eyebrow mb-4">Host System</h2>
           <article className="card p-4">
             <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold" style={{ backgroundColor: "oklch(62% 0.14 340)18", color: "oklch(62% 0.14 340)", border: "1px solid oklch(62% 0.14 340)30" }}>
-                J
+              <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: "oklch(62% 0.14 340)18" }}>
+                <JellyfinIcon className="h-5 w-5" />
               </div>
               <div>
                 <h3 className="text-sm font-medium text-text-primary">{data?.jellyfin?.serverName || "Jellyfin"}</h3>
@@ -153,7 +154,7 @@ export function DashboardContent() {
 
         {/* Service Cards */}
         <section className="mb-8">
-          <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">Services</h2>
+          <h2 className="eyebrow mb-4">Services</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {serviceOrder.map((id) => {
               const service = services[id];
@@ -161,7 +162,6 @@ export function DashboardContent() {
               const health = svcData?.health;
               const queue = svcData?.queue || [];
               const disk = svcData?.disk;
-              const isShared = sharedIds.has(id);
               const healthColorMap: Record<string, string> = {
                 healthy: "oklch(72% 0.16 145)",
                 warning: "oklch(78% 0.16 85)",
@@ -169,67 +169,62 @@ export function DashboardContent() {
                 offline: "oklch(48% 0.008 175)",
               };
               const healthColor = health ? (healthColorMap[health.status] || "oklch(48% 0.008 175)") : "oklch(48% 0.008 175)";
+              const ServiceIcon = iconMap[id];
 
               return (
-                  <article key={id} className="card flex flex-col gap-3 p-4">
-                    <div className="flex items-start justify-between">
-                      <Link href={`/${id}`} className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-md font-mono text-sm font-semibold" style={{ backgroundColor: `${service.color}18`, color: service.color, border: `1px solid ${service.color}30` }}>
-                          {service.icon}
-                        </div>
-                        <div>
-                          <h3 className="text-sm font-medium text-text-primary">{service.name}</h3>
-                          <p className="text-xs text-text-muted">{service.description}</p>
-                        </div>
-                      </Link>
-                      <div className="flex items-center gap-2">
-                        <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
-                        <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
+                <article key={id} className="card flex flex-col gap-3 p-4">
+                  <div className="flex items-start justify-between">
+                    <Link href={`/${id}`} className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: `${service.color}18` }}>
+                        {ServiceIcon && <ServiceIcon className="h-5 w-5" />}
                       </div>
-                    </div>
-
-                    {loading ? (
-                      <div className="h-6 animate-pulse rounded-md bg-[var(--surface-overlay)]" />
-                    ) : health?.message && health.message !== "All systems operational" ? (
-                      <div className="rounded-md border border-status-warning/20 bg-status-warning/5 px-3 py-2">
-                        <p className="text-xs text-status-warning">{health.message}</p>
+                      <div>
+                        <h3 className="text-sm font-medium text-text-primary">{service.name}</h3>
+                        <p className="text-xs text-text-muted">{service.description}</p>
                       </div>
-                    ) : null}
-
-                    <div className="flex items-center gap-4">
-                      {queue.length > 0 && (
-                        <div className="flex items-baseline gap-1.5">
-                          <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
-                          <span className="text-xs text-text-muted">in queue</span>
-                        </div>
-                      )}
-                      {disk?.total !== "N/A" && disk?.percent > 0 && !isShared && (
-                        <div className="flex flex-1 items-center gap-2">
-                          <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-surface-overlay">
-                            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk.percent > 80 ? "oklch(62% 0.22 25)" : disk.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
-                          </div>
-                          <span className="text-xs text-text-muted">{disk.used}</span>
-                        </div>
-                      )}
-                      {isShared && (
-                        <span className="text-xs text-text-muted flex items-center gap-1">
-                          <span className="inline-block h-2 w-2 rounded-full bg-[var(--accent)]" />
-                          Shared storage
-                        </span>
-                      )}
+                    </Link>
+                    <div className="flex items-center gap-2">
+                      <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
+                      <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
                     </div>
+                  </div>
 
-                    <ServiceActions serviceId={id} hasQueue={queue.length > 0} />
-
-                    <div className="flex items-center justify-between border-t border-border pt-3">
-                      <span className="text-xs text-text-muted">
-                        {svcData?.activity?.length > 0 ? `${svcData.activity.length} recent events` : "No recent activity"}
-                      </span>
-                      <Link href={`/${id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
-                        Open Settings
-                      </Link>
+                  {loading ? (
+                    <div className="h-6 animate-pulse rounded-md bg-[var(--surface-hover)]" />
+                  ) : health?.message && health.message !== "All systems operational" ? (
+                    <div className="rounded-md border border-[var(--warning)]/20 bg-[var(--warning)]/5 px-3 py-2">
+                      <p className="text-xs text-[var(--warning)]">{health.message}</p>
                     </div>
-                  </article>
+                  ) : null}
+
+                  <div className="flex items-center gap-4">
+                    {queue.length > 0 && (
+                      <div className="flex items-baseline gap-1.5">
+                        <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
+                        <span className="text-xs text-text-muted">in queue</span>
+                      </div>
+                    )}
+                    {disk?.total !== "N/A" && disk?.percent > 0 && (
+                      <div className="flex flex-1 items-center gap-2">
+                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-hover)]">
+                          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk.percent > 80 ? "oklch(62% 0.22 25)" : disk.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
+                        </div>
+                        <span className="text-xs text-text-muted">{disk.used}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <ServiceActions serviceId={id} hasQueue={queue.length > 0} />
+
+                  <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
+                    <span className="text-xs text-text-muted">
+                      {svcData?.activity?.length > 0 ? `${svcData.activity.length} recent events` : "No recent activity"}
+                    </span>
+                    <Link href={`/${id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
+                      Open Settings
+                    </Link>
+                  </div>
+                </article>
               );
             })}
           </div>
@@ -237,22 +232,22 @@ export function DashboardContent() {
 
         {/* Activity Feed */}
         <section>
-          <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-[var(--text-muted)]">Recent Activity</h2>
-          <div className="card divide-y divide-border">
+          <h2 className="eyebrow mb-4">Recent Activity</h2>
+          <div className="card divide-y divide-[var(--border)]">
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <div key={i} className="flex items-start gap-3 px-5 py-3">
-                  <div className="h-5 w-5 animate-pulse rounded bg-[var(--surface-overlay)]" />
+                  <div className="h-5 w-5 animate-pulse rounded bg-[var(--surface-hover)]" />
                   <div className="flex-1 space-y-2">
-                    <div className="h-3 w-24 animate-pulse rounded bg-[var(--surface-overlay)]" />
-                    <div className="h-3 w-48 animate-pulse rounded bg-[var(--surface-overlay)]" />
+                    <div className="h-3 w-24 animate-pulse rounded bg-[var(--surface-hover)]" />
+                    <div className="h-3 w-48 animate-pulse rounded bg-[var(--surface-hover)]" />
                   </div>
                 </div>
               ))
             ) : data?.allActivity?.length === 0 ? (
               <div className="px-5 py-8 text-center text-sm text-text-muted">No recent activity</div>
             ) : (
-              <ul className="divide-y divide-border" role="list">
+              <ul className="divide-y divide-[var(--border)]" role="list">
                 {data?.allActivity?.map((event: any, index: number) => {
                   const service = services[event.service];
                   const icon = typeIcons[event.type] || "·";
@@ -261,8 +256,8 @@ export function DashboardContent() {
                     import: "var(--success)",
                     search: "var(--accent)",
                     refresh: "var(--text-muted)",
-                    error: "var(--error)",
-                    request: "oklch(62% 0.14 340)",
+                    error: "var(--pink)",
+                    request: "var(--accent-soft)",
                   };
                   const color = colorMap[event.type] || "var(--text-muted)";
                   return (
