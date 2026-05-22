@@ -46,6 +46,8 @@ export function DashboardContent() {
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [recentEvents, setRecentEvents] = useState<any[]>([]);
+  const [eventsLoading, setEventsLoading] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -65,10 +67,27 @@ export function DashboardContent() {
     }
   };
 
+  const fetchRecentEvents = async () => {
+    try {
+      const res = await fetch("/api/events?pageSize=3", { cache: "no-store" });
+      if (res.ok) {
+        const json = await res.json();
+        setRecentEvents(json.events || []);
+      }
+    } catch {
+    } finally {
+      setEventsLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchRecentEvents();
     const interval = setInterval(() => {
-      if (document.visibilityState === "visible") fetchData();
+      if (document.visibilityState === "visible") {
+        fetchData();
+        fetchRecentEvents();
+      }
     }, 30000);
     return () => clearInterval(interval);
   }, []);
@@ -183,60 +202,86 @@ export function DashboardContent() {
                 </article>
               );
             })}
-          </div>
-        </section>
 
-        {/* Activity Feed */}
-        <section>
-          <h2 className="eyebrow mb-4">Recent Activity</h2>
-          <div className="card divide-y divide-[var(--border)]">
-            {loading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="flex items-start gap-3 px-5 py-3">
-                  <div className="h-5 w-5 animate-pulse rounded bg-[var(--surface-hover)]" />
-                  <div className="flex-1 space-y-2">
-                    <div className="h-3 w-24 animate-pulse rounded bg-[var(--surface-hover)]" />
-                    <div className="h-3 w-48 animate-pulse rounded bg-[var(--surface-hover)]" />
-                  </div>
+            {/* Activity Card */}
+            <article key="activity" className="card flex flex-col gap-3 p-4">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-9 w-9 items-center justify-center rounded-md"
+                  style={{ backgroundColor: "oklch(62% 0.14 340 / 0.18)" }}
+                >
+                  <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="oklch(62% 0.14 340)" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <polyline points="12 6 12 12 16 14" />
+                  </svg>
                 </div>
-              ))
-            ) : data?.allActivity?.length === 0 ? (
-              <div className="px-5 py-8 text-center text-sm text-text-muted">No recent activity</div>
-            ) : (
-              <ul className="divide-y divide-[var(--border)]" role="list">
-                {data?.allActivity?.map((event: any, index: number) => {
-                  const service = services[event.service];
-                  const icon = typeIcons[event.type] || "·";
-                  const colorMap: Record<string, string> = {
-                    download: "var(--success)",
-                    import: "var(--success)",
-                    search: "var(--accent)",
-                    refresh: "var(--text-muted)",
-                    error: "var(--pink)",
-                    request: "var(--accent-soft)",
-                  };
-                  const color = colorMap[event.type] || "var(--text-muted)";
-                  return (
-                    <li
-                      key={`${event.service}-${event.timestamp}-${event.title}-${event.message}-${index}`}
-                      className="flex items-center gap-3 px-5 py-3"
-                    >
-                      <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-xs font-medium" style={{ backgroundColor: `${typeof color === 'string' && color.startsWith('var') ? 'rgba(100,160,220,0.12)' : color + '15'}`, color }}>
-                        {icon}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-baseline gap-2">
-                          <span className="text-xs font-medium" style={{ color: service?.color }}>{service?.name}</span>
-                          <span className="text-xs text-[var(--text-muted)]">{event.title}</span>
-                        </div>
-                        {event.message && <p className="mt-0.5 truncate text-xs text-[var(--text-muted)]">{event.message}</p>}
-                      </div>
-                      <span className="flex-shrink-0 text-xs text-[var(--text-muted)]">{formatTime(event.timestamp)}</span>
-                    </li>
-                  );
-                })}
-              </ul>
-            )}
+                <div>
+                  <h3 className="text-sm font-medium text-text-primary">Recent Activity</h3>
+                  <p className="text-xs text-text-muted">Events from all services</p>
+                </div>
+                <div className="ml-auto">
+                  <span className="metric-value text-lg font-semibold text-text-primary">
+                    {eventsLoading ? "—" : recentEvents.length}
+                  </span>
+                </div>
+              </div>
+
+              {eventsLoading ? (
+                <div className="space-y-3">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="h-6 animate-pulse rounded-md bg-[var(--surface-hover)]" />
+                  ))}
+                </div>
+              ) : recentEvents.length === 0 ? (
+                <div className="py-4 text-center text-xs text-text-muted">No recent activity</div>
+              ) : (
+                <ul className="space-y-2">
+                  {recentEvents.map((event: any, index: number) => {
+                    const service = services[event.service];
+                    const icon = typeIcons[event.type] || "·";
+                    const colorMap: Record<string, string> = {
+                      download: "var(--success)",
+                      import: "var(--success)",
+                      search: "var(--accent)",
+                      refresh: "var(--text-muted)",
+                      error: "var(--pink)",
+                      request: "var(--accent-soft)",
+                    };
+                    const color = colorMap[event.type] || "var(--text-muted)";
+                    return (
+                      <li key={`${event.service}-${event.timestamp}-${event.title}-${index}`} className="flex items-center gap-2">
+                        <span
+                          className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-[10px] font-medium"
+                          style={{ backgroundColor: `${typeof color === "string" && color.startsWith("var") ? "rgba(100,160,220,0.12)" : color + "15"}`, color }}
+                        >
+                          {icon}
+                        </span>
+                        {service && (
+                          <span className="rounded-sm px-1.5 py-0.5 text-[10px] font-medium" style={{ backgroundColor: `${service.color.slice(0, -1)} / 0.15)`, color: service.color }}>
+                            {service.name}
+                          </span>
+                        )}
+                        <span className="min-w-0 flex-1 truncate text-xs text-text-primary">{event.title}</span>
+                        <span className="flex-shrink-0 text-[10px] text-text-muted">{formatTime(event.timestamp)}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+
+              <Link href="/events" className="btn-ghost self-start">
+                View All Events
+              </Link>
+
+              <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
+                <span className="text-xs text-text-muted">
+                  {eventsLoading ? "Loading..." : `${recentEvents.length} event${recentEvents.length !== 1 ? "s" : ""} today`}
+                </span>
+                <Link href="/events" className="btn-ghost" aria-label="View all events">
+                  View All →
+                </Link>
+              </div>
+            </article>
           </div>
         </section>
       </main>
