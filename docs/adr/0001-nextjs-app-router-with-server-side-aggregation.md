@@ -4,14 +4,14 @@
 Accepted
 
 ## Context
-[Need a unified dashboard that aggregates health, queue, disk, activity data from multiple *arr services without exposing internal network details]
+The dashboard needs to aggregate health, queue, disk, and activity data from multiple *arr services. Each service runs on a different port authenticated by its own API key. Direct browser-to-service calls would require per-service CORS configuration and expose internal network topology to the client.
 
 ## Decision
-[Next.js App Router with all API routes aggregated server-side, URL rewrite proxy for direct service access]
+Use Next.js App Router with server-side API route handlers for read-oriented data aggregation (health, queue, disk, activity), paired with Next.js URL rewrite proxies for direct service actions (search, pause, refresh) that require the full service API surface.
 
 ## Consequences
 **Positive:**
-- API keys remain same-origin (all traffic stays within the dashboard origin) and are not exposed to third-party origins — see ADR-0006 for the rewrite proxy path where keys are browser-accessible
+- API keys are never exposed to third-party origins (all traffic stays within the dashboard origin)
 - Server-side aggregation reduces client complexity
 
 **Negative:**
