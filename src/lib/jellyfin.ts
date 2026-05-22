@@ -1,7 +1,11 @@
+import { env } from "./env";
+import type { JellyfinSystemInfo } from "./types";
+import { mockJellyfinSystemInfo } from "./mock-data";
+
 function getJellyfinConfig() {
   return {
-    url: process.env.JELLYFIN_URL || "",
-    key: process.env.JELLYFIN_API_KEY || "",
+    url: env.JELLYFIN_URL || "",
+    key: env.JELLYFIN_API_KEY || "",
   };
 }
 
@@ -32,7 +36,8 @@ async function jellyfinFetch(endpoint: string): Promise<Response | null> {
   return null;
 }
 
-export async function getJellyfinSystemInfo() {
+export async function getJellyfinSystemInfo(): Promise<JellyfinSystemInfo | null> {
+  if (env.USE_MOCK_DATA === "true") return mockJellyfinSystemInfo;
   try {
     const res = await jellyfinFetch("/System/Info");
     if (!res || !res.ok) return null;
@@ -50,7 +55,8 @@ export async function getJellyfinSystemInfo() {
   }
 }
 
-export async function getJellyfinSessions() {
+export async function getJellyfinSessions(): Promise<number> {
+  if (env.USE_MOCK_DATA === "true") return 3;
   try {
     const res = await jellyfinFetch("/Sessions");
     if (!res || !res.ok) return 0;

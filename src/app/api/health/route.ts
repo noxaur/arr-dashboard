@@ -1,26 +1,15 @@
 import { NextResponse } from "next/server";
-import { checkHealth } from "@/lib/api";
-import { serviceOrder } from "@/lib/services";
+import { fetchAllServices } from "@/lib/arr-service";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const serviceId = searchParams.get("service");
 
-  if (!serviceId) {
-    const results: Record<string, Awaited<ReturnType<typeof checkHealth>>> = {};
-    for (const id of serviceOrder) {
-      results[id] = await checkHealth(id);
-    }
-    return NextResponse.json(results);
+  const entries = await fetchAllServices("health", serviceId ? { services: [serviceId] } : undefined);
+
+  if (serviceId && !entries[serviceId]) {
+    return NextResponse.json({ error: `Failed to check health for ${serviceId}` }, { status: 500 });
   }
 
-  try {
-    const health = await checkHealth(serviceId);
-    return NextResponse.json({ [serviceId]: health });
-  } catch (error) {
-    return NextResponse.json(
-      { error: `Failed to check health for ${serviceId}` },
-      { status: 500 }
-    );
-  }
+  return NextResponse.json(entries);
 }

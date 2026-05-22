@@ -1,9 +1,13 @@
+import { env } from "./env";
 import { services } from "./services";
 import { getBasicAuth } from "./auth";
-import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace } from "./mock-data";
+import { formatBytes } from "./format";
+import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace, SystemInfo } from "./types";
 import { mockHealth, mockQueue, mockActivity } from "./mock-data";
 
-const USE_MOCK = process.env.USE_MOCK_DATA === "true";
+function useMock() {
+  return env.USE_MOCK_DATA === "true";
+}
 
 async function arrFetch(
   serviceId: string,
@@ -18,7 +22,7 @@ async function arrFetch(
     throw new Error(`Missing URL for ${serviceId} (env: ${service.id.toUpperCase()}_URL)`);
   }
 
-  const apiKey = process.env[service.apiKeyEnv];
+  const apiKey = (env as Record<string, string | undefined>)[service.apiKeyEnv];
   if (!apiKey) {
     throw new Error(`Missing API key for ${serviceId} (env: ${service.apiKeyEnv})`);
   }
@@ -67,7 +71,7 @@ async function arrFetch(
 export { arrFetch };
 
 export async function checkHealth(serviceId: string): Promise<HealthStatus> {
-  if (USE_MOCK) return mockHealth[serviceId];
+  if (useMock()) return mockHealth[serviceId];
 
   try {
     const start = Date.now();
@@ -122,7 +126,7 @@ export async function checkHealth(serviceId: string): Promise<HealthStatus> {
 }
 
 export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
-  if (USE_MOCK) {
+  if (useMock()) {
     return { used: "0 MB", total: "N/A", percent: 0 };
   }
 
@@ -154,7 +158,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       freeBytes += disk.freeSpace;
     }
 
-    const usedBytes = totalBytes - freeBytes;
+    const usedBytes = Math.max(0, totalBytes - freeBytes);
     const percent = totalBytes > 0 ? Math.round((usedBytes / totalBytes) * 100) : 0;
 
     return {
@@ -169,20 +173,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
   }
 }
 
-export function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB", "TB"];
-  let unitIndex = 0;
-  let value = bytes;
-  while (value >= 1024 && unitIndex < units.length - 1) {
-    value /= 1024;
-    unitIndex++;
-  }
-  return `${value.toFixed(value >= 100 ? 0 : 1)} ${units[unitIndex]}`;
-}
+export { formatBytes } from "./format";
 
 export async function getQueue(serviceId: string): Promise<QueueItem[]> {
-  if (USE_MOCK) return mockQueue.filter((q) => q.service === serviceId);
+  if (useMock()) return mockQueue.filter((q) => q.service === serviceId);
 
   try {
     let res: Response;
@@ -217,7 +211,7 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
     return (data.records || data || []).map((item: any) => ({
       id: item.id,
       title: item.movie?.title || item.series?.title || item.title || "Unknown",
-      progress: item.status === "downloading" ? Math.round(((item.size - (item.sizeleft || 0)) / (item.size || 1)) * 100) : 0,
+      progress: item.status === "downloading" && item.size > 0 ? Math.round(Math.min(100, Math.max(0, ((item.size - (item.sizeleft || 0)) / item.size) * 100))) : 0,
       status: item.status === "downloading" ? "downloading" as const : item.status === "importing" ? "importing" as const : item.status === "failed" ? "failed" as const : "queued" as const,
       size: item.size ? formatBytes(item.size) : "N/A",
       sizeLeft: item.sizeleft ? formatBytes(item.sizeleft) : "0 MB",
@@ -230,7 +224,7 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
 }
 
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
-  if (USE_MOCK)
+  if (useMock())
     return mockActivity.filter((a) => a.service === serviceId).slice(0, 10);
 
   try {
@@ -296,33 +290,28 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   }
 }
 
-export interface SystemInfo {
-  os: string;
-  docker: boolean;
-  uptime: string;
-}
-
 export async function getSystemInfo(serviceId: string): Promise<SystemInfo> {
-  if (USE_MOCK) {
-    return { os: "Linux", docker: true, uptime: "3d 14h" };
+  if (useMock()) {
+    return { os: "Linux", version: "5.18.4.9568", docker: true, uptime: "3d 14h" };
   }
 
   if (serviceId === "prowlarr" || serviceId === "jellyseerr" || serviceId === "bazarr") {
-    return { os: "unknown", docker: false, uptime: "N/A" };
+    return { os: "unknown", version: "unknown", docker: false, uptime: "N/A" };
   }
 
   try {
     const res = await arrFetch(serviceId, "/system/status");
-    if (!res.ok) return { os: "unknown", docker: false, uptime: "N/A" };
+    if (!res.ok) return { os: "unknown", version: "unknown", docker: false, uptime: "N/A" };
 
     const data = await res.json();
     return {
       os: data.osName || data.platform || "unknown",
+      version: data.version || "unknown",
       docker: data.isDocker || data.docker || false,
       uptime: data.uptime ? `${data.uptime}` : formatUptime(data.startTime),
     };
   } catch {
-    return { os: "unknown", docker: false, uptime: "N/A" };
+    return { os: "unknown", version: "unknown", docker: false, uptime: "N/A" };
   }
 }
 
@@ -338,7 +327,7 @@ export function formatUptime(startTime?: string): string {
 }
 
 export async function pauseQueue(serviceId: string): Promise<boolean> {
-  if (USE_MOCK) return true;
+  if (useMock()) return true;
 
   try {
     const res = await arrFetch(serviceId, "/command", {
@@ -352,7 +341,7 @@ export async function pauseQueue(serviceId: string): Promise<boolean> {
 }
 
 export async function refreshMonitored(serviceId: string): Promise<boolean> {
-  if (USE_MOCK) return true;
+  if (useMock()) return true;
 
   try {
     const res = await arrFetch(serviceId, "/command", {
@@ -366,7 +355,7 @@ export async function refreshMonitored(serviceId: string): Promise<boolean> {
 }
 
 export async function searchMissing(serviceId: string): Promise<boolean> {
-  if (USE_MOCK) return true;
+  if (useMock()) return true;
 
   try {
     const commandName = serviceId === "radarr" ? "MoviesSearch" : "SeriesSearch";
