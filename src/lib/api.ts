@@ -1,9 +1,12 @@
+import { env } from "./env";
 import { services } from "./services";
 import { getBasicAuth } from "./auth";
 import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace } from "./mock-data";
 import { mockHealth, mockQueue, mockActivity } from "./mock-data";
 
-const USE_MOCK = process.env.USE_MOCK_DATA === "true";
+function useMock() {
+  return env.USE_MOCK_DATA === "true";
+}
 
 async function arrFetch(
   serviceId: string,
@@ -18,7 +21,7 @@ async function arrFetch(
     throw new Error(`Missing URL for ${serviceId} (env: ${service.id.toUpperCase()}_URL)`);
   }
 
-  const apiKey = process.env[service.apiKeyEnv];
+  const apiKey = (env as Record<string, string | undefined>)[service.apiKeyEnv];
   if (!apiKey) {
     throw new Error(`Missing API key for ${serviceId} (env: ${service.apiKeyEnv})`);
   }
@@ -67,7 +70,7 @@ async function arrFetch(
 export { arrFetch };
 
 export async function checkHealth(serviceId: string): Promise<HealthStatus> {
-  if (USE_MOCK) return mockHealth[serviceId];
+  if (useMock()) return mockHealth[serviceId];
 
   try {
     const start = Date.now();
@@ -122,7 +125,7 @@ export async function checkHealth(serviceId: string): Promise<HealthStatus> {
 }
 
 export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
-  if (USE_MOCK) {
+  if (useMock()) {
     return { used: "0 MB", total: "N/A", percent: 0 };
   }
 
@@ -182,7 +185,7 @@ export function formatBytes(bytes: number): string {
 }
 
 export async function getQueue(serviceId: string): Promise<QueueItem[]> {
-  if (USE_MOCK) return mockQueue.filter((q) => q.service === serviceId);
+  if (useMock()) return mockQueue.filter((q) => q.service === serviceId);
 
   try {
     let res: Response;
@@ -230,7 +233,7 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
 }
 
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
-  if (USE_MOCK)
+  if (useMock())
     return mockActivity.filter((a) => a.service === serviceId).slice(0, 10);
 
   try {
@@ -303,7 +306,7 @@ export interface SystemInfo {
 }
 
 export async function getSystemInfo(serviceId: string): Promise<SystemInfo> {
-  if (USE_MOCK) {
+  if (useMock()) {
     return { os: "Linux", docker: true, uptime: "3d 14h" };
   }
 
@@ -338,7 +341,7 @@ export function formatUptime(startTime?: string): string {
 }
 
 export async function pauseQueue(serviceId: string): Promise<boolean> {
-  if (USE_MOCK) return true;
+  if (useMock()) return true;
 
   try {
     const res = await arrFetch(serviceId, "/command", {
@@ -352,7 +355,7 @@ export async function pauseQueue(serviceId: string): Promise<boolean> {
 }
 
 export async function refreshMonitored(serviceId: string): Promise<boolean> {
-  if (USE_MOCK) return true;
+  if (useMock()) return true;
 
   try {
     const res = await arrFetch(serviceId, "/command", {
@@ -366,7 +369,7 @@ export async function refreshMonitored(serviceId: string): Promise<boolean> {
 }
 
 export async function searchMissing(serviceId: string): Promise<boolean> {
-  if (USE_MOCK) return true;
+  if (useMock()) return true;
 
   try {
     const commandName = serviceId === "radarr" ? "MoviesSearch" : "SeriesSearch";

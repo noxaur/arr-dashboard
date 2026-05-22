@@ -33,6 +33,14 @@ export interface DiskSpace {
   mounts?: Array<{ path: string; used: string; total: string }>;
 }
 
+export const mockJellyfinSystemInfo = {
+  os: "Linux",
+  version: "10.10.6",
+  architecture: "x64",
+  startTime: new Date(Date.now() - 86400000 * 3).toISOString(),
+  serverName: "Media Server",
+};
+
 const now = new Date();
 
 function timeAgo(minutes: number): string {

@@ -3,9 +3,12 @@
 import { useState } from "react";
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">(
-    () => (document.documentElement.getAttribute("data-theme") as "light" | "dark") ?? "light",
-  );
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    if (typeof document !== "undefined") {
+      return (document.documentElement.getAttribute("data-theme") as "light" | "dark") ?? "light";
+    }
+    return "light";
+  });
 
   const toggle = () => {
     const next = theme === "light" ? "dark" : "light";

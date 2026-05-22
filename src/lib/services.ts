@@ -1,3 +1,5 @@
+import { env } from "./env";
+
 export interface ServiceConfig {
   id: string;
   name: string;
@@ -14,7 +16,7 @@ export const services: Record<string, ServiceConfig> = {
     id: "radarr",
     name: "Radarr",
     description: "Movie management",
-    url: process.env.RADARR_URL || "",
+    url: env.RADARR_URL,
     apiEndpoint: "/api/v3",
     icon: "M",
     color: "oklch(65% 0.15 30)",
@@ -24,7 +26,7 @@ export const services: Record<string, ServiceConfig> = {
     id: "sonarr",
     name: "Sonarr",
     description: "TV series management",
-    url: process.env.SONARR_URL || "",
+    url: env.SONARR_URL,
     apiEndpoint: "/api/v3",
     icon: "S",
     color: "oklch(62% 0.14 170)",
@@ -34,7 +36,7 @@ export const services: Record<string, ServiceConfig> = {
     id: "prowlarr",
     name: "Prowlarr",
     description: "Indexer management",
-    url: process.env.PROWLARR_URL || "",
+    url: env.PROWLARR_URL,
     apiEndpoint: "/api/v1",
     icon: "P",
     color: "oklch(60% 0.12 280)",
@@ -44,7 +46,7 @@ export const services: Record<string, ServiceConfig> = {
     id: "bazarr",
     name: "Bazarr",
     description: "Subtitle management",
-    url: process.env.BAZARR_URL || "",
+    url: env.BAZARR_URL,
     apiEndpoint: "/api",
     icon: "B",
     color: "oklch(62% 0.12 220)",
@@ -54,7 +56,7 @@ export const services: Record<string, ServiceConfig> = {
     id: "jellyseerr",
     name: "Jellyseerr",
     description: "Request management",
-    url: process.env.JELLYSEERR_URL || "",
+    url: env.JELLYSEERR_URL,
     apiEndpoint: "/api/v1",
     icon: "J",
     color: "oklch(62% 0.14 340)",

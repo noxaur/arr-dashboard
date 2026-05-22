@@ -10,8 +10,8 @@ export async function GET() {
     Promise.allSettled(serviceOrder.map((id) => getDiskSpace(id))),
     Promise.allSettled(serviceOrder.map((id) => getActivity(id))),
     Promise.allSettled(serviceOrder.map((id) => getSystemInfo(id))),
-    getJellyfinSystemInfo(),
-    getJellyfinSessions(),
+    getJellyfinSystemInfo().catch(() => null),
+    getJellyfinSessions().catch(() => 0),
   ]);
 
   const services = serviceOrder.map((id, i) => ({

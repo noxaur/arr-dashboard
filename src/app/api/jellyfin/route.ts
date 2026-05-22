@@ -1,14 +1,9 @@
 import { NextResponse } from "next/server";
-
-function getJellyfinConfig() {
-  return {
-    url: process.env.JELLYFIN_URL,
-    key: process.env.JELLYFIN_API_KEY,
-  };
-}
+import { env } from "@/lib/env";
 
 export async function GET() {
-  const { url: JELLYFIN_URL, key: JELLYFIN_KEY } = getJellyfinConfig();
+  const JELLYFIN_URL = env.JELLYFIN_URL;
+  const JELLYFIN_KEY = env.JELLYFIN_API_KEY;
 
   if (!JELLYFIN_KEY) {
     return NextResponse.json({ error: "Missing JELLYFIN_API_KEY" }, { status: 500 });
