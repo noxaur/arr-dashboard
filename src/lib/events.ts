@@ -1,35 +1,6 @@
-// src/lib/events.ts
-// Shared types, constants, and utilities for the Events page
+import type { EventType, ActivityEvent, EventGroup } from "./types";
 
-export type EventType = "download" | "import" | "search" | "refresh" | "error" | "request";
-
-export interface ActivityEvent {
-  id: number;
-  service: string;
-  type: EventType;
-  title: string;
-  message: string;
-  timestamp: string;
-  // Rich detail fields (available from real *arr API responses)
-  quality?: string;
-  qualityVersion?: number;
-  indexer?: string;
-  downloadClient?: string;
-  size?: string;
-  score?: number;
-  user?: string;
-  source?: string;
-  protocol?: "usenet" | "torrent";
-  movie?: { title: string; year?: number };
-  series?: { title: string; season?: number; episode?: number; episodeTitle?: string };
-  subtitle?: { language: string; type?: string };
-  duration?: string;
-}
-
-export interface EventGroup {
-  events: ActivityEvent[];
-  count: number;
-}
+export type { EventType, ActivityEvent, EventGroup };
 
 export const serviceColors: Record<string, string> = {
   radarr: "oklch(65% 0.15 30)",
