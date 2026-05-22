@@ -21,6 +21,21 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className={rubik.variable}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+      (function() {
+        var theme = localStorage.getItem('theme');
+        if (!theme) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    `,
+          }}
+        />
+      </head>
       <body className="min-h-screen font-sans antialiased">
         {children}
       </body>
