@@ -146,10 +146,15 @@ export function EventsContent() {
   };
 
   const setDatePreset = (days: number) => {
-    const to = new Date().toISOString().split("T")[0];
-    const from = new Date(Date.now() - days * 86400000).toISOString().split("T")[0];
-    setFilters((f) => ({ ...f, from, to }));
-    setDatePresetState(days);
+    if (datePreset === days) {
+      setDatePresetState(null);
+      setFilters((f) => ({ ...f, from: "", to: "" }));
+    } else {
+      const to = new Date().toISOString().split("T")[0];
+      const from = new Date(Date.now() - days * 86400000).toISOString().split("T")[0];
+      setFilters((f) => ({ ...f, from, to }));
+      setDatePresetState(days);
+    }
     setPage(1);
   };
 
