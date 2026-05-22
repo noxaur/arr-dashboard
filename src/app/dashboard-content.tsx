@@ -136,7 +136,6 @@ export function DashboardContent() {
               const svcData = data?.services?.find((s: any) => s.id === id);
               const health = svcData?.health;
               const queue = svcData?.queue || [];
-              const disk = svcData?.disk;
               const healthColorMap: Record<string, string> = {
                 healthy: "oklch(72% 0.16 145)",
                 warning: "oklch(78% 0.16 85)",
@@ -177,14 +176,6 @@ export function DashboardContent() {
                       <div className="flex items-baseline gap-1.5">
                         <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
                         <span className="text-xs text-text-muted">in queue</span>
-                      </div>
-                    )}
-                    {disk?.total !== "N/A" && disk?.percent > 0 && (
-                      <div className="flex flex-1 items-center gap-2">
-                        <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-hover)]">
-                          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk.percent > 80 ? "oklch(62% 0.22 25)" : disk.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
-                        </div>
-                        <span className="text-xs text-text-muted">{disk.used}</span>
                       </div>
                     )}
                   </div>

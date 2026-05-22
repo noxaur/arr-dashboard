@@ -1,5 +1,16 @@
 # Implementation Spec: Fix Dashboard Issues
 
+## Status
+
+| Phase | Description | Status |
+|-------|-------------|--------|
+| 1 | Fix disk space calculation — dedup mounts by `totalSpace`; dedup cross-service by `total` | ✅ Implemented |
+| 6 | Top bar disk stat uses deduplicated calculation; "No disk data" for services without disk API | ✅ Implemented |
+| 2 | Wire up action buttons (refresh, search) | 🔲 Not implemented |
+| 3 | Add auto-refresh (polling or revalidate) | 🔲 Not implemented |
+| 4 | Add Jellyfin system info integration | 🔲 Not implemented |
+| 5 | Fix Jellyseerr activity endpoint | 🔲 Not implemented |
+
 ## Problem Statement
 
 After removing iframes, the dashboard has several critical issues:

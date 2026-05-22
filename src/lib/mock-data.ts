@@ -30,6 +30,7 @@ export interface DiskSpace {
   total: string;
   percent: number;
   usedBytes?: number;
+  totalBytes?: number;
   mounts?: Array<{ path: string; used: string; total: string }>;
 }
 

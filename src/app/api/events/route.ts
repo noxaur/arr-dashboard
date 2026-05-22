@@ -2,6 +2,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serviceOrder } from "@/lib/services";
 import { getActivity } from "@/lib/api";
+import { getJellyfinActivity } from "@/lib/jellyfin";
 import type { ActivityEvent } from "@/lib/events";
 
 interface EventsQuery {
@@ -25,20 +26,27 @@ export async function GET(request: NextRequest) {
     ? query.types.split(",").filter(Boolean)
     : [];
   const searchText = (query.search ?? "").toLowerCase().trim();
-  const fromDate = query.from ? new Date(query.from) : null;
+  const defaultFrom = new Date(Date.now() - 30 * 86400000);
+  const fromDate = query.from ? new Date(query.from) : defaultFrom;
   const toDate = query.to ? new Date(query.to) : null;
   const validFrom = fromDate && !isNaN(fromDate.getTime());
   const validTo = toDate && !isNaN(toDate.getTime());
   const page = Math.max(1, parseInt(query.page ?? "1", 10) || 1);
-  const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize ?? "50", 10) || 50));
+  const pageSize = Math.min(200, Math.max(1, parseInt(query.pageSize ?? "100", 10) || 100));
 
-  const results = await Promise.allSettled(
-    selectedServices.map((id) => getActivity(id))
-  );
+  const [arrResults, jellyfinEvents] = await Promise.all([
+    Promise.allSettled(selectedServices.map((id) => getActivity(id))),
+    getJellyfinActivity(),
+  ]);
 
   const allEvents: ActivityEvent[] = [];
+  const includeJellyfin = !query.services || query.services.split(",").includes("jellyfin");
 
-  results.forEach((result, i) => {
+  if (includeJellyfin) {
+    allEvents.push(...jellyfinEvents.map((e) => ({ ...e, service: "jellyfin" })));
+  }
+
+  arrResults.forEach((result, i) => {
     if (result.status === "fulfilled") {
       const serviceEvents = result.value.map((e: any) => ({
         ...e,

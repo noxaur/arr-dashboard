@@ -14,8 +14,12 @@ import {
   groupEvents,
   formatTime,
 } from "@/lib/events";
-import { EventModal } from "./events-modal";
+import dynamic from "next/dynamic";
 import { motion, AnimatePresence } from "motion/react";
+
+const EventModal = dynamic(() => import("./events-modal").then((m) => ({ default: m.EventModal })), {
+  ssr: false,
+});
 
 interface Filters {
   services: string[];
@@ -33,9 +37,11 @@ interface EventsResponse {
   totalPages: number;
 }
 
+const ALL_SERVICE_IDS = [...serviceOrder, "jellyfin"];
+
 function buildQuery(filters: Filters, page: number): string {
   const params = new URLSearchParams();
-  if (filters.services.length > 0 && filters.services.length < serviceOrder.length) {
+  if (filters.services.length > 0) {
     params.set("services", filters.services.join(","));
   }
   if (filters.types.length > 0 && filters.types.length < Object.keys(typeLabels).length) {
@@ -239,6 +245,17 @@ export function EventsContent() {
                 </button>
               );
             })}
+            <button
+              onClick={() => toggleService("jellyfin")}
+              className="btn-ghost px-2.5 py-1 text-xs"
+              style={{
+                backgroundColor: filters.services.includes("jellyfin") ? "var(--accent-bg)" : undefined,
+                color: filters.services.includes("jellyfin") ? "var(--accent)" : undefined,
+                borderColor: filters.services.includes("jellyfin") ? "var(--accent)" : undefined,
+              }}
+            >
+              Jellyfin
+            </button>
 
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>|</span>
 
@@ -375,7 +392,7 @@ export function EventsContent() {
               Next
             </button>
             <span className="text-xs ml-2" style={{ color: "var(--text-muted)" }}>
-              Page {page} of {totalPages}
+              {(page - 1) * 50 + 1}–{Math.min(page * 50, total)} of {total}
             </span>
           </div>
         )}
@@ -486,46 +503,46 @@ function EventRow({
         </div>
       </div>
 
-      {isGroup && expanded && !hasSearch && (
-        <>
-          <div
-            className="px-5 py-1.5 text-[10px] font-medium"
-            style={{
-              backgroundColor: "var(--bg-elevated)",
-              color: "var(--text-muted)",
-              borderLeft: `3px solid ${serviceColors[primary.service]}`,
-              borderTop: "1px solid var(--border)",
-            }}
-          >
-            {group.count - 1} more {group.count - 1 === 1 ? "event" : "events"}
-          </div>
-          {group.events.slice(1).map((event, subIdx) => (
-            <div
-              key={event.id}
-              onClick={() => onEventClick(event)}
-              className="flex items-center gap-3 px-5 py-2.5"
-              style={{
-                borderTop: subIdx > 0 ? "1px solid var(--border)" : undefined,
-                borderLeft: `3px solid ${serviceColors[primary.service]}`,
-                backgroundColor: "var(--bg-elevated)",
-                cursor: "pointer",
-                transition: "opacity 150ms ease",
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.8"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
-            >
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs" style={{ color: "var(--text-secondary)" }}>
-                  {event.message}
-                </p>
+          {isGroup && expanded && !hasSearch && (
+          <>
+            {group.events.slice(1, 6).map((event, subIdx) => (
+              <div
+                key={event.id}
+                onClick={() => onEventClick(event)}
+                className="flex items-center gap-3 px-5 py-2.5"
+                style={{
+                  borderLeft: `3px solid ${serviceColors[primary.service]}`,
+                  backgroundColor: "var(--bg-elevated)",
+                  cursor: "pointer",
+                  transition: "opacity 150ms ease",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.8"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
+              >
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs" style={{ color: "var(--text-secondary)" }}>
+                    {event.message || event.title}
+                  </p>
+                </div>
+                <span className="flex-shrink-0 text-xs" style={{ color: "var(--text-muted)" }}>
+                  {formatTime(event.timestamp)}
+                </span>
               </div>
-              <span className="flex-shrink-0 text-xs" style={{ color: "var(--text-muted)" }}>
-                {formatTime(event.timestamp)}
-              </span>
-            </div>
-          ))}
-        </>
-      )}
+            ))}
+            {group.count > 6 && (
+              <div
+                className="px-5 py-1.5 text-[10px] font-medium"
+                style={{
+                  backgroundColor: "var(--bg-elevated)",
+                  color: "var(--text-muted)",
+                  borderLeft: `3px solid ${serviceColors[primary.service]}`,
+                }}
+              >
+                +{group.count - 6} more {group.count - 6 === 1 ? "event" : "events"}
+              </div>
+            )}
+          </>
+          )}
     </>
   );
 }

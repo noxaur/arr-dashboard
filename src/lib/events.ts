@@ -37,6 +37,7 @@ export const serviceColors: Record<string, string> = {
   prowlarr: "oklch(60% 0.12 280)",
   bazarr: "oklch(62% 0.12 220)",
   jellyseerr: "oklch(62% 0.14 340)",
+  jellyfin: "oklch(60% 0.13 50)",
 };
 
 export const serviceNames: Record<string, string> = {
@@ -45,6 +46,7 @@ export const serviceNames: Record<string, string> = {
   prowlarr: "Prowlarr",
   bazarr: "Bazarr",
   jellyseerr: "Jellyseerr",
+  jellyfin: "Jellyfin",
 };
 
 export const typeIcons: Record<EventType, string> = {

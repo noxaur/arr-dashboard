@@ -140,10 +140,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
+    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
     for (const mount of data) {
-      if (!uniqueDisks.has(mount.path)) {
-        uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      if (!uniqueDisks.has(mount.totalSpace)) {
+        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
     }
 
@@ -162,6 +162,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       total: formatBytes(totalBytes),
       percent,
       usedBytes,
+      totalBytes,
       mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace) })),
     };
   } catch {
@@ -231,19 +232,19 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
 
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   if (USE_MOCK)
-    return mockActivity.filter((a) => a.service === serviceId).slice(0, 10);
+    return mockActivity.filter((a) => a.service === serviceId).slice(0, 200);
 
   try {
     let res: Response;
 
     if (serviceId === "prowlarr") {
-      res = await arrFetch(serviceId, "/history?pageSize=10");
+      res = await arrFetch(serviceId, "/history?pageSize=2000");
     } else if (serviceId === "bazarr") {
-      res = await arrFetch(serviceId, "/system/logs?start=0&limit=10");
+      res = await arrFetch(serviceId, "/system/logs?start=0&limit=2000");
     } else if (serviceId === "jellyseerr") {
-      res = await arrFetch(serviceId, "/activity?take=10&skip=0&sort=createdAt");
+      res = await arrFetch(serviceId, "/activity?take=2000&skip=0&sort=createdAt");
     } else {
-      res = await arrFetch(serviceId, "/history?pageSize=10");
+      res = await arrFetch(serviceId, "/history?pageSize=2000");
     }
 
     if (!res.ok) return [];
@@ -277,9 +278,15 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
       }));
     }
 
-    return (data.records || data || [])
+    let events = (data.records || data || []) as any[];
+    if (serviceId === "prowlarr") {
+      events = events.filter((item: any) => {
+        const msg = item.data?.message || item.data?.title || "";
+        return msg.length > 0;
+      });
+    }
+    return events
       .filter((item: any) => !["indexerRss", "indexerSearch"].includes(item.eventType))
-      .slice(0, 10)
       .map((item: any, i: number) => ({
       id: i,
       service: serviceId,
