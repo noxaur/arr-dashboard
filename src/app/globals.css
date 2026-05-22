@@ -102,7 +102,7 @@
   }
 
   ::selection {
-    background-color: var(--accent / 0.25);
+    background-color: oklch(65% 0.12 280 / 0.25);
     color: var(--text-primary);
   }
 
@@ -356,17 +356,17 @@
 
   .status-dot.healthy {
     background-color: var(--success);
-    box-shadow: 0 0 6px var(--success / 0.35);
+    box-shadow: 0 0 6px oklch(72% 0.16 145 / 0.35);
   }
 
   .status-dot.warning {
     background-color: var(--warning);
-    box-shadow: 0 0 6px var(--warning / 0.35);
+    box-shadow: 0 0 6px oklch(78% 0.16 85 / 0.35);
   }
 
   .status-dot.error {
     background-color: var(--error);
-    box-shadow: 0 0 6px var(--error / 0.35);
+    box-shadow: 0 0 6px oklch(62% 0.22 25 / 0.35);
   }
 
   .status-dot.offline {
