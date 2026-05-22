@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = document.documentElement.getAttribute("data-theme") as "light" | "dark" | null;
-    if (stored) setTheme(stored);
+    setMounted(true);
+    const current = document.documentElement.getAttribute("data-theme") as "light" | "dark" | null;
+    if (current) setTheme(current);
   }, []);
 
   const toggle = () => {
@@ -17,12 +19,19 @@ export function ThemeToggle() {
     document.documentElement.setAttribute("data-theme", next);
   };
 
+  if (!mounted) {
+    return (
+      <button className="btn-ghost" aria-label="Toggle theme">
+        ◐
+      </button>
+    );
+  }
+
   return (
     <button
       onClick={toggle}
       className="btn-ghost"
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-      suppressHydrationWarning
     >
       {theme === "light" ? "◐" : "◑"}
     </button>

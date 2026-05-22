@@ -338,6 +338,11 @@
     text-transform: uppercase;
   }
 
+  .card-grid {
+    content-visibility: auto;
+    contain: content;
+  }
+
   .eyebrow {
     font-size: 15px;
     font-weight: 500;
