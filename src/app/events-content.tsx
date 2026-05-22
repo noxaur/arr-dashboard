@@ -237,7 +237,8 @@ export function EventsContent() {
         {filtersOpen && (
           <div className="mb-4 flex flex-wrap items-center gap-1.5">
             {serviceOrder.map((id) => {
-              const active = activeServices.includes(id);
+              const hasFilter = filters.services.length > 0;
+              const active = hasFilter && activeServices.includes(id);
               const color = serviceColors[id];
               return (
                 <button
@@ -258,7 +259,8 @@ export function EventsContent() {
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>|</span>
 
             {(Object.keys(typeLabels) as EventType[]).map((t) => {
-              const active = filters.types.length === 0 || filters.types.includes(t);
+              const hasFilter = filters.types.length > 0;
+              const active = hasFilter && filters.types.includes(t);
               const color = typeColors[t];
               return (
                 <button
