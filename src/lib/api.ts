@@ -1,6 +1,7 @@
 import { env } from "./env";
 import { services } from "./services";
 import { getBasicAuth } from "./auth";
+import { formatBytes } from "./format";
 import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace, SystemInfo } from "./types";
 import { mockHealth, mockQueue, mockActivity } from "./mock-data";
 
@@ -172,17 +173,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
   }
 }
 
-export function formatBytes(bytes: number): string {
-  if (bytes === 0) return "0 B";
-  const units = ["B", "KB", "MB", "GB", "TB"];
-  let unitIndex = 0;
-  let value = bytes;
-  while (value >= 1024 && unitIndex < units.length - 1) {
-    value /= 1024;
-    unitIndex++;
-  }
-  return `${value.toFixed(value >= 100 ? 0 : 1)} ${units[unitIndex]}`;
-}
+export { formatBytes } from "./format";
 
 export async function getQueue(serviceId: string): Promise<QueueItem[]> {
   if (useMock()) return mockQueue.filter((q) => q.service === serviceId);

@@ -1,33 +1,18 @@
 import { NextResponse } from "next/server";
-import { getDiskSpace, formatBytes } from "@/lib/api";
+import { formatBytes, parseBytes } from "@/lib/format";
+import { fetchAllServices } from "@/lib/arr-service";
+import type { DiskSpace } from "@/lib/types";
 
 export async function GET() {
   try {
-    const [radarr, sonarr] = await Promise.all([
-      getDiskSpace("radarr"),
-      getDiskSpace("sonarr"),
-    ]);
+    const entries = await fetchAllServices<DiskSpace>("disk");
 
-    const parseBytes = (value: string | number): number => {
-      if (typeof value === "number") return Number.isFinite(value) ? value : 0;
-      const match = value.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
-      if (!match) return 0;
-      const num = parseFloat(match[1]);
-      if (isNaN(num)) return 0;
-      const unit = match[2].toUpperCase();
-      const multipliers: Record<string, number> = {
-        B: 1, KB: 1000, MB: 1000000, GB: 1000000000, TB: 1000000000000,
-      };
-      return Math.round(num * (multipliers[unit] || 1));
-    };
-
-    // Deduplicate by total bytes — Radarr and Sonarr report the same underlying disk
     const seenTotals = new Set<number>();
     let totalBytes = 0;
     let usedBytes = 0;
 
-    for (const disk of [radarr, sonarr]) {
-      if (disk.total !== "N/A") {
+    for (const disk of Object.values(entries)) {
+      if (disk.usedBytes !== undefined) {
         const diskTotal = parseBytes(disk.total);
         if (!seenTotals.has(diskTotal)) {
           seenTotals.add(diskTotal);
@@ -43,13 +28,9 @@ export async function GET() {
       used: formatBytes(usedBytes),
       total: formatBytes(totalBytes),
       percent,
-      radarr,
-      sonarr,
+      ...entries,
     });
-  } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to fetch disk space" },
-      { status: 500 }
-    );
+  } catch {
+    return NextResponse.json({ error: "Failed to fetch disk space" }, { status: 500 });
   }
 }
