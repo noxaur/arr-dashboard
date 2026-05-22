@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={rubik.variable}>
       <script
         dangerouslySetInnerHTML={{
-          __html: `(function(){var t=localStorage.getItem("theme");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"}document.documentElement.setAttribute("data-theme",t)})()`,
+          __html: `(function(){var t;try{t=localStorage.getItem("theme")}catch(e){}document.documentElement.setAttribute("data-theme",t||(matchMedia("(prefers-color-scheme:dark)").matches?"dark":"light"))})()`,
         }}
       />
       <body className="min-h-screen font-sans antialiased">

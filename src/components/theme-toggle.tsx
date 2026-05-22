@@ -19,6 +19,7 @@ export function ThemeToggle() {
       onClick={toggle}
       className="btn-ghost"
       aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+      suppressHydrationWarning
     >
       {theme === "light" ? "◐" : "◑"}
     </button>
