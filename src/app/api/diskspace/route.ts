@@ -1,25 +1,25 @@
 import { NextResponse } from "next/server";
 import { getDiskSpace, formatBytes } from "@/lib/api";
 
+export function parseBytes(value: string | number): number {
+  if (typeof value === "number") return Number.isFinite(value) ? value : 0;
+  const match = value.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
+  if (!match) return 0;
+  const num = parseFloat(match[1]);
+  if (isNaN(num)) return 0;
+  const unit = match[2].toUpperCase();
+  const multipliers: Record<string, number> = {
+    B: 1, KB: 1024, MB: 1048576, GB: 1073741824, TB: 1099511627776,
+  };
+  return Math.round(num * (multipliers[unit] || 1));
+}
+
 export async function GET() {
   try {
     const [radarr, sonarr] = await Promise.all([
       getDiskSpace("radarr"),
       getDiskSpace("sonarr"),
     ]);
-
-    const parseBytes = (value: string | number): number => {
-      if (typeof value === "number") return Number.isFinite(value) ? value : 0;
-      const match = value.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
-      if (!match) return 0;
-      const num = parseFloat(match[1]);
-      if (isNaN(num)) return 0;
-      const unit = match[2].toUpperCase();
-      const multipliers: Record<string, number> = {
-        B: 1, KB: 1000, MB: 1000000, GB: 1000000000, TB: 1000000000000,
-      };
-      return Math.round(num * (multipliers[unit] || 1));
-    };
 
     // Deduplicate by total bytes — Radarr and Sonarr report the same underlying disk
     const seenTotals = new Set<number>();

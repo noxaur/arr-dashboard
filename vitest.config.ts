@@ -4,4 +4,12 @@ export default defineConfig({
   test: {
     environment: "node",
   },
+  esbuild: {
+    jsx: "automatic",
+  },
+  resolve: {
+    alias: {
+      "@": "./src",
+    },
+  },
 });
