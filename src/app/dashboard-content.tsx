@@ -25,7 +25,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 const typeIcons: Record<string, string> = {
   download: "↓",
   import: "✓",
-  search: "⌕",
+  search: "⊕",
   refresh: "↻",
   error: "!",
   request: "+",
@@ -259,9 +259,9 @@ export function DashboardContent() {
                   return (
                     <li
                       key={`${event.service}-${event.timestamp}-${event.title}-${event.message}-${index}`}
-                      className="flex items-start gap-3 px-5 py-3"
+                      className="flex items-center gap-3 px-5 py-3"
                     >
-                      <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-xs font-medium" style={{ backgroundColor: `${typeof color === 'string' && color.startsWith('var') ? 'rgba(100,160,220,0.12)' : color + '15'}`, color }}>
+                      <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-xs font-medium" style={{ backgroundColor: `${typeof color === 'string' && color.startsWith('var') ? 'rgba(100,160,220,0.12)' : color + '15'}`, color }}>
                         {icon}
                       </div>
                       <div className="min-w-0 flex-1">
