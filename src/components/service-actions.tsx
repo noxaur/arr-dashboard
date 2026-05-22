@@ -7,11 +7,17 @@ export function ServiceActions({ serviceId, hasQueue }: { serviceId: string; has
   const handleAction = async (action: string) => {
     setLoading(action);
     try {
-      await fetch("/api/actions", {
+      const res = await fetch("/api/actions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ service: serviceId, action }),
       });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || `Action failed: ${res.status}`);
+      }
+    } catch (error) {
+      console.error(`Action ${action} failed for ${serviceId}:`, error);
     } finally {
       setLoading(null);
     }
