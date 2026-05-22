@@ -5,16 +5,20 @@ export async function POST(request: Request) {
   try {
     const origin = request.headers.get("origin") || request.headers.get("referer");
     const host = request.headers.get("host");
-    if (origin && host) {
-      let originHost: string;
-      try {
-        originHost = new URL(origin).host;
-      } catch {
-        return NextResponse.json({ error: "Invalid origin" }, { status: 403 });
-      }
-      if (originHost !== host) {
-        return NextResponse.json({ error: "Cross-origin requests not allowed" }, { status: 403 });
-      }
+    if (!origin || !host) {
+      return NextResponse.json(
+        { error: "Missing origin or host header" },
+        { status: 403 }
+      );
+    }
+    let originHost: string;
+    try {
+      originHost = new URL(origin).host;
+    } catch {
+      return NextResponse.json({ error: "Invalid origin" }, { status: 403 });
+    }
+    if (originHost !== host) {
+      return NextResponse.json({ error: "Cross-origin requests not allowed" }, { status: 403 });
     }
 
     const body = await request.json();
