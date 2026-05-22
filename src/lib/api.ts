@@ -5,7 +5,7 @@ import { formatBytes } from "./format";
 import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace, SystemInfo } from "./types";
 import { mockHealth, mockQueue, mockActivity } from "./mock-data";
 
-function useMock() {
+function isMock() {
   return env.USE_MOCK_DATA === "true";
 }
 
@@ -71,7 +71,7 @@ async function arrFetch(
 export { arrFetch };
 
 export async function checkHealth(serviceId: string): Promise<HealthStatus> {
-  if (useMock()) return mockHealth[serviceId];
+  if (isMock()) return mockHealth[serviceId];
 
   try {
     const start = Date.now();
@@ -126,7 +126,7 @@ export async function checkHealth(serviceId: string): Promise<HealthStatus> {
 }
 
 export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
-  if (useMock()) {
+  if (isMock()) {
     return { used: "0 MB", total: "N/A", percent: 0 };
   }
 
@@ -176,7 +176,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
 export { formatBytes } from "./format";
 
 export async function getQueue(serviceId: string): Promise<QueueItem[]> {
-  if (useMock()) return mockQueue.filter((q) => q.service === serviceId);
+  if (isMock()) return mockQueue.filter((q) => q.service === serviceId);
 
   try {
     let res: Response;
@@ -224,7 +224,7 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
 }
 
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
-  if (useMock())
+  if (isMock())
     return mockActivity.filter((a) => a.service === serviceId).slice(0, 10);
 
   try {
@@ -291,7 +291,7 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
 }
 
 export async function getSystemInfo(serviceId: string): Promise<SystemInfo> {
-  if (useMock()) {
+  if (isMock()) {
     return { os: "Linux", version: "5.18.4.9568", docker: true, uptime: "3d 14h" };
   }
 
@@ -327,7 +327,7 @@ export function formatUptime(startTime?: string): string {
 }
 
 export async function pauseQueue(serviceId: string): Promise<boolean> {
-  if (useMock()) return true;
+  if (isMock()) return true;
 
   try {
     const res = await arrFetch(serviceId, "/command", {
@@ -341,7 +341,7 @@ export async function pauseQueue(serviceId: string): Promise<boolean> {
 }
 
 export async function refreshMonitored(serviceId: string): Promise<boolean> {
-  if (useMock()) return true;
+  if (isMock()) return true;
 
   try {
     const res = await arrFetch(serviceId, "/command", {
@@ -355,7 +355,7 @@ export async function refreshMonitored(serviceId: string): Promise<boolean> {
 }
 
 export async function searchMissing(serviceId: string): Promise<boolean> {
-  if (useMock()) return true;
+  if (isMock()) return true;
 
   try {
     const commandName = serviceId === "radarr" ? "MoviesSearch" : "SeriesSearch";
