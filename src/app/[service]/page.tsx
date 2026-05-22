@@ -1,10 +1,14 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { services } from "@/lib/services";
 import Link from "next/link";
+import { SERVICE_IDS } from "@/lib/types";
 
-export default function SonarrPage() {
-  const service = services.sonarr;
-  
+export default async function ServicePage({ params }: { params: Promise<{ service: string }> }) {
+  const { service: serviceId } = await params;
+  if (!SERVICE_IDS.includes(serviceId as never)) notFound();
+
+  const service = services[serviceId];
+
   if (!service.url) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -17,6 +21,6 @@ export default function SonarrPage() {
       </div>
     );
   }
-  
+
   redirect(service.url);
 }
