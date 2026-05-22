@@ -326,7 +326,7 @@ export async function getSystemInfo(serviceId: string): Promise<SystemInfo> {
   }
 }
 
-function formatUptime(startTime?: string): string {
+export function formatUptime(startTime?: string): string {
   if (!startTime) return "N/A";
   const start = new Date(startTime).getTime();
   const now = Date.now();
