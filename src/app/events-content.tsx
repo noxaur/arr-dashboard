@@ -238,16 +238,15 @@ export function EventsContent() {
             {serviceOrder.map((id) => {
               const hasFilter = filters.services.length > 0;
               const active = hasFilter && filters.services.includes(id);
-              const color = serviceColors[id];
               return (
                 <button
                   key={id}
                   onClick={() => toggleService(id)}
                   className="btn-ghost px-2.5 py-1 text-xs"
                   style={{
-                    backgroundColor: active ? `${color.replace(")", " / 0.15)")}` : undefined,
-                    color: active ? color : undefined,
-                    borderColor: active ? color : undefined,
+                    backgroundColor: active ? "var(--accent-bg)" : undefined,
+                    color: active ? "var(--accent)" : undefined,
+                    borderColor: active ? "var(--accent)" : undefined,
                   }}
                 >
                   {serviceNames[id]}
@@ -260,16 +259,15 @@ export function EventsContent() {
             {(Object.keys(typeLabels) as EventType[]).map((t) => {
               const hasFilter = filters.types.length > 0;
               const active = hasFilter && filters.types.includes(t);
-              const color = typeColors[t];
               return (
                 <button
                   key={t}
                   onClick={() => toggleType(t)}
                   className="btn-ghost px-2.5 py-1 text-xs"
                   style={{
-                    backgroundColor: active ? `${color.replace(")", " / 0.1)")}` : undefined,
-                    color: active ? color : undefined,
-                    borderColor: active ? color : undefined,
+                    backgroundColor: active ? "var(--accent-bg)" : undefined,
+                    color: active ? "var(--accent)" : undefined,
+                    borderColor: active ? "var(--accent)" : undefined,
                   }}
                 >
                   {typeLabels[t]}
