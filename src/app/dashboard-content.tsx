@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { services, serviceOrder } from "@/lib/services";
-import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { formatBytes } from "@/lib/api";
 import { ServiceActions } from "@/components/service-actions";
@@ -169,7 +168,7 @@ export function DashboardContent() {
               return (
                 <article key={id} className="card flex flex-col gap-3 p-4">
                   <div className="flex items-start justify-between">
-                    <Link href={`/${id}`} className="flex items-center gap-3">
+                    <a href={service.url || undefined} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3">
                       <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: `${service.color.slice(0, -1)} / 0.18)` }}>
                         {ServiceIcon && <ServiceIcon className="h-5 w-5" />}
                       </div>
@@ -177,7 +176,7 @@ export function DashboardContent() {
                         <h3 className="text-sm font-medium text-text-primary">{service.name}</h3>
                         <p className="text-xs text-text-muted">{service.description}</p>
                       </div>
-                    </Link>
+                    </a>
                     <div className="flex items-center gap-2">
                       <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
                       <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
@@ -215,9 +214,9 @@ export function DashboardContent() {
                     <span className="text-xs text-text-muted">
                       {svcData?.activity?.length > 0 ? `${svcData.activity.length} recent events` : "No recent activity"}
                     </span>
-                    <Link href={`/${id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
-                      Open Settings
-                    </Link>
+                    <a href={service.url || undefined} target="_blank" rel="noopener noreferrer" className="btn-ghost" aria-label={`Open ${service.name} settings`}>
+                      Open Settings ↗
+                    </a>
                   </div>
                 </article>
               );
