@@ -8,12 +8,17 @@ export async function GET() {
       getDiskSpace("sonarr"),
     ]);
 
-    const parseBytes = (value: string): number => {
-      const num = parseFloat(value);
-      if (value.includes("TB")) return num * 1099511627776;
-      if (value.includes("GB")) return num * 1073741824;
-      if (value.includes("MB")) return num * 1048576;
-      return 0;
+    const parseBytes = (value: string | number): number => {
+      if (typeof value === "number") return value;
+      const match = value.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
+      if (!match) return 0;
+      const num = parseFloat(match[1]);
+      if (isNaN(num)) return 0;
+      const unit = match[2].toUpperCase();
+      const multipliers: Record<string, number> = {
+        B: 1, KB: 1000, MB: 1000000, GB: 1000000000, TB: 1000000000000,
+      };
+      return Math.round(num * (multipliers[unit] || 1));
     };
 
     // Deduplicate by total bytes — Radarr and Sonarr report the same underlying disk
