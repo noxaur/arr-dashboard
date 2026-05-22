@@ -1,20 +1,28 @@
-# ADR-0006: Server-Side Actions API for Direct Service Interactions
+# ADR-0006: URL Rewrites and Server-Side Actions for Direct Service Access
 
 ## Status
 Accepted
 
 ## Context
-[Some dashboard interactions (search, pause, refresh) need to perform actions on services directly, not through aggregated read endpoints]
+Some dashboard interactions need to reach *arr services directly rather than through aggregated server-side endpoints. These include arbitrary API calls (using the full service API surface) and predefined actions (search, pause, refresh). Two mechanisms exist for direct access, each suited to different use cases.
 
 ## Decision
-[POST /api/actions endpoint that receives { service, action } from the client and calls server-side API functions. API keys remain server-side, read from environment variables at runtime.]
+
+### URL Rewrite Proxy
+Use Next.js URL rewrites to proxy `/api/{service}/:path*` request paths directly to the corresponding *arr service URL, forwarding the original request headers from the browser to the target service. This provides full access to each service's API surface without building custom aggregation handlers.
+
+### Server-Side Actions API
+Provide a `POST /api/actions` endpoint that receives `{ service, action }` from the client and calls server-side API functions. API keys stay server-side, read from environment variables at runtime. Origin header validation prevents CSRF. Available actions: pause queue, refresh monitored, search missing.
 
 ## Consequences
 **Positive:**
-- Actions are authenticated using env-var API keys server-side; no CORS issues
-- The same AbortSignal timeout and retry logic from aggregated reads apply
-- Origin header is validated to prevent CSRF
+- URL rewrites preserve the full API surface of each service without needing custom endpoint maintenance
+- The server-side actions endpoint keeps API keys server-side for predefined operations
+- The same AbortSignal timeout and retry logic from aggregated reads apply to the actions endpoint
+- Rewrite-based access requires no backend changes when a service adds new API endpoints
 
 **Negative:**
-- Actions are limited to predefined operations (pause, refresh, search) and don't expose the full API surface of each service
+- URL rewrites transmit API keys from the browser to the Next.js server via request headers — while same-origin, keys are accessible in browser memory. See ADR-0001.
+- The actions endpoint is limited to predefined operations (pause, refresh, search)
 - Adding new actions requires updating both the route handler and client-side code
+- Having two direct-access mechanisms adds architectural complexity
