@@ -83,6 +83,22 @@ export function DashboardContent() {
               <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
             </div>
             <h1 className="text-base font-semibold">*arr Dashboard</h1>
+            <nav className="flex items-center gap-1 ml-4">
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>/</span>
+              <Link
+                href="/events"
+                className="rounded px-2 py-1 text-xs font-medium transition-all"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-hover)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
+                }}
+              >
+                Events
+              </Link>
+            </nav>
           </div>
           <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
             <div className="flex items-center gap-1.5 sm:gap-2">
