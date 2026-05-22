@@ -9,7 +9,7 @@ export async function GET() {
     ]);
 
     const parseBytes = (value: string | number): number => {
-      if (typeof value === "number") return value;
+      if (typeof value === "number") return Number.isFinite(value) ? value : 0;
       const match = value.match(/^([\d.]+)\s*(B|KB|MB|GB|TB)$/i);
       if (!match) return 0;
       const num = parseFloat(match[1]);
