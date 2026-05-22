@@ -20,7 +20,7 @@ export async function GET() {
     queue: queueResults[i].status === "fulfilled" ? queueResults[i].value : [],
     disk: diskResults[i].status === "fulfilled" ? diskResults[i].value : { used: "0 MB", total: "N/A", percent: 0 },
     activity: activityResults[i].status === "fulfilled" ? activityResults[i].value : [],
-    system: systemResults[i].status === "fulfilled" ? systemResults[i].value : { os: "unknown", docker: false, uptime: "N/A" },
+    system: systemResults[i].status === "fulfilled" ? systemResults[i].value : { os: "unknown", version: "unknown", docker: false, uptime: "N/A" },
   }));
 
   const totalQueue = services.flatMap((s) => s.queue).length;

@@ -1,39 +1,14 @@
-export interface HealthStatus {
-  status: "healthy" | "warning" | "error" | "offline";
-  message: string;
-  version: string;
-  responseTime: number;
-}
+import type {
+  HealthStatus,
+  QueueItem,
+  ActivityEvent,
+  DiskSpace,
+  JellyfinSystemInfo,
+} from "./types";
 
-export interface QueueItem {
-  id: number;
-  title: string;
-  progress: number;
-  status: "downloading" | "queued" | "importing" | "failed";
-  size: string;
-  sizeLeft: string;
-  eta: string;
-  service: string;
-}
+export type { HealthStatus, QueueItem, ActivityEvent, DiskSpace, JellyfinSystemInfo };
 
-export interface ActivityEvent {
-  id: number;
-  service: string;
-  type: "download" | "import" | "search" | "refresh" | "error" | "request";
-  title: string;
-  message: string;
-  timestamp: string;
-}
-
-export interface DiskSpace {
-  used: string;
-  total: string;
-  percent: number;
-  usedBytes?: number;
-  mounts?: Array<{ path: string; used: string; total: string }>;
-}
-
-export const mockJellyfinSystemInfo = {
+export const mockJellyfinSystemInfo: JellyfinSystemInfo = {
   os: "Linux",
   version: "10.10.6",
   architecture: "x64",

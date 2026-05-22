@@ -1,39 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { formatBytes } from "@/lib/api";
+import { useDashboardStore } from "@/lib/dashboard-store";
+import { useVisibilityPoll } from "@/lib/use-visibility-poll";
 
 export function Header() {
   const pathname = usePathname();
   const isDashboard = pathname === "/";
   const isEvents = pathname.startsWith("/events");
 
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const data = useDashboardStore((s) => s.data);
+  const loading = useDashboardStore((s) => s.loading);
+  const lastUpdated = useDashboardStore((s) => s.lastUpdated);
+  const fetchData = useDashboardStore((s) => s.fetchData);
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch("/api/dashboard", { cache: "no-store" });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json);
-        setLoading(false);
-        setLastUpdated(new Date());
-      }
-    } catch {}
-  };
-
-  useEffect(() => {
-    fetchData();
-    const interval = setInterval(() => {
-      if (document.visibilityState === "visible") fetchData();
-    }, 30000);
-    return () => clearInterval(interval);
-  }, []);
+  useVisibilityPoll(fetchData, 30000);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">

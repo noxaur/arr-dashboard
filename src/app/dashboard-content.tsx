@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import { services, serviceOrder } from "@/lib/services";
 import { Header } from "@/components/header";
 import Link from "next/link";
@@ -12,6 +12,8 @@ import {
   JellyseerrIcon,
   JellyfinIcon,
 } from "@/components/service-icons";
+import { useDashboardStore } from "@/lib/dashboard-store";
+import { useVisibilityPoll } from "@/lib/use-visibility-poll";
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   radarr: RadarrIcon,
@@ -42,32 +44,15 @@ function formatTime(iso: string) {
 }
 
 export function DashboardContent() {
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const data = useDashboardStore((s) => s.data);
+  const loading = useDashboardStore((s) => s.loading);
+  const error = useDashboardStore((s) => s.error);
+  const fetchData = useDashboardStore((s) => s.fetchData);
+
   const [recentEvents, setRecentEvents] = useState<any[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const res = await fetch("/api/dashboard", { cache: "no-store" });
-      if (res.ok) {
-        const json = await res.json();
-        setData(json);
-        setError(null);
-        setLastUpdated(new Date());
-      } else {
-        setError(`Failed to load: ${res.status}`);
-      }
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Network error");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchRecentEvents = async () => {
+  const fetchRecentEvents = useCallback(async () => {
     try {
       const res = await fetch("/api/events?pageSize=3", { cache: "no-store" });
       if (res.ok) {
@@ -78,19 +63,14 @@ export function DashboardContent() {
     } finally {
       setEventsLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchData();
-    fetchRecentEvents();
-    const interval = setInterval(() => {
-      if (document.visibilityState === "visible") {
-        fetchData();
-        fetchRecentEvents();
-      }
-    }, 30000);
-    return () => clearInterval(interval);
   }, []);
+
+  const refresh = useCallback(async () => {
+    await fetchData();
+    await fetchRecentEvents();
+  }, [fetchData, fetchRecentEvents]);
+
+  useVisibilityPoll(refresh, 30000);
 
   return (
     <div className="min-h-screen">
@@ -136,7 +116,7 @@ export function DashboardContent() {
               const svcData = data?.services?.find((s: any) => s.id === id);
               const health = svcData?.health;
               const queue = svcData?.queue || [];
-              const disk = svcData?.disk;
+              const disk = svcData?.disk || { used: "0 MB", total: "N/A", percent: 0 };
               const healthColorMap: Record<string, string> = {
                 healthy: "oklch(72% 0.16 145)",
                 warning: "oklch(78% 0.16 85)",
@@ -182,7 +162,7 @@ export function DashboardContent() {
                     {disk?.total !== "N/A" && disk?.percent > 0 && (
                       <div className="flex flex-1 items-center gap-2">
                         <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-hover)]">
-                          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk.percent > 80 ? "oklch(62% 0.22 25)" : disk.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
+                          <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk!.percent}%`, backgroundColor: disk!.percent > 80 ? "oklch(62% 0.22 25)" : disk!.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
                         </div>
                         <span className="text-xs text-text-muted">{disk.used}</span>
                       </div>
@@ -193,7 +173,7 @@ export function DashboardContent() {
 
                   <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
                     <span className="text-xs text-text-muted">
-                      {svcData?.activity?.length > 0 ? `${svcData.activity.length} recent events` : "No recent activity"}
+                      {svcData?.activity?.length ? `${svcData!.activity!.length} recent events` : "No recent activity"}
                     </span>
                     <Link href={`/${id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
                       Open Settings

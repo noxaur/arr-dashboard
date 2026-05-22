@@ -25,13 +25,7 @@ interface Filters {
   to: string;
 }
 
-interface EventsResponse {
-  events: ActivityEvent[];
-  total: number;
-  page: number;
-  pageSize: number;
-  totalPages: number;
-}
+import { EventsResponse } from "@/lib/types";
 
 function buildQuery(filters: Filters, page: number): string {
   const params = new URLSearchParams();

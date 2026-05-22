@@ -1,7 +1,5 @@
 import { env } from "./env";
-
-const SERVICE_KEYS = ["radarr", "sonarr", "prowlarr", "bazarr", "jellyseerr"] as const;
-type ServiceId = (typeof SERVICE_KEYS)[number];
+import type { ServiceId } from "./types";
 
 const envRecord = env as Record<string, string | undefined>;
 

@@ -1,7 +1,7 @@
 import { env } from "./env";
 import { services } from "./services";
 import { getBasicAuth } from "./auth";
-import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace } from "./mock-data";
+import type { HealthStatus, QueueItem, ActivityEvent, DiskSpace, SystemInfo } from "./types";
 import { mockHealth, mockQueue, mockActivity } from "./mock-data";
 
 function useMock() {
@@ -299,33 +299,28 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   }
 }
 
-export interface SystemInfo {
-  os: string;
-  docker: boolean;
-  uptime: string;
-}
-
 export async function getSystemInfo(serviceId: string): Promise<SystemInfo> {
   if (useMock()) {
-    return { os: "Linux", docker: true, uptime: "3d 14h" };
+    return { os: "Linux", version: "5.18.4.9568", docker: true, uptime: "3d 14h" };
   }
 
   if (serviceId === "prowlarr" || serviceId === "jellyseerr" || serviceId === "bazarr") {
-    return { os: "unknown", docker: false, uptime: "N/A" };
+    return { os: "unknown", version: "unknown", docker: false, uptime: "N/A" };
   }
 
   try {
     const res = await arrFetch(serviceId, "/system/status");
-    if (!res.ok) return { os: "unknown", docker: false, uptime: "N/A" };
+    if (!res.ok) return { os: "unknown", version: "unknown", docker: false, uptime: "N/A" };
 
     const data = await res.json();
     return {
       os: data.osName || data.platform || "unknown",
+      version: data.version || "unknown",
       docker: data.isDocker || data.docker || false,
       uptime: data.uptime ? `${data.uptime}` : formatUptime(data.startTime),
     };
   } catch {
-    return { os: "unknown", docker: false, uptime: "N/A" };
+    return { os: "unknown", version: "unknown", docker: false, uptime: "N/A" };
   }
 }
 

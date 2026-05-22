@@ -7,10 +7,7 @@ export async function GET(request: Request) {
   const serviceId = searchParams.get("service");
 
   if (!serviceId) {
-    const results: Awaited<ReturnType<typeof getQueue>> = [];
-    for (const id of serviceOrder) {
-      results.push(...(await getQueue(id)));
-    }
+    const results = (await Promise.all(serviceOrder.map((id) => getQueue(id)))).flat();
     return NextResponse.json(results);
   }
 

@@ -1,15 +1,7 @@
 import { env } from "./env";
+import type { ServiceConfig } from "./types";
 
-export interface ServiceConfig {
-  id: string;
-  name: string;
-  description: string;
-  url: string;
-  apiEndpoint: string;
-  icon: string;
-  color: string;
-  apiKeyEnv: string;
-}
+export type { ServiceConfig };
 
 export const services: Record<string, ServiceConfig> = {
   radarr: {
