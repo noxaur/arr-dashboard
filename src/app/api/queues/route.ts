@@ -6,6 +6,10 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const serviceId = searchParams.get("service");
 
+  if (serviceId && !serviceOrder.includes(serviceId)) {
+    return NextResponse.json({ error: `Unknown service: ${serviceId}` }, { status: 400 });
+  }
+
   if (!serviceId) {
     const results: Awaited<ReturnType<typeof getQueue>> = [];
     for (const id of serviceOrder) {
