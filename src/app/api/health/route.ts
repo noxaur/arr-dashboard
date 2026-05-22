@@ -7,11 +7,8 @@ export async function GET(request: Request) {
   const serviceId = searchParams.get("service");
 
   if (!serviceId) {
-    const results: Record<string, Awaited<ReturnType<typeof checkHealth>>> = {};
-    for (const id of serviceOrder) {
-      results[id] = await checkHealth(id);
-    }
-    return NextResponse.json(results);
+    const results = await Promise.all(serviceOrder.map(async (id) => ({ [id]: await checkHealth(id) })));
+    return NextResponse.json(Object.assign({}, ...results));
   }
 
   try {
