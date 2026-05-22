@@ -5,9 +5,15 @@ export async function POST(request: Request) {
   try {
     const origin = request.headers.get("origin") || request.headers.get("referer");
     const host = request.headers.get("host");
-    if (!origin || !host) {
+    if (!origin) {
       return NextResponse.json(
-        { error: "Missing origin or host header" },
+        { error: "Missing origin header" },
+        { status: 403 }
+      );
+    }
+    if (!host) {
+      return NextResponse.json(
+        { error: "Missing host header" },
         { status: 403 }
       );
     }
