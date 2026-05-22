@@ -1,9 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { services, serviceOrder } from "@/lib/services";
+import { Header } from "@/components/header";
 import Link from "next/link";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { formatBytes } from "@/lib/api";
 import { ServiceActions } from "@/components/service-actions";
 import {
   RadarrIcon,
@@ -76,46 +75,7 @@ export function DashboardContent() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
-              <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
-            </div>
-            <h1 className="text-base font-semibold">*arr Dashboard</h1>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              <span className={`status-dot ${data?.healthAlerts === 0 ? "healthy" : "warning"}`} />
-              <span className="text-xs text-[var(--text-muted)] hidden sm:inline">Queue</span>
-              <span className="metric-value text-sm font-medium">{loading ? "—" : data?.totalQueue ?? 0}</span>
-            </div>
-            <div className="hidden md:flex items-center gap-2">
-              <span className="status-dot healthy" />
-              <span className="text-xs text-[var(--text-muted)]">Downloading</span>
-              <span className="metric-value text-sm font-medium">{loading ? "—" : data?.activeDownloads ?? 0}</span>
-            </div>
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              {(data?.healthAlerts ?? 0) > 0 && <span className="status-dot warning" />}
-              <span className="text-xs text-[var(--text-muted)] hidden sm:inline">Alerts</span>
-              <span className={`metric-value text-sm font-medium ${(data?.healthAlerts ?? 0) > 0 ? "text-[var(--error)]" : ""}`}>
-                {loading ? "—" : data?.healthAlerts ?? 0}
-              </span>
-            </div>
-            <div className="hidden lg:block h-5 w-px bg-[var(--border)]" />
-            <div className="hidden lg:flex items-center gap-2">
-              <span className="text-xs text-[var(--text-muted)]">Disk</span>
-              <span className="metric-value text-sm font-medium">{loading ? "—" : (data?.totalDiskUsed ?? 0) === 0 ? "—" : formatBytes(data?.totalDiskUsed ?? 0)}</span>
-            </div>
-            <div className="hidden xl:flex items-center gap-2">
-              <span className="text-xs text-[var(--text-muted)]">
-                Updated {lastUpdated?.toLocaleTimeString() ?? "—"}
-              </span>
-            </div>
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-[1152px] px-6 py-8">
         {error && (
