@@ -154,7 +154,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       freeBytes += disk.freeSpace;
     }
 
-    const usedBytes = totalBytes - freeBytes;
+    const usedBytes = Math.max(0, totalBytes - freeBytes);
     const percent = totalBytes > 0 ? Math.round((usedBytes / totalBytes) * 100) : 0;
 
     return {
