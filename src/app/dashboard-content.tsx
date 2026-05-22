@@ -25,7 +25,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 const typeIcons: Record<string, string> = {
   download: "↓",
   import: "✓",
-  search: "⌕",
+  search: "⊕",
   refresh: "↻",
   error: "!",
   request: "+",
@@ -79,8 +79,8 @@ export function DashboardContent() {
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
         <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md">
-              <JellyfinIcon className="h-6 w-6" />
+            <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
+              <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
             </div>
             <h1 className="text-base font-semibold">*arr Dashboard</h1>
           </div>
@@ -125,6 +125,7 @@ export function DashboardContent() {
           </div>
         )}
 
+        {/* Host System Card */}
         <section className="mb-8">
           <h2 className="eyebrow mb-4">Host System</h2>
           <article className="card p-4">
@@ -147,6 +148,7 @@ export function DashboardContent() {
           </article>
         </section>
 
+        {/* Service Cards */}
         <section className="mb-8">
           <h2 className="eyebrow mb-4">Services</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -224,6 +226,7 @@ export function DashboardContent() {
           </div>
         </section>
 
+        {/* Activity Feed */}
         <section>
           <h2 className="eyebrow mb-4">Recent Activity</h2>
           <div className="card divide-y divide-[var(--border)]">
@@ -256,9 +259,9 @@ export function DashboardContent() {
                   return (
                     <li
                       key={`${event.service}-${event.timestamp}-${event.title}-${event.message}-${index}`}
-                      className="flex items-start gap-3 px-5 py-3"
+                      className="flex items-center gap-3 px-5 py-3"
                     >
-                      <div className="mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-xs font-medium" style={{ backgroundColor: `var(--accent-bg)`, color }}>
+                      <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded text-xs font-medium" style={{ backgroundColor: `${typeof color === 'string' && color.startsWith('var') ? 'rgba(100,160,220,0.12)' : color + '15'}`, color }}>
                         {icon}
                       </div>
                       <div className="min-w-0 flex-1">
