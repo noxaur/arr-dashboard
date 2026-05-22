@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { formatBytes, getDiskSpace } from "./api";
+import { formatBytes, getDiskSpace, formatUptime, getQueue } from "./api";
 
 vi.mock("./services", () => ({
   services: {
@@ -124,5 +124,111 @@ describe("getDiskSpace", () => {
 
     const result = await getDiskSpace("radarr");
     expect(result).toEqual({ used: "0 MB", total: "N/A", percent: 0 });
+  });
+});
+
+describe("formatUptime", () => {
+  it("returns N/A for undefined startTime", () => {
+    expect(formatUptime(undefined)).toBe("N/A");
+  });
+
+  it("returns N/A for empty startTime", () => {
+    expect(formatUptime("")).toBe("N/A");
+  });
+
+  it("returns human-readable uptime for a past date", () => {
+    const past = new Date(Date.now() - 90000000).toISOString();
+    const result = formatUptime(past);
+    expect(result).toMatch(/\d+d \d+h|\d+h \d+m/);
+  });
+});
+
+describe("getQueue", () => {
+  beforeEach(() => {
+    vi.stubEnv("USE_MOCK_DATA", "false");
+    vi.stubEnv("RADARR_API_KEY", "test-key");
+    mockFetch.mockReset();
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("returns empty for Prowlarr", async () => {
+    const result = await getQueue("prowlarr");
+    expect(result).toEqual([]);
+  });
+
+  it("maps failed status correctly", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        records: [
+          {
+            id: 1,
+            title: "Failed Movie (2024)",
+            status: "failed",
+            size: 2000000000,
+            sizeleft: 0,
+            estimatedCompletionTime: null,
+          },
+        ],
+      }),
+    });
+
+    const result = await getQueue("radarr");
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe("failed");
+  });
+
+  it("maps downloading status correctly", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        records: [
+          {
+            id: 1,
+            title: "Downloading Movie (2024)",
+            status: "downloading",
+            size: 4000000000,
+            sizeleft: 1000000000,
+            estimatedCompletionTime: null,
+          },
+        ],
+      }),
+    });
+
+    const result = await getQueue("radarr");
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe("downloading");
+  });
+
+  it("maps queued as default status", async () => {
+    mockFetch.mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({
+        records: [
+          {
+            id: 1,
+            title: "Queued Movie (2024)",
+            status: "queued",
+            size: 3000000000,
+            sizeleft: 3000000000,
+            estimatedCompletionTime: null,
+          },
+        ],
+      }),
+    });
+
+    const result = await getQueue("radarr");
+    expect(result).toHaveLength(1);
+    expect(result[0].status).toBe("queued");
+  });
+
+  it("handles API failure gracefully", async () => {
+    mockFetch.mockResolvedValue({ ok: false });
+
+    const result = await getQueue("radarr");
+    expect(result).toEqual([]);
   });
 });
