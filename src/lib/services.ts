@@ -3,8 +3,6 @@ export interface ServiceConfig {
   name: string;
   description: string;
   url: string;
-  embedUrl: string;
-  apiUrl: string;
   apiEndpoint: string;
   icon: string;
   color: string;
@@ -17,8 +15,6 @@ export const services: Record<string, ServiceConfig> = {
     name: "Radarr",
     description: "Movie management",
     url: process.env.RADARR_URL || "",
-    embedUrl: "/api/embed/radarr",
-    apiUrl: "/api/radarr",
     apiEndpoint: "/api/v3",
     icon: "M",
     color: "oklch(65% 0.15 30)",
@@ -29,8 +25,6 @@ export const services: Record<string, ServiceConfig> = {
     name: "Sonarr",
     description: "TV series management",
     url: process.env.SONARR_URL || "",
-    embedUrl: "/api/embed/sonarr",
-    apiUrl: "/api/sonarr",
     apiEndpoint: "/api/v3",
     icon: "S",
     color: "oklch(62% 0.14 170)",
@@ -41,8 +35,6 @@ export const services: Record<string, ServiceConfig> = {
     name: "Prowlarr",
     description: "Indexer management",
     url: process.env.PROWLARR_URL || "",
-    embedUrl: "/api/embed/prowlarr",
-    apiUrl: "/api/prowlarr",
     apiEndpoint: "/api/v1",
     icon: "P",
     color: "oklch(60% 0.12 280)",
@@ -53,8 +45,6 @@ export const services: Record<string, ServiceConfig> = {
     name: "Bazarr",
     description: "Subtitle management",
     url: process.env.BAZARR_URL || "",
-    embedUrl: "/api/embed/bazarr",
-    apiUrl: "/api/bazarr",
     apiEndpoint: "/api",
     icon: "B",
     color: "oklch(62% 0.12 220)",
@@ -65,8 +55,6 @@ export const services: Record<string, ServiceConfig> = {
     name: "Jellyseerr",
     description: "Request management",
     url: process.env.JELLYSEERR_URL || "",
-    embedUrl: "/api/embed/jellyseerr",
-    apiUrl: "/api/jellyseerr",
     apiEndpoint: "/api/v1",
     icon: "J",
     color: "oklch(62% 0.14 340)",
