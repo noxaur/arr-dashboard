@@ -16,7 +16,7 @@ function getBasicPass(serviceId: ServiceId | string): string {
 export function getBasicAuth(serviceId: ServiceId | string): string | null {
   const user = getBasicUser(serviceId);
   const pass = getBasicPass(serviceId);
-  if (!user && !pass) return null;
+  if (!user || !pass) return null;
   return `Basic ${Buffer.from(`${user}:${pass}`).toString("base64")}`;
 }
 
