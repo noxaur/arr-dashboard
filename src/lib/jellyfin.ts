@@ -1,16 +1,21 @@
-const JELLYFIN_URL = process.env.JELLYFIN_URL || "";
-const JELLYFIN_KEY = process.env.JELLYFIN_API_KEY || "";
+function getJellyfinConfig() {
+  return {
+    url: process.env.JELLYFIN_URL || "",
+    key: process.env.JELLYFIN_API_KEY || "",
+  };
+}
 
 async function jellyfinFetch(endpoint: string): Promise<Response | null> {
-  if (!JELLYFIN_URL || !JELLYFIN_KEY) return null;
+  const { url, key } = getJellyfinConfig();
+  if (!url || !key) return null;
 
   const maxRetries = 2;
   let lastError: Error | null = null;
 
   for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
-      const res = await fetch(`${JELLYFIN_URL}${endpoint}`, {
-        headers: { "X-Emby-Token": JELLYFIN_KEY },
+      const res = await fetch(`${url}${endpoint}`, {
+        headers: { "X-Emby-Token": key },
         cache: "no-store",
         signal: AbortSignal.timeout(15000),
       });
