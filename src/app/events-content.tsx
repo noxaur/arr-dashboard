@@ -16,6 +16,7 @@ import {
 } from "@/lib/events";
 import { EventModal } from "./events-modal";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { motion } from "motion/react";
 
 interface Filters {
   services: string[];
@@ -207,27 +208,36 @@ export function EventsContent() {
       </header>
 
       <main className="mx-auto max-w-[1152px] px-6 py-8">
-        <div className="mb-4 flex items-center gap-4">
-          <button
+        <motion.div className="mb-4 flex items-center gap-4" layout>
+          <motion.button
+            layout
             onClick={() => setFiltersOpen(!filtersOpen)}
             aria-expanded={filtersOpen}
             className="btn-ghost flex items-center gap-1.5 px-3 py-1.5 text-xs"
           >
-            <span style={{ display: "inline-block", transition: "transform 150ms ease", transform: filtersOpen ? "rotate(90deg)" : "rotate(0deg)" }}>
+            <motion.span
+              animate={{ rotate: filtersOpen ? 90 : 0 }}
+              transition={{ duration: 0.15 }}
+            >
               ▶
-            </span>
+            </motion.span>
             Filters
-            {hasActiveFilters && (
-              <span
-                className="ml-1 rounded px-1.5 py-0.5 text-[10px] font-medium"
-                style={{ backgroundColor: "var(--accent-bg)", color: "var(--accent)" }}
-              >
-                {filters.services.length + filters.types.length + (filters.search ? 1 : 0) + (filters.from || filters.to ? 1 : 0)}
-              </span>
-            )}
-          </button>
+            <motion.span
+              className="ml-1 rounded px-1.5 text-[10px] font-medium inline-flex items-center"
+              style={{
+                backgroundColor: hasActiveFilters ? "var(--accent-bg)" : "transparent",
+                color: hasActiveFilters ? "var(--accent)" : "transparent",
+                height: 18,
+              }}
+              animate={{ opacity: hasActiveFilters ? 1 : 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              {filters.services.length + filters.types.length + (filters.search ? 1 : 0) + (filters.from || filters.to ? 1 : 0)}
+            </motion.span>
+          </motion.button>
           <div className="h-5 w-px bg-[var(--border)]" />
-          <input
+          <motion.input
+            layout
             type="text"
             placeholder="Search events..."
             aria-label="Search events"
@@ -236,7 +246,7 @@ export function EventsContent() {
             className="max-w-xs flex-1 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs outline-none placeholder:text-[var(--text-muted)]"
             style={{ color: "var(--text-primary)" }}
           />
-        </div>
+        </motion.div>
 
         {filtersOpen && (
           <div className="mb-4 flex flex-wrap items-center gap-1.5">
