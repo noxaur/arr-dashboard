@@ -211,7 +211,7 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
     return (data.records || data || []).map((item: any) => ({
       id: item.id,
       title: item.movie?.title || item.series?.title || item.title || "Unknown",
-      progress: item.status === "downloading" ? Math.round(((item.size - (item.sizeleft || 0)) / (item.size || 1)) * 100) : 0,
+      progress: item.status === "downloading" && item.size > 0 ? Math.round(Math.min(100, Math.max(0, ((item.size - (item.sizeleft || 0)) / item.size) * 100))) : 0,
       status: item.status === "downloading" ? "downloading" as const : item.status === "importing" ? "importing" as const : item.status === "failed" ? "failed" as const : "queued" as const,
       size: item.size ? formatBytes(item.size) : "N/A",
       sizeLeft: item.sizeleft ? formatBytes(item.sizeleft) : "0 MB",
