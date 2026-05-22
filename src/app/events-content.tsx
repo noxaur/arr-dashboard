@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
-import Link from "next/link";
+import { Header } from "@/components/header";
 import { serviceOrder } from "@/lib/services";
 import {
   type ActivityEvent,
@@ -15,8 +15,7 @@ import {
   formatTime,
 } from "@/lib/events";
 import { EventModal } from "./events-modal";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 
 interface Filters {
   services: string[];
@@ -57,7 +56,6 @@ export function EventsContent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [modalEvent, setModalEvent] = useState<ActivityEvent | null>(null);
   const [page, setPage] = useState(1);
@@ -72,10 +70,6 @@ export function EventsContent() {
   const abortRef = useRef<AbortController | null>(null);
   const searchRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [searchInput, setSearchInput] = useState("");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   useEffect(() => {
     if (searchRef.current) clearTimeout(searchRef.current);
@@ -175,37 +169,7 @@ export function EventsContent() {
 
   return (
     <div className="min-h-screen">
-      <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
-        <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
-          <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
-              <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
-            </div>
-            <h1 className="text-base font-semibold">*arr Dashboard</h1>
-            <nav className="ml-4 flex items-center gap-1">
-              <span className="text-xs" style={{ color: "var(--text-muted)" }}>/</span>
-              <Link
-                href="/events"
-                className="rounded px-2 py-1 text-xs font-medium transition-all"
-                style={{ color: "var(--accent)", backgroundColor: "var(--accent-bg)" }}
-              >
-                Events
-              </Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
-            <span className="hidden sm:inline text-xs" style={{ color: "var(--text-muted)" }}>
-              {total} {total === 1 ? "event" : "events"}
-            </span>
-            {lastUpdated && (
-              <span className="hidden lg:inline text-xs" style={{ color: "var(--text-muted)" }}>
-                · {mounted ? formatTime(lastUpdated.toISOString()) : ""}
-              </span>
-            )}
-            <ThemeToggle />
-          </div>
-        </div>
-      </header>
+      <Header />
 
       <main className="mx-auto max-w-[1152px] px-6 py-8">
         <motion.div className="mb-4 flex items-center gap-4" layout>
@@ -222,18 +186,25 @@ export function EventsContent() {
               ▶
             </motion.span>
             Filters
-            <motion.span
-              className="ml-1 rounded px-1.5 text-[10px] font-medium inline-flex items-center"
-              style={{
-                backgroundColor: hasActiveFilters ? "var(--accent-bg)" : "transparent",
-                color: hasActiveFilters ? "var(--accent)" : "transparent",
-                height: 18,
-              }}
-              animate={{ opacity: hasActiveFilters ? 1 : 0 }}
-              transition={{ duration: 0.15 }}
-            >
-              {filters.services.length + filters.types.length + (filters.search ? 1 : 0) + (filters.from || filters.to ? 1 : 0)}
-            </motion.span>
+            <AnimatePresence>
+              {hasActiveFilters && (
+                <motion.span
+                  key="filter-badge"
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.5 }}
+                  transition={{ duration: 0.15 }}
+                  className="ml-1 rounded px-1.5 text-[10px] font-medium inline-flex items-center"
+                  style={{
+                    backgroundColor: "var(--accent-bg)",
+                    color: "var(--accent)",
+                    height: 18,
+                  }}
+                >
+                  {filters.services.length + filters.types.length + (filters.search ? 1 : 0) + (filters.from || filters.to ? 1 : 0)}
+                </motion.span>
+              )}
+            </AnimatePresence>
           </motion.button>
           <div className="h-5 w-px bg-[var(--border)]" />
           <motion.input
