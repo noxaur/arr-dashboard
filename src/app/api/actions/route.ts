@@ -52,8 +52,10 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ success: result, service, action });
   } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("[actions] Failed to execute action:", message);
     return NextResponse.json(
-      { error: "Failed to execute action" },
+      { error: `Failed to execute action: ${message}` },
       { status: 500 }
     );
   }

@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import { getQueue } from "@/lib/api";
-import { mockQueue } from "@/lib/mock-data";
+import { serviceOrder } from "@/lib/services";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const serviceId = searchParams.get("service");
 
   if (!serviceId) {
-    return NextResponse.json(mockQueue);
+    const results: Awaited<ReturnType<typeof getQueue>> = [];
+    for (const id of serviceOrder) {
+      results.push(...(await getQueue(id)));
+    }
+    return NextResponse.json(results);
   }
 
   try {

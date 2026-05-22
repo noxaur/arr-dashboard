@@ -1,13 +1,17 @@
 import { NextResponse } from "next/server";
 import { checkHealth } from "@/lib/api";
-import { mockHealth } from "@/lib/mock-data";
+import { serviceOrder } from "@/lib/services";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const serviceId = searchParams.get("service");
 
   if (!serviceId) {
-    return NextResponse.json(mockHealth);
+    const results: Record<string, Awaited<ReturnType<typeof checkHealth>>> = {};
+    for (const id of serviceOrder) {
+      results[id] = await checkHealth(id);
+    }
+    return NextResponse.json(results);
   }
 
   try {
