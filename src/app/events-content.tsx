@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
+import Link from "next/link";
 import { serviceOrder } from "@/lib/services";
 import {
   type ActivityEvent,
@@ -14,6 +15,7 @@ import {
   formatTime,
 } from "@/lib/events";
 import { EventModal } from "./events-modal";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface Filters {
   services: string[];
@@ -169,137 +171,154 @@ export function EventsContent() {
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
-        <div className="mx-auto max-w-[1152px] px-6 py-3">
+        <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setFiltersOpen(!filtersOpen)}
-              aria-expanded={filtersOpen}
-              className="btn-ghost flex items-center gap-1.5 px-3 py-1.5 text-xs"
-            >
-              <span style={{ display: "inline-block", transition: "transform 150ms ease", transform: filtersOpen ? "rotate(90deg)" : "rotate(0deg)" }}>
-                ▶
-              </span>
-              Filters
-              {hasActiveFilters && (
-                <span
-                  className="ml-1 rounded px-1.5 py-0.5 text-[10px] font-medium"
-                  style={{ backgroundColor: "var(--accent-bg)", color: "var(--accent)" }}
-                >
-                  {filters.services.length + filters.types.length + (filters.search ? 1 : 0) + (filters.from || filters.to ? 1 : 0)}
-                </span>
-              )}
-            </button>
-            <div className="h-5 w-px bg-[var(--border)]" />
-            <input
-              type="text"
-              placeholder="Search events..."
-              aria-label="Search events"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              className="flex-1 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs outline-none placeholder:text-[var(--text-muted)] max-w-xs"
-              style={{ color: "var(--text-primary)" }}
-            />
-            <div className="ml-auto flex items-center gap-2">
-              <span className="text-xs" style={{ color: "var(--text-muted)" }}>
-                {total} {total === 1 ? "event" : "events"}
-              </span>
-              {lastUpdated && (
-                <span className="hidden sm:inline text-xs" style={{ color: "var(--text-muted)" }}>
-                  · {mounted ? formatTime(lastUpdated.toISOString()) : ""}
-                </span>
-              )}
+            <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
+              <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
             </div>
+            <h1 className="text-base font-semibold">*arr Dashboard</h1>
+            <nav className="ml-4 flex items-center gap-1">
+              <span className="text-xs" style={{ color: "var(--text-muted)" }}>/</span>
+              <Link
+                href="/events"
+                className="rounded px-2 py-1 text-xs font-medium transition-all"
+                style={{ color: "var(--accent)", backgroundColor: "var(--accent-bg)" }}
+              >
+                Events
+              </Link>
+            </nav>
+          </div>
+          <div className="flex items-center gap-2 sm:gap-4 lg:gap-6">
+            <span className="hidden sm:inline text-xs" style={{ color: "var(--text-muted)" }}>
+              {total} {total === 1 ? "event" : "events"}
+            </span>
+            {lastUpdated && (
+              <span className="hidden lg:inline text-xs" style={{ color: "var(--text-muted)" }}>
+                · {mounted ? formatTime(lastUpdated.toISOString()) : ""}
+              </span>
+            )}
+            <ThemeToggle />
           </div>
         </div>
       </header>
 
-      {filtersOpen && (
-        <div className="mx-auto max-w-[1152px] px-6 pt-0 pb-4">
-          <div className="card p-4 space-y-4">
-            <div>
-              <span className="micro-cap mb-2 block">Service</span>
-              <div className="flex flex-wrap gap-1.5">
-                {serviceOrder.map((id) => {
-                  const active = activeServices.includes(id);
-                  const color = serviceColors[id];
-                  return (
-                    <button
-                      key={id}
-                      onClick={() => toggleService(id)}
-                      className="rounded px-2.5 py-1 text-xs font-medium transition-all"
-                      style={{
-                        backgroundColor: active ? `${color.replace(")", " / 0.15)")}` : "var(--surface)",
-                        color: active ? color : "var(--text-muted)",
-                        border: active ? `1px solid ${color}` : "1px solid var(--border)",
-                      }}
-                    >
-                      {serviceNames[id]}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+      <main className="mx-auto max-w-[1152px] px-6 py-8">
+        <div className="mb-4 flex items-center gap-4">
+          <button
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            aria-expanded={filtersOpen}
+            className="btn-ghost flex items-center gap-1.5 px-3 py-1.5 text-xs"
+          >
+            <span style={{ display: "inline-block", transition: "transform 150ms ease", transform: filtersOpen ? "rotate(90deg)" : "rotate(0deg)" }}>
+              ▶
+            </span>
+            Filters
+            {hasActiveFilters && (
+              <span
+                className="ml-1 rounded px-1.5 py-0.5 text-[10px] font-medium"
+                style={{ backgroundColor: "var(--accent-bg)", color: "var(--accent)" }}
+              >
+                {filters.services.length + filters.types.length + (filters.search ? 1 : 0) + (filters.from || filters.to ? 1 : 0)}
+              </span>
+            )}
+          </button>
+          <div className="h-5 w-px bg-[var(--border)]" />
+          <input
+            type="text"
+            placeholder="Search events..."
+            aria-label="Search events"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="max-w-xs flex-1 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs outline-none placeholder:text-[var(--text-muted)]"
+            style={{ color: "var(--text-primary)" }}
+          />
+        </div>
 
-            <div>
-              <span className="micro-cap mb-2 block">Event Type</span>
-              <div className="flex flex-wrap gap-1.5">
-                {(Object.keys(typeLabels) as EventType[]).map((t) => {
-                  const active = filters.types.length === 0 || filters.types.includes(t);
-                  const color = typeColors[t];
-                  return (
-                    <button
-                      key={t}
-                      onClick={() => toggleType(t)}
-                      className="rounded px-2.5 py-1 text-xs font-medium transition-all"
-                      style={{
-                        backgroundColor: active ? `${color.replace(")", " / 0.1)")}` : "var(--surface)",
-                        color: active ? color : "var(--text-muted)",
-                        border: active ? `1px solid ${color}` : "1px solid var(--border)",
-                      }}
-                    >
-                      {typeIcons[t]} {typeLabels[t]}
-                    </button>
-                  );
-                })}
+        {filtersOpen && (
+          <div className="mb-4">
+            <div className="card p-4 space-y-4">
+              <div>
+                <span className="micro-cap mb-2 block">Service</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {serviceOrder.map((id) => {
+                    const active = activeServices.includes(id);
+                    const color = serviceColors[id];
+                    return (
+                      <button
+                        key={id}
+                        onClick={() => toggleService(id)}
+                        className="rounded px-2.5 py-1 text-xs font-medium transition-all"
+                        style={{
+                          backgroundColor: active ? `${color.replace(")", " / 0.15)")}` : "var(--surface)",
+                          color: active ? color : "var(--text-muted)",
+                          border: active ? `1px solid ${color}` : "1px solid var(--border)",
+                        }}
+                      >
+                        {serviceNames[id]}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <span className="micro-cap mb-2 block">Date Range</span>
-              <div className="flex flex-wrap items-center gap-2">
-                <input
-                  type="date"
-                  value={filters.from}
-                  aria-label="From date"
-                  onChange={(e) => { setFilters((f) => ({ ...f, from: e.target.value })); setPage(1); }}
-                  className="rounded border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-xs outline-none"
-                  style={{ color: "var(--text-primary)" }}
-                />
-                <span className="text-xs" style={{ color: "var(--text-muted)" }}>to</span>
-                <input
-                  type="date"
-                  value={filters.to}
-                  aria-label="To date"
-                  onChange={(e) => { setFilters((f) => ({ ...f, to: e.target.value })); setPage(1); }}
-                  className="rounded border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-xs outline-none"
-                  style={{ color: "var(--text-primary)" }}
-                />
-                <button onClick={() => setDatePreset(1)} className="btn-ghost text-xs px-2 py-1">24h</button>
-                <button onClick={() => setDatePreset(7)} className="btn-ghost text-xs px-2 py-1">7d</button>
-                <button onClick={() => setDatePreset(30)} className="btn-ghost text-xs px-2 py-1">30d</button>
-                <button onClick={() => setDatePreset(90)} className="btn-ghost text-xs px-2 py-1">90d</button>
-                {hasActiveFilters && (
-                  <button onClick={clearFilters} className="btn-ghost text-xs px-2 py-1" style={{ color: "var(--pink)" }}>
-                    Clear all
-                  </button>
-                )}
+              <div>
+                <span className="micro-cap mb-2 block">Event Type</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {(Object.keys(typeLabels) as EventType[]).map((t) => {
+                    const active = filters.types.length === 0 || filters.types.includes(t);
+                    const color = typeColors[t];
+                    return (
+                      <button
+                        key={t}
+                        onClick={() => toggleType(t)}
+                        className="rounded px-2.5 py-1 text-xs font-medium transition-all"
+                        style={{
+                          backgroundColor: active ? `${color.replace(")", " / 0.1)")}` : "var(--surface)",
+                          color: active ? color : "var(--text-muted)",
+                          border: active ? `1px solid ${color}` : "1px solid var(--border)",
+                        }}
+                      >
+                        {typeIcons[t]} {typeLabels[t]}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <span className="micro-cap mb-2 block">Date Range</span>
+                <div className="flex flex-wrap items-center gap-2">
+                  <input
+                    type="date"
+                    value={filters.from}
+                    aria-label="From date"
+                    onChange={(e) => { setFilters((f) => ({ ...f, from: e.target.value })); setPage(1); }}
+                    className="rounded border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-xs outline-none"
+                    style={{ color: "var(--text-primary)" }}
+                  />
+                  <span className="text-xs" style={{ color: "var(--text-muted)" }}>to</span>
+                  <input
+                    type="date"
+                    value={filters.to}
+                    aria-label="To date"
+                    onChange={(e) => { setFilters((f) => ({ ...f, to: e.target.value })); setPage(1); }}
+                    className="rounded border border-[var(--border)] bg-[var(--surface)] px-2.5 py-1 text-xs outline-none"
+                    style={{ color: "var(--text-primary)" }}
+                  />
+                  <button onClick={() => setDatePreset(1)} className="btn-ghost text-xs px-2 py-1">24h</button>
+                  <button onClick={() => setDatePreset(7)} className="btn-ghost text-xs px-2 py-1">7d</button>
+                  <button onClick={() => setDatePreset(30)} className="btn-ghost text-xs px-2 py-1">30d</button>
+                  {hasActiveFilters && (
+                    <button onClick={clearFilters} className="btn-ghost text-xs px-2 py-1" style={{ color: "var(--pink)" }}>
+                      Clear all
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <main className="mx-auto max-w-[1152px] px-6 pb-8">
         {error ? (
           <div className="card p-4" style={{ borderColor: "var(--error)" }}>
             <p className="text-xs" style={{ color: "var(--error)" }}>{error}</p>
@@ -318,7 +337,7 @@ export function EventsContent() {
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-1">
+          <div className="card divide-y divide-[var(--border)]">
             {groupedEvents.map((group, gi) => {
               const primary = group.events[0];
               const isGroup = group.count > 1;
@@ -416,7 +435,7 @@ function EventRow({
   };
 
   return (
-    <div className="card overflow-hidden" style={{ borderRadius: "var(--radius-xl)" }}>
+    <>
       <div
         onClick={handlePrimaryClick}
         className="flex items-center gap-3 px-5 py-3"
@@ -528,6 +547,6 @@ function EventRow({
           ))}
         </>
       )}
-    </div>
+    </>
   );
 }
