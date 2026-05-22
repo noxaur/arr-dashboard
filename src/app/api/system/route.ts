@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { services } from "@/lib/services";
-import { arrFetch } from "@/lib/api";
+import { arrFetch, formatUptime } from "@/lib/api";
 
 export async function GET() {
   const results: Record<string, { version: string; os: string; docker: boolean; uptime: string; status: string }> = {};
@@ -40,13 +40,4 @@ export async function GET() {
   return NextResponse.json(results);
 }
 
-function formatUptime(startTime?: string): string {
-  if (!startTime) return "N/A";
-  const start = new Date(startTime).getTime();
-  const now = Date.now();
-  const diff = now - start;
-  const hours = Math.floor(diff / 3600000);
-  const days = Math.floor(hours / 24);
-  if (days > 0) return `${days}d ${hours % 24}h`;
-  return `${hours}h ${Math.floor((diff % 3600000) / 60000)}m`;
-}
+
