@@ -49,9 +49,9 @@ export function DashboardContent() {
   const [recentEvents, setRecentEvents] = useState<any[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
-  const fetchData = async () => {
+  const fetchData = async (signal?: AbortSignal) => {
     try {
-      const res = await fetch("/api/dashboard", { cache: "no-store" });
+      const res = await fetch("/api/dashboard", { cache: "no-store", signal });
       if (res.ok) {
         const json = await res.json();
         setData(json);
@@ -61,35 +61,51 @@ export function DashboardContent() {
         setError(`Failed to load: ${res.status}`);
       }
     } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
       setError(e instanceof Error ? e.message : "Network error");
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchRecentEvents = async () => {
+  const fetchRecentEvents = async (signal?: AbortSignal) => {
     try {
-      const res = await fetch("/api/events?pageSize=3", { cache: "no-store" });
+      const res = await fetch("/api/events?pageSize=3", { cache: "no-store", signal });
       if (res.ok) {
         const json = await res.json();
         setRecentEvents(json.events || []);
       }
-    } catch {
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
     } finally {
       setEventsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData();
-    fetchRecentEvents();
+    let cancelled = false;
+    const controller = new AbortController();
+
+    const run = async () => {
+      await Promise.all([
+        fetchData(controller.signal),
+        fetchRecentEvents(controller.signal),
+      ]);
+    };
+
+    run();
+
     const interval = setInterval(() => {
       if (document.visibilityState === "visible") {
-        fetchData();
-        fetchRecentEvents();
+        run();
       }
     }, 30000);
-    return () => clearInterval(interval);
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+      clearInterval(interval);
+    };
   }, []);
 
   return (
