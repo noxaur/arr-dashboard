@@ -100,7 +100,7 @@ export function DashboardContent() {
         {error && (
           <div className="mb-6 rounded-md border border-[var(--error)]/20 bg-[var(--error)]/5 px-4 py-3">
             <p className="text-sm text-[var(--error)]">{error}</p>
-            <button onClick={fetchData} className="mt-2 text-sm underline">Retry</button>
+            <button onClick={() => { fetchData(); }} className="mt-2 text-sm underline">Retry</button>
           </div>
         )}
 
