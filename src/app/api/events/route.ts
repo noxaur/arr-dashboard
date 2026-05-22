@@ -1,7 +1,5 @@
-// src/app/api/events/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { serviceOrder } from "@/lib/services";
-import { getActivity } from "@/lib/api";
+import { fetchAllServices } from "@/lib/arr-service";
 import type { ActivityEvent } from "@/lib/events";
 
 interface EventsQuery {
@@ -20,7 +18,7 @@ export async function GET(request: NextRequest) {
 
   const selectedServices = query.services
     ? query.services.split(",").filter(Boolean)
-    : serviceOrder;
+    : undefined;
   const selectedTypes = query.types
     ? query.types.split(",").filter(Boolean)
     : [];
@@ -32,25 +30,12 @@ export async function GET(request: NextRequest) {
   const page = Math.max(1, parseInt(query.page ?? "1", 10) || 1);
   const pageSize = Math.min(100, Math.max(1, parseInt(query.pageSize ?? "50", 10) || 50));
 
-  const results = await Promise.allSettled(
-    selectedServices.map((id) => getActivity(id))
+  const entries = await fetchAllServices<ActivityEvent[]>("activity", selectedServices ? { services: selectedServices } : undefined);
+
+  const allEvents: ActivityEvent[] = Object.entries(entries).flatMap(([service, events]) =>
+    events.map((e) => ({ ...e, service }))
   );
 
-  const allEvents: ActivityEvent[] = [];
-
-  results.forEach((result, i) => {
-    if (result.status === "fulfilled") {
-      const serviceEvents = result.value.map((e: any) => ({
-        ...e,
-        service: selectedServices[i],
-      }));
-      allEvents.push(...serviceEvents);
-    } else {
-      console.error(`Events API: failed to fetch activity for ${selectedServices[i]}`, result.reason);
-    }
-  });
-
-  // Apply filters
   let filtered = allEvents.filter((event) => {
     if (selectedTypes.length > 0 && !selectedTypes.includes(event.type)) return false;
     if (searchText) {
@@ -63,14 +48,9 @@ export async function GET(request: NextRequest) {
     return true;
   });
 
-  // Sort by timestamp descending (newest first)
-  filtered.sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
   const total = filtered.length;
-
-  // Paginate
   const start = (page - 1) * pageSize;
   const paginated = filtered.slice(start, start + pageSize);
 
