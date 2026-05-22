@@ -67,6 +67,7 @@ export function EventsContent() {
     from: "",
     to: "",
   });
+  const [datePreset, setDatePresetState] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const searchRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [searchInput, setSearchInput] = useState("");
@@ -140,6 +141,7 @@ export function EventsContent() {
   const clearFilters = () => {
     setFilters({ services: [], types: [], search: "", from: "", to: "" });
     setSearchInput("");
+    setDatePresetState(null);
     setPage(1);
   };
 
@@ -147,6 +149,7 @@ export function EventsContent() {
     const to = new Date().toISOString().split("T")[0];
     const from = new Date(Date.now() - days * 86400000).toISOString().split("T")[0];
     setFilters((f) => ({ ...f, from, to }));
+    setDatePresetState(days);
     setPage(1);
   };
 
@@ -156,10 +159,6 @@ export function EventsContent() {
     if (hasSearch) return events.map((e) => ({ events: [e], count: 1 }));
     return groupEvents(events);
   }, [events, hasSearch]);
-
-  const activeServices = filters.services.length === 0
-    ? serviceOrder
-    : serviceOrder.filter((s) => !filters.services.includes(s));
 
   const hasActiveFilters =
     filters.services.length > 0 ||
@@ -238,7 +237,7 @@ export function EventsContent() {
           <div className="mb-4 flex flex-wrap items-center gap-1.5">
             {serviceOrder.map((id) => {
               const hasFilter = filters.services.length > 0;
-              const active = hasFilter && activeServices.includes(id);
+              const active = hasFilter && filters.services.includes(id);
               const color = serviceColors[id];
               return (
                 <button
@@ -280,9 +279,33 @@ export function EventsContent() {
 
             <span className="text-xs" style={{ color: "var(--text-muted)" }}>|</span>
 
-            <button onClick={() => setDatePreset(1)} className="btn-ghost px-2.5 py-1 text-xs">24h</button>
-            <button onClick={() => setDatePreset(7)} className="btn-ghost px-2.5 py-1 text-xs">7d</button>
-            <button onClick={() => setDatePreset(30)} className="btn-ghost px-2.5 py-1 text-xs">30d</button>
+            <button
+              onClick={() => setDatePreset(1)}
+              className="btn-ghost px-2.5 py-1 text-xs"
+              style={{
+                backgroundColor: datePreset === 1 ? "var(--accent-bg)" : undefined,
+                color: datePreset === 1 ? "var(--accent)" : undefined,
+                borderColor: datePreset === 1 ? "var(--accent)" : undefined,
+              }}
+            >24h</button>
+            <button
+              onClick={() => setDatePreset(7)}
+              className="btn-ghost px-2.5 py-1 text-xs"
+              style={{
+                backgroundColor: datePreset === 7 ? "var(--accent-bg)" : undefined,
+                color: datePreset === 7 ? "var(--accent)" : undefined,
+                borderColor: datePreset === 7 ? "var(--accent)" : undefined,
+              }}
+            >7d</button>
+            <button
+              onClick={() => setDatePreset(30)}
+              className="btn-ghost px-2.5 py-1 text-xs"
+              style={{
+                backgroundColor: datePreset === 30 ? "var(--accent-bg)" : undefined,
+                color: datePreset === 30 ? "var(--accent)" : undefined,
+                borderColor: datePreset === 30 ? "var(--accent)" : undefined,
+              }}
+            >30d</button>
             {hasActiveFilters && (
               <button onClick={clearFilters} className="btn-ghost px-2.5 py-1 text-xs" style={{ color: "var(--pink)" }}>
                 Clear all
