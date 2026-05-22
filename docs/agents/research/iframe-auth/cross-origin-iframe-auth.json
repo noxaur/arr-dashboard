@@ -1,0 +1,233 @@
+{
+  "run_id": "trun_d61c966fcd194f749211245c761186f2",
+  "interaction_id": "trun_d61c966fcd194f749211245c761186f2",
+  "result_url": "https://platform.parallel.ai/play/deep-research/trun_d61c966fcd194f749211245c761186f2",
+  "status": "completed",
+  "output": {
+    "basis": [
+      {
+        "field": "content",
+        "reasoning": "The answer is synthesized from multiple technical documentation sources and specifications. The shift away from third-party cookies and the introduction of privacy-preserving alternatives are supported by the Privacy Sandbox and thecurrent.com. The transition from legacy headers to modern security controls, specifically using frame-ancestors over X-Frame-Options, is detailed in MDN Web Docs for Content-Security-Policy and X-Frame-Options. The necessity of the Permissions-Policy and the allow attribute for iframe capabilities comes from MDN's Permissions-Policy and HTMLIFrameElement documentation. Cookie architecture requirements, including SameSite=None and Secure attributes, are based on MDN's Storage Access API and Set-Cookie guides. The use of CHIPS for partitioned state is supported by the IETF Datatracker draft and Chrome Developers. Authentication flow options like FedCM and SAA are corroborated by MDN and Chrome Developers, noting FedCM's role as a trust signal. Finally, the critical need for postMessage origin validation to prevent XSS is based on the GitHub postMessage security review checklist. No material contradictions were found.",
+        "citations": [
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors",
+            "excerpts": [
+              "The HTTP Content-Security-Policy (CSP) frame-ancestors directive specifies valid parents that may embed a page using <frame>, <iframe>, <object>, or <embed>. Setting this directive to 'none' is similar to X-Frame-Options: deny (which is also supported in older browsers).",
+              "The HTTP `Content-Security-Policy` (CSP) **`frame-ancestors`** directive specifies valid parents that may embed a page using `<frame>` , `<iframe>` , `<object>` , or `<embed>` .",
+              "Content-Security-Policy: frame-ancestors 'none';",
+              "Content-Security-Policy: frame-ancestors <source-expression-list>;"
+            ],
+            "title": "Content-Security-Policy: frame-ancestors directive - HTTP | MDN"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/API/Storage_Access_API",
+            "excerpts": [
+              "Although the API surface is the same, websites using the Storage Access API should expect differences in the level and extent of third-party cookie access they receive between different browsers, due to differences in their storage access policies.",
+              "The Storage Access API provides a way for cross-site content loaded in a third-party context (i.e., embedded in an `<iframe>` ) to gain access to third-party cookies and unpartitioned state that it would typically only have access to in a first-party context (i.e., when loaded directly in a browser tab).",
+              "Third party content embedded in an `<iframe>` that needs to access cookie or other unpartitioned state can request access using the Storage Access API as follows:",
+              "If permission is granted, the resource will then reload itself.\n3",
+              "* Cookies must have `SameSite=None` explicitly set on them, because the default value for Chrome is `SameSite=Lax` ( `SameSite=None` is the default in Firefox and Safari).",
+              "* Cookies must have the `Secure` attribute set on them."
+            ],
+            "title": "Storage Access API - Web APIs | MDN - MDN Web Docs"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/identity-credentials-get",
+            "excerpts": [
+              "The HTTP Permissions-Policy header identity-credentials-get directive controls whether the current document is allowed to use the Federated Credential Management API (FedCM), and more specifically usage of the following methods:"
+            ],
+            "title": "Permissions-Policy: identity-credentials-get directive"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/API/HTMLIFrameElement/allow",
+            "excerpts": [
+              "The Permissions Policy specified by the allow attribute implements a further restriction on top of the policy specified in the Permissions-Policy header. It doesn't replace it. See <iframe> 's Permissions Policy syntax for more details. It reflects the allow attribute of the <iframe> element.",
+              "The **`allow`** property of the `HTMLIFrameElement` interface indicates the Permissions Policy specified for this `<iframe>` element. The policy defines what features are available to the `<iframe>` element (for example, access to the `microphone` , `camera` , `battery` , `web-share` , etc.) based on the origin of the request."
+            ],
+            "title": "HTMLIFrameElement: allow property - Web APIs | MDN"
+          },
+          {
+            "url": "https://datatracker.ietf.org/doc/html/draft-cutler-httpbis-partitioned-cookies",
+            "excerpts": [
+              "This document updates RFC6265bis, defining a new attribute, Partitioned, which restricts the contexts in which a cookie is available to only those whose top-level document is same-site with the top-level document that initiated the request that created the cookie."
+            ],
+            "title": "draft-cutler-httpbis-partitioned-cookies-01 - IETF Datatracker"
+          },
+          {
+            "url": "https://github.com/explainers-by-googlers/CHIPS-spec/blob/main/draft-cutler-httpbis-partitioned-cookies.md",
+            "excerpts": [
+              "In order to meet these use cases, this document proposes changes to RFC6265bis to support a new cookie attribute, Partitioned, which restricts the contexts that a cookie is available to only those whose top-level document is same-site with the top-level document that the cookie was created in."
+            ],
+            "title": "CHIPS-spec/draft-cutler-httpbis-partitioned-cookies.md at ..."
+          },
+          {
+            "url": "https://gist.github.com/juan-gunawan/bc5c6617e05ae6620fe9850eb4502db2",
+            "excerpts": [
+              "postMessage is generally considered very secure as long as the programmer is careful to check the origin and source of an arriving message. Acting on a message without verifying its source opens a vector for cross-site scripting attacks."
+            ],
+            "title": "postMessage () security review checklist \u00b7 GitHub"
+          },
+          {
+            "url": "https://postmessage.dev/",
+            "excerpts": [
+              "A comprehensive guide to postMessage API, security vulnerabilities, and best practices for web developers and security researchers."
+            ],
+            "title": "postMessage.dev - The Complete Guide to Window postMessage ..."
+          },
+          {
+            "url": "http://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Set-Cookie",
+            "excerpts": [
+              "Cookie names prefixed with __Secure- or __Host- can be used only if they are set with the Secure attribute from a secure (HTTPS) origin."
+            ],
+            "title": "Set-Cookie header - HTTP - MDN Web Docs"
+          },
+          {
+            "url": "https://www.xjavascript.com/blog/how-to-communicate-between-iframe-and-the-parent-site/",
+            "excerpts": [
+              "In this blog, we\u2019ll demystify how `postMessage` works, walk through step-by-step examples, and cover critical security best practices to ensure your implementation is both functional and safe."
+            ],
+            "title": "How to Communicate Between Iframe and Parent Site on ..."
+          },
+          {
+            "url": "https://microsoftedge.github.io/MSEdgeExplainers/StorageAccessAPI/explainer.html",
+            "excerpts": [
+              "The API would address storage access for all forms of storage that may currently be blocked by existing policies and browser settings such as third-party cookies."
+            ],
+            "title": "Storage Access API Explainer | MSEdgeExplainers"
+          },
+          {
+            "url": "https://web.nodejs.cn/en-us/docs/web/http/headers/permissions-policy/identity-credentials-get/",
+            "excerpts": [
+              "The HTTP Permissions-Policy header identity-credentials-get directive controls whether the current document is allowed to use the Federated Credential Management API (FedCM), and more specifically the navigator.credentials.get () method with an identity option."
+            ],
+            "title": "Permissions-Policy: identity-credentials-get - HTTP | MDN"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/Permissions_Policy",
+            "excerpts": [
+              "You define a set of \"policies\" that restrict what APIs the site's code can access or modify the browser's default behavior for certain features. This allows you to enforce best practices, even as the codebase evolves \u2014 as well as more safely compose third-party content."
+            ],
+            "title": "Permissions Policy - HTTP - MDN"
+          },
+          {
+            "url": "http://partnerize.com/resources/blog/what-you-need-to-know-about-safari-itp-2-2-and-upcoming-chrome-changes",
+            "excerpts": [
+              "Jun 3, 2019 \u00b7 Further, it is easy to set a SameSite status with either Partnerize's S2S or first-party cookie-based solution. Whether there will be long-term\u00a0..."
+            ],
+            "title": "What You Need To Know About Safari ITP 2.2 and Upcoming ..."
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/API/FedCM_API",
+            "excerpts": [
+              "The Federated Credential Management API (or FedCM API) provides a standard mechanism for identity providers (IdPs) to make identity federation services available on the web in a privacy-preserving way, without the need for third-party cookies and redirects.",
+              "The problem is that traditional identity federation relies on `<iframe>` s, redirects, and third-party cookies, which are also used for third-party tracking. Browsers are limiting the usage of these features in an effort to preserve user privacy, but a side effect is that this makes valid, non-tracking uses more difficult to implement, which includes identity federation.",
+              "FedCM aims to work around this problem, providing a dedicated mechanism for federated identity flows on the web, and enabling supporting browsers to provide special UI elements on RPs, allowing users to choose an IdP account to use for sign-in.",
+              "Developers can explicitly grant permission for an `<iframe>` to use FedCM via the `allow` attribute:",
+              "<iframe src=\"3rd-party.example\" allow=\"identity-credentials-get\"></iframe>"
+            ],
+            "title": "Federated Credential Management (FedCM) API - Web APIs | MDN"
+          },
+          {
+            "url": "https://developer.chrome.com/blog/working-with-the-industry-to-evolve-chips/",
+            "excerpts": [
+              "To encourage good security practices, CHIPS design requires that cookies only be set by and sent over secure protocols and that partitioned cookies must be set with `Secure` .",
+              "In other [cases, it made authentication flows difficult in embedded contexts](https://github.com/privacycg/CHIPS/issues/39) ."
+            ],
+            "title": "Working with the industry to evolve CHIPS - Chrome Developers"
+          },
+          {
+            "url": "http://thecurrent.com/google-third-party-cookies-deprecation-chrome-identity-privacy",
+            "excerpts": [
+              "Google is abandoning its plan to deprecate third-party cookies in its Chrome browser, the latest development in a five-year saga of preparation, delays, and"
+            ],
+            "title": "Under pressure, Google halts third-party cookie deprecation in ..."
+          },
+          {
+            "url": "https://developers.google.com/workspace/classroom/add-ons/developer-guides/third-party-cookies",
+            "excerpts": [
+              "Warning: Chrome has announced that third-party (3P) cookies are no longer being deprecated. The guidance described here is no longer necessary, and add-ons should not be impacted in"
+            ],
+            "title": "Prepare for the third-party cookie deprecation | Google ..."
+          },
+          {
+            "url": "https://stackoverflow.com/questions/27358966/how-can-i-set-x-frame-options-on-an-iframe",
+            "excerpts": [
+              "You can't set X-Frame-Options on the iframe. That is a response header set by the domain from which you are requesting the resource (google.com.ua in your example)."
+            ],
+            "title": "javascript - How can I set 'X-Frame-Options' on an iframe ..."
+          },
+          {
+            "url": "https://stackoverflow.com/questions/6666423/overcoming-display-forbidden-by-x-frame-options",
+            "excerpts": [
+              "Site owners use the X-Frame-Options response header so that their website cannot be opened in an Iframe. This helps to secure the users against clickjacking attack"
+            ],
+            "title": "Overcoming \"Display forbidden by X-Frame-Options\""
+          },
+          {
+            "url": "https://developer.chrome.com/docs/privacy-sandbox/fedcm/",
+            "excerpts": [
+              "FedCM can help reduce reliance on third-party cookies, which are often used to\ntrack users across the web. The API offers a personalized sign in experience\neven when third-party cookies aren't available (for example, in the Incognito mode).",
+              "FedCM is also integrated with other Privacy Sandbox APIs. For example, the\nStorage Access API uses FedCM authentication as a [trust signal](https://privacysandbox.google.com/cookies/storage-access-api) .\nThis integration is useful for the websites that rely on both FedCM for\nauthentication and the SAA to enable cross-origin iframes to access necessary\nstorage.",
+              "Additionally, FedCM serves as a [trust signal](https://privacysandbox.google.com/cookies/storage-access-api) for Storage Access API, eliminating friction for IdP-initiated storage access requests."
+            ],
+            "title": "FedCM: A privacy-preserving identity federation API \u00a0|\u00a0 Identity \u00a0|\u00a0 Chrome for Developers"
+          },
+          {
+            "url": "https://owasp.org/www-community/attacks/Clickjacking",
+            "excerpts": [
+              "1. Sending the proper Content Security Policy (CSP) frame-ancestors directive response headers that instruct the browser to not allow framing from other domains. The older `X-Frame-Options` HTTP headers is used for graceful degradation and older browser compatibility.",
+              "2. Properly setting authentication cookies with `SameSite=Strict` (or `Lax` ), unless they explicitly need `None` (which is rare)."
+            ],
+            "title": "Clickjacking | OWASP Foundation"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy",
+            "excerpts": [
+              "Controls whether a document loaded in a third-party context (i.e., embedded in an `<iframe>` ) is allowed to use the Storage Access API to request access to unpartitioned cookies.",
+              "For an `<iframe>` to have a feature enabled its allowed origin must also be in the allowlist for the parent page. Because of this inheritance behavior , it is a good idea to specify the widest acceptable support for a feature in the HTTP header, and then specify the subset of support you need in each `<iframe>` .",
+              "By default, if an `<iframe>` navigates to another origin, the policy is not applied to the origin that the `<iframe>` navigates to."
+            ],
+            "title": "Permissions-Policy header - HTTP | MDN"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Permissions-Policy",
+            "excerpts": [
+              "Permissions-Policy header",
+              "Controls whether a document loaded in a third-party context (i.e., embedded in an `<iframe>` ) is allowed to use the Storage Access API to request access to unpartitioned cookies.",
+              "For an `<iframe>` to have a feature enabled its allowed origin must also be in the allowlist for the parent page. Because of this inheritance behavior , it is a good idea to specify the widest acceptable support for a feature in the HTTP header, and then specify the subset of support you need in each `<iframe>` .",
+              "By listing the origin that the `<iframe>` navigates to in the `allow` attribute, the Permissions Policy that was applied to the original `<iframe>` will be applied to the origin the `<iframe>` navigates to.",
+              "Permissions-Policy: geolocation=(self https://trusted-ad-network.com)",
+              "<iframe src=\"https://trusted-ad-network.com\" allow=\"geolocation\"></iframe>",
+              "If a different origin ended up getting loaded into `<iframe>` , it would not have access to geolocation:",
+              "<iframe src=\"https://rogue-origin-example.com\" allow=\"geolocation\"></iframe>"
+            ],
+            "title": "Permissions-Policy header - HTTP | MDN"
+          },
+          {
+            "url": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options",
+            "excerpts": [
+              "The HTTP **`X-Frame-Options`** response header can be used to indicate whether a browser should be allowed to render the document in a `<frame>` , `<iframe>` , `<embed>` or `<object>` . Sites can use this to avoid clickjacking attacks and some cross-site leaks , by ensuring that their content is not embedded into other sites.",
+              "`ALLOW-FROM origin` Deprecated\nThis is an obsolete directive. Modern browsers that encounter response headers with this directive will ignore the header completely. The `Content-Security-Policy` HTTP header has a `frame-ancestors` directive which you should use instead."
+            ],
+            "title": "X-Frame-Options header - HTTP | MDN"
+          },
+          {
+            "url": "https://developers.google.com/privacy-sandbox/3pcd",
+            "excerpts": [
+              "Provide a great experience for your users, whether or not third-party cookies are available.",
+              "The Partitioned cookie attribute allows developers to opt a cookie into partitioned storage, with separate cookie jars per top-level site.",
+              "Storage Access allows iframes to request storage access permissions when access would otherwise be denied by browser settings.",
+              "A web API for privacy-preserving identity federation."
+            ],
+            "title": "Third-party cookies \u00a0|\u00a0 Privacy Sandbox"
+          }
+        ],
+        "confidence": "high"
+      }
+    ],
+    "type": "text",
+    "beta_fields": null,
+    "mcp_tool_calls": null,
+    "content_file": "cross-origin-iframe-auth.md"
+  }
+}

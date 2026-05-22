@@ -1,0 +1,87 @@
+{
+  "research_topic": "Cross-Origin Iframe Authentication, Session Continuity & Multi-Page Embedding",
+  "interaction_ids": [
+    "trun_d61c966fcd194f749211245c761186f2",
+    "trun_d61c966fcd194f74aa450296ff7bd383"
+  ],
+  "processor": "pro-fast",
+  "completed": "2026-05-22",
+  "deliverable": "docs/agents/references/cross-origin-iframe-auth.md",
+  "covered_apps": [
+    {
+      "name": "SonarQube",
+      "issues": [
+        "Hardcodes X-Frame-Options: SAMEORIGIN — cannot embed without reverse proxy",
+        "Uses window.alert() on login failure — blocked in cross-origin iframe",
+        "CSRF tokens refresh on every navigation — back/forward causes 403s",
+        "Session cookies lack SameSite=None — blocked as third-party"
+      ],
+      "solutions": [
+        "Strip X-Frame-Options via NGINX proxy, add frame-ancestors CSP",
+        "Override window.alert() via injected script (styled overlay)",
+        "postMessage token bridge to sync CSRF tokens",
+        "Rewrite Set-Cookie to add SameSite=None; Secure"
+      ]
+    },
+    {
+      "name": "Generic Self-Hosted App (Jellyfin, *arr, etc.)",
+      "issues": [
+        "May or may not set CSP headers",
+        "Some use basic auth popup, some use cookie-based sessions",
+        "Multi-page navigation resets parent loading state"
+      ],
+      "solutions": [
+        "Consistent reverse proxy pattern for all embedded apps",
+        "Navigation observer injected via proxy to notify parent",
+        "Parent component state machine (loading → active → navigating → active)"
+      ]
+    }
+  ],
+  "key_technologies": [
+    {
+      "name": "CSP frame-ancestors",
+      "replaces": "Legacy X-Frame-Options (ALLOW-FROM is deprecated)",
+      "usage": "HTTP header on embedded app allowinglist parent domains"
+    },
+    {
+      "name": "SameSite=None; Secure",
+      "required": true,
+      "usage": "Required for any cookie sent in cross-origin iframe context"
+    },
+    {
+      "name": "CHIPS (Partitioned)",
+      "usage": "Opts cookies into partitioned storage per top-level site",
+      "tradeoff": "Isolates iframe session from direct-tab session"
+    },
+    {
+      "name": "Storage Access API",
+      "usage": "Request unpartitioned cookie access in Safari/ITP browsers",
+      "requires_user_gesture": true
+    },
+    {
+      "name": "FedCM",
+      "usage": "Privacy-preserving federated identity without third-party cookies",
+      "status": "Chrome: stable, Safari: experimental, Firefox: in dev"
+    },
+    {
+      "name": "postMessage",
+      "usage": "Cross-origin communication between iframe and parent",
+      "critical_requirement": "Always verify event.origin — failing to do so is an XSS vector"
+    }
+  ],
+  "browser_strategies": {
+    "Chrome/Edge": "SameSite=None; Secure + proxy rewrite. No user interaction needed.",
+    "Safari": "Must call document.requestStorageAccess() after user gesture. Show click-to-enable overlay if first attempt fails.",
+    "Firefox": "Strict third-party cookie blocking by default. Use Storage Access API + fallback 'Open in new tab' link.",
+    "Brave": "Same as Chrome. Shields may need per-site disabling."
+  },
+  "references": [
+    "https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Content-Security-Policy/frame-ancestors",
+    "https://developer.mozilla.org/en-US/docs/Web/API/Storage_Access_API",
+    "https://developer.mozilla.org/en-US/docs/Web/Privacy/Guides/Third-party_cookies",
+    "https://github.com/explainers-by-googlers/CHIPS-spec",
+    "https://developer.chrome.com/docs/privacy-sandbox/fedcm/",
+    "https://gist.github.com/juan-gunawan/bc5c6617e05ae6620fe9850eb4502db2",
+    "https://community.sonarsource.com/t/how-to-embed-sonarqube-page-in-html-iframe/10420"
+  ]
+}
