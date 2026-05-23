@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { formatBytes, parseBytes } from "@/lib/format";
+import { formatBytes } from "@/lib/format";
 import { fetchAllServices } from "@/lib/arr-service";
 import type { DiskSpace } from "@/lib/types";
 
@@ -7,19 +7,16 @@ export async function GET() {
   try {
     const entries = await fetchAllServices<DiskSpace>("disk");
 
-    // Deduplicate by total bytes — Radarr and Sonarr report the same underlying disk
+    // Deduplicate by totalBytes — Radarr and Sonarr report the same underlying disk
     const seenTotals = new Set<number>();
     let totalBytes = 0;
     let usedBytes = 0;
 
     for (const disk of Object.values(entries)) {
-      if (disk.usedBytes !== undefined) {
-        const diskTotal = parseBytes(disk.total);
-        if (!seenTotals.has(diskTotal)) {
-          seenTotals.add(diskTotal);
-          totalBytes += diskTotal;
-          usedBytes += parseBytes(disk.used);
-        }
+      if (disk.totalBytes !== undefined && !seenTotals.has(disk.totalBytes)) {
+        seenTotals.add(disk.totalBytes);
+        totalBytes += disk.totalBytes;
+        usedBytes += disk.usedBytes ?? 0;
       }
     }
 
