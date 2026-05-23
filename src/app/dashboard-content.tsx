@@ -1,12 +1,11 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { serviceOrder } from "@/lib/services";
 import { Header } from "@/components/header";
 import { HostSystemCard } from "@/components/host-system-card";
 import { ServiceCard } from "@/components/service-card";
 import { ActivityCard } from "@/components/activity-card";
 import { useDashboardStore } from "@/lib/dashboard-store";
-import { useVisibilityPoll } from "@/lib/use-visibility-poll";
 
 export function DashboardContent() {
   const data = useDashboardStore((s) => s.data);
@@ -17,25 +16,45 @@ export function DashboardContent() {
   const [recentEvents, setRecentEvents] = useState<any[]>([]);
   const [eventsLoading, setEventsLoading] = useState(true);
 
-  const fetchRecentEvents = useCallback(async () => {
+  const fetchRecentEvents = async (signal?: AbortSignal) => {
     try {
-      const res = await fetch("/api/events?pageSize=3", { cache: "no-store" });
+      const res = await fetch("/api/events?pageSize=3", { cache: "no-store", signal });
+      if (signal?.aborted) return;
       if (res.ok) {
         const json = await res.json();
+        if (signal?.aborted) return;
         setRecentEvents(json.events || []);
       }
-    } catch {
+    } catch (e) {
+      if (e instanceof DOMException && e.name === "AbortError") return;
     } finally {
       setEventsLoading(false);
     }
-  }, []);
+  };
 
-  const refresh = useCallback(async () => {
-    await fetchData();
-    await fetchRecentEvents();
-  }, [fetchData, fetchRecentEvents]);
+  useEffect(() => {
+    let cancelled = false;
+    const controller = new AbortController();
 
-  useVisibilityPoll(refresh, 30000);
+    const run = async () => {
+      await fetchData();
+      await fetchRecentEvents(controller.signal);
+    };
+
+    run();
+
+    const interval = setInterval(() => {
+      if (document.visibilityState === "visible" && !cancelled) {
+        run();
+      }
+    }, 30000);
+
+    return () => {
+      cancelled = true;
+      controller.abort();
+      clearInterval(interval);
+    };
+  }, [fetchData]);
 
   return (
     <div className="min-h-screen">
@@ -45,7 +64,7 @@ export function DashboardContent() {
         {error && (
           <div className="mb-6 rounded-md border border-[var(--error)]/20 bg-[var(--error)]/5 px-4 py-3">
             <p className="text-sm text-[var(--error)]">{error}</p>
-            <button onClick={refresh} className="mt-2 text-sm underline">Retry</button>
+            <button onClick={() => { fetchData(); fetchRecentEvents(); }} className="mt-2 text-sm underline">Retry</button>
           </div>
         )}
 
