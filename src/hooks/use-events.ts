@@ -25,7 +25,6 @@ function buildQuery(filters: Filters, page: number): string {
   if (filters.from) params.set("from", filters.from);
   if (filters.to) params.set("to", filters.to);
   params.set("page", String(page));
-  params.set("pageSize", "50");
   return params.toString();
 }
 
@@ -83,13 +82,19 @@ export function useEvents() {
     }
   }, [filters, page]);
 
+  const fetchEventsRef = useRef(fetchEvents);
+  fetchEventsRef.current = fetchEvents;
+
   useEffect(() => {
-    fetchEvents();
+    fetchEventsRef.current();
+  }, [filters, page]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (document.visibilityState === "visible") fetchEvents();
+      if (document.visibilityState === "visible") fetchEventsRef.current();
     }, 30000);
     return () => clearInterval(interval);
-  }, [fetchEvents]);
+  }, []);
 
   const toggleService = (id: string) => {
     setFilters((f) => {
@@ -121,11 +126,10 @@ export function useEvents() {
   const setDatePreset = (days: number) => {
     if (datePreset === days) {
       setDatePresetState(null);
-      setFilters((f) => ({ ...f, from: "", to: "" }));
+      setFilters((f) => ({ ...f, from: "" }));
     } else {
-      const to = new Date().toISOString().split("T")[0];
       const from = new Date(Date.now() - days * 86400000).toISOString().split("T")[0];
-      setFilters((f) => ({ ...f, from, to }));
+      setFilters((f) => ({ ...f, from }));
       setDatePresetState(days);
     }
     setPage(1);

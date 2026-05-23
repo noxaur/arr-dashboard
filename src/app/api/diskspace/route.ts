@@ -7,6 +7,7 @@ export async function GET() {
   try {
     const entries = await fetchAllServices<DiskSpace>("disk");
 
+    // Deduplicate by total bytes — Radarr and Sonarr report the same underlying disk
     const seenTotals = new Set<number>();
     let totalBytes = 0;
     let usedBytes = 0;

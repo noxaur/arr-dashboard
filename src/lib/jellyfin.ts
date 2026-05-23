@@ -9,6 +9,8 @@ function getJellyfinConfig() {
   };
 }
 
+import type { ActivityEvent, EventType } from "@/lib/events";
+
 async function jellyfinFetch(endpoint: string): Promise<Response | null> {
   const { url, key } = getJellyfinConfig();
   if (!url || !key) return null;
@@ -36,8 +38,48 @@ async function jellyfinFetch(endpoint: string): Promise<Response | null> {
   return null;
 }
 
+interface JellyfinActivityEntry {
+  Id: number;
+  Name: string;
+  Overview?: string;
+  ShortOverview?: string;
+  Type: string;
+  Date: string;
+  Severity: string;
+  UserId: string;
+}
+
+export async function getJellyfinActivity(): Promise<ActivityEvent[]> {
+  try {
+    const res = await jellyfinFetch("/System/ActivityLog/Entries?StartIndex=0&Limit=2000");
+    if (!res || !res.ok) return [];
+    const data = await res.json();
+    const items: JellyfinActivityEntry[] = data.Items || [];
+    return items.map((item) => {
+      let type: EventType = "refresh";
+      const t = item.Type || "";
+      if (t.includes("PlaybackStopped") || t.includes("PlaybackStop")) type = "import";
+      else if (t.includes("Playback") || t.includes("Video")) type = "download";
+      else if (t.includes("UserDownloading")) type = "download";
+      else if (t.includes("AuthenticationSucceeded")) type = "import";
+      else if (t.includes("Session") || t.includes("Login")) type = "import";
+      else if (t.includes("Library") || t.includes("Update")) type = "refresh";
+      else if (t.includes("Error") || t.includes("Exception") || item.Severity === "Error") type = "error";
+      return {
+        id: item.Id,
+        service: "jellyfin",
+        type,
+        title: item.Name || "Activity",
+        message: item.ShortOverview || item.Name || "",
+        timestamp: item.Date || new Date().toISOString(),
+      };
+    });
+  } catch {
+    return [];
+  }
+}
+
 export async function getJellyfinSystemInfo(): Promise<JellyfinSystemInfo | null> {
-  if (env.USE_MOCK_DATA === "true") return mockJellyfinSystemInfo;
   try {
     const res = await jellyfinFetch("/System/Info");
     if (!res || !res.ok) return null;

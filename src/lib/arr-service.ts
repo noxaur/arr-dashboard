@@ -62,6 +62,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
   const activeDownloads = services.flatMap((s) => s.queue).filter((q) => q.status === "downloading").length;
   const healthAlerts = services.filter((s) => s.health.status === "warning" || s.health.status === "error").length;
   const totalDiskUsed = services.reduce((sum, s) => sum + (s.disk?.usedBytes || 0), 0);
+  const totalDiskSize = services.reduce((sum, s) => sum + (s.disk?.totalBytes || 0), 0);
 
   const allActivity = services
     .flatMap((s) => s.activity.map((e) => ({ ...e, service: s.id })))
@@ -76,6 +77,7 @@ export async function getDashboardData(): Promise<DashboardResponse> {
     activeDownloads,
     healthAlerts,
     totalDiskUsed,
+    totalDiskSize,
     allActivity,
   };
 }

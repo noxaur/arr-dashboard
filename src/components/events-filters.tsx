@@ -58,7 +58,7 @@ export function EventsFilters({
                   height: 18,
                 }}
               >
-                {filters.services.length + filters.types.length + (searchInput ? 1 : 0) + (0)}
+                {filters.services.length + filters.types.length + (searchInput ? 1 : 0) + (datePreset ? 1 : 0)}
               </motion.span>
             )}
           </AnimatePresence>
@@ -96,6 +96,17 @@ export function EventsFilters({
               </button>
             );
           })}
+          <button
+            onClick={() => onToggleService("jellyfin")}
+            className="btn-ghost px-2.5 py-1 text-xs"
+            style={{
+              backgroundColor: filters.services.includes("jellyfin") ? "var(--accent-bg)" : undefined,
+              color: filters.services.includes("jellyfin") ? "var(--accent)" : undefined,
+              borderColor: filters.services.includes("jellyfin") ? "var(--accent)" : undefined,
+            }}
+          >
+            Jellyfin
+          </button>
 
           <span className="text-xs" style={{ color: "var(--text-muted)" }}>|</span>
 

@@ -144,10 +144,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
+    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
     for (const mount of data) {
-      if (!uniqueDisks.has(mount.path)) {
-        uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      if (!uniqueDisks.has(mount.totalSpace)) {
+        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
     }
 
@@ -166,6 +166,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       total: formatBytes(totalBytes),
       percent,
       usedBytes,
+      totalBytes,
       mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace) })),
     };
   } catch {
@@ -225,19 +226,66 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
 
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   if (isMock())
-    return mockActivity.filter((a) => a.service === serviceId).slice(0, 10);
+    return mockActivity.filter((a) => a.service === serviceId).slice(0, 200);
 
   try {
     let res: Response;
 
     if (serviceId === "prowlarr") {
-      res = await arrFetch(serviceId, "/history?pageSize=10");
+      res = await arrFetch(serviceId, "/history?pageSize=2000");
+      if (!res.ok) return [];
+      const histData = await res.json();
+      const records = (histData.records || []) as any[];
+
+      const indexerRes = await arrFetch(serviceId, "/indexer");
+      const indexerMap: Record<number, string> = {};
+      if (indexerRes.ok) {
+        const indexers = await indexerRes.json();
+        for (const idx of indexers) {
+          if (idx.id != null) indexerMap[idx.id] = idx.name;
+        }
+      }
+
+      return records.map((item: any, i: number) => {
+        const indexerName = item.indexerId != null ? (indexerMap[item.indexerId] || `ID#${item.indexerId}`) : "Unknown";
+        const data = item.data || {};
+        let type: "download" | "import" | "error" | "search" | "refresh" = "refresh";
+        let title = item.eventType || "History event";
+        let message = "";
+
+        switch (item.eventType) {
+          case "indexerRss":
+            type = "refresh";
+            title = `${indexerName} RSS`;
+            message = `← ${data.source || "?"} (${data.queryType || "?"}, ${data.queryResults || 0} results)`;
+            break;
+          case "indexerQuery":
+            type = "search";
+            title = data.query || "Search";
+            message = `→ ${indexerName} (${data.source || "?"}, ${data.queryResults || 0} results)`;
+            break;
+          case "releaseGrabbed":
+            type = "download";
+            title = data.grabTitle || "Release grabbed";
+            message = `→ ${indexerName} via ${data.source || "?"}`;
+            break;
+        }
+
+        return {
+          id: i,
+          service: serviceId,
+          type,
+          title,
+          message,
+          timestamp: item.date || new Date().toISOString(),
+        };
+      });
     } else if (serviceId === "bazarr") {
-      res = await arrFetch(serviceId, "/system/logs?start=0&limit=10");
+      res = await arrFetch(serviceId, "/system/logs?start=0&limit=2000");
     } else if (serviceId === "jellyseerr") {
-      res = await arrFetch(serviceId, "/activity?take=10&skip=0&sort=createdAt");
+      res = await arrFetch(serviceId, "/request?take=5000&skip=0&sort=added");
     } else {
-      res = await arrFetch(serviceId, "/history?pageSize=10");
+      res = await arrFetch(serviceId, "/history?pageSize=2000");
     }
 
     if (!res.ok) return [];
@@ -246,18 +294,56 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
 
     if (serviceId === "jellyseerr") {
       const items = data.results || data.items || [];
-      return items.map((item: any, i: number) => {
-        const activityType = item.activity || item.type || "";
-        const media = item.media || item.request?.media || {};
-        return {
-          id: i,
-          service: serviceId,
-          type: "request" as const,
-          title: activityType || "Activity",
-          message: `${media?.title || media?.media?.title || "Unknown"} — ${activityType}`,
-          timestamp: item.timestamp || item.createdAt || item.updatedAt || new Date().toISOString(),
-        };
-      });
+      const titleCache = new Map<number, string>();
+      const statusLabels: Record<number, string> = {
+        1: "Pending Approval",
+        2: "Approved",
+        3: "Declined",
+        4: "Failed",
+        5: "Fulfilled",
+      };
+
+      const resolveTitle = async (item: any): Promise<string> => {
+        const tmdbId = item.media?.tmdbId;
+        if (!tmdbId) return "Unknown";
+        if (titleCache.has(tmdbId)) return titleCache.get(tmdbId)!;
+
+        const serviceUrl = item.media?.serviceUrl || "";
+        const seriesMatch = serviceUrl.match(/\/series\/([\w-]+)/);
+        if (seriesMatch) {
+          const title = seriesMatch[1].replace(/-/g, " ").replace(/\b\w/g, (c: string) => c.toUpperCase());
+          titleCache.set(tmdbId, title);
+          return title;
+        }
+
+        if (item.media?.mediaType === "movie") {
+          try {
+            const res = await arrFetch("radarr", `/movie?tmdbId=${tmdbId}`);
+            if (res.ok) {
+              const movies = await res.json();
+              const t = movies[0]?.title || `Movie #${tmdbId}`;
+              titleCache.set(tmdbId, t);
+              return t;
+            }
+          } catch {}
+        }
+        return `Movie #${tmdbId}`;
+      };
+
+      const resolved = await Promise.all(items.map(async (item: any) => ({
+        item,
+        mediaTitle: await resolveTitle(item),
+        seasonInfo: item.season?.seasonNumber ? ` S${item.season.seasonNumber}` : "",
+      })));
+
+      return resolved.map(({ item, mediaTitle, seasonInfo }) => ({
+        id: item.id,
+        service: serviceId,
+        type: item.status === 3 ? "error" as const : "request" as const,
+        title: statusLabels[item.status] || "Request",
+        message: `${mediaTitle}${seasonInfo} — requested by ${item.requestedBy?.displayName || "Unknown"}`,
+        timestamp: item.createdAt || new Date().toISOString(),
+      }));
     }
 
     if (serviceId === "bazarr") {
@@ -271,15 +357,15 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
       }));
     }
 
-    return (data.records || data || [])
-      .filter((item: any) => !["indexerRss", "indexerSearch"].includes(item.eventType))
-      .slice(0, 10)
+    const events = (data.records || data || []) as any[];
+    return events
       .map((item: any, i: number) => ({
       id: i,
       service: serviceId,
       type: item.eventType === "downloadFolderImported" ? "import" as const :
             item.eventType === "grabbed" ? "download" as const :
             item.eventType === "downloadFailed" ? "error" as const :
+            item.eventType === "indexerSearch" ? "search" as const :
             "refresh" as const,
       title: item.eventType || "History event",
       message: item.data?.message || item.data?.title || "",

@@ -23,8 +23,10 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--lime)" }}>
-            <span className="text-sm font-semibold" style={{ color: "var(--primary)" }}>⬡</span>
+          <div className="flex h-8 w-8 items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="h-8 w-8">
+              <text x="16" y="23" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="22" fontWeight="700" fill="var(--text)">J</text>
+            </svg>
           </div>
           <h1 className="text-base font-semibold">*arr Dashboard</h1>
           <nav className="ml-4 flex items-center gap-1">
@@ -72,7 +74,9 @@ export function Header() {
           <div className="hidden lg:block h-5 w-px bg-[var(--border)]" />
           <div className="hidden lg:flex items-center gap-2">
             <span className="text-xs text-[var(--text-muted)]">Disk</span>
-            <span className="metric-value text-sm font-medium">{loading ? "—" : (data?.totalDiskUsed ?? 0) === 0 ? "—" : formatBytes(data?.totalDiskUsed ?? 0)}</span>
+            <span className="metric-value text-sm font-medium">
+              {loading ? "—" : !data?.totalDiskSize ? "—" : `${formatBytes(data.totalDiskUsed)} / ${formatBytes(data.totalDiskSize)}`}
+            </span>
           </div>
           <div className="hidden xl:flex items-center gap-2">
             <span className="text-xs text-[var(--text-muted)]">Updated {lastUpdated?.toLocaleTimeString() ?? "—"}</span>

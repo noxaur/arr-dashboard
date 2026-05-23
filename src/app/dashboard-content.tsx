@@ -54,7 +54,7 @@ export function DashboardContent() {
         <section className="mb-8">
           <h2 className="eyebrow mb-4">Services</h2>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {serviceOrder.map((id) => {
+              {serviceOrder.map((id) => {
               const svcData = data?.services?.find((s) => s.id === id);
               if (!svcData) return null;
               return <ServiceCard key={id} data={svcData} loading={loading} />;
