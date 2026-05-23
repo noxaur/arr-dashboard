@@ -51,7 +51,6 @@ function buildQuery(filters: Filters, page: number): string {
   if (filters.from) params.set("from", filters.from);
   if (filters.to) params.set("to", filters.to);
   params.set("page", String(page));
-  params.set("pageSize", "50");
   return params.toString();
 }
 
@@ -59,6 +58,7 @@ export function EventsContent() {
   const [events, setEvents] = useState<ActivityEvent[]>([]);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [pageSize, setPageSize] = useState(50);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
@@ -102,6 +102,7 @@ export function EventsContent() {
       setEvents(data.events);
       setTotal(data.total);
       setTotalPages(data.totalPages);
+      setPageSize(data.pageSize);
       setLastUpdated(new Date());
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
@@ -350,7 +351,7 @@ export function EventsContent() {
           </div>
         )}
 
-        {totalPages > 1 && (
+        {totalPages > 1 ? (
           <div className="mt-4 flex items-center justify-center gap-2">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
@@ -392,7 +393,13 @@ export function EventsContent() {
               Next
             </button>
             <span className="text-xs ml-2" style={{ color: "var(--text-muted)" }}>
-              {(page - 1) * 50 + 1}–{Math.min(page * 50, total)} of {total}
+              {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, total)} of {total}
+            </span>
+          </div>
+        ) : (
+          <div className="mt-4 flex items-center justify-center gap-2">
+            <span className="text-xs" style={{ color: "var(--text-muted)" }}>
+              {total} {total === 1 ? "event" : "events"}
             </span>
           </div>
         )}

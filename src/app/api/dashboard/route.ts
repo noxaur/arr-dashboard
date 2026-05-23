@@ -26,12 +26,12 @@ export async function GET() {
   const totalQueue = services.flatMap((s) => s.queue).length;
   const activeDownloads = services.flatMap((s) => s.queue).filter((q: any) => q.status === "downloading").length;
   const healthAlerts = services.filter((s) => s.health.status === "warning" || s.health.status === "error").length;
-  const seenDisks = new Set<string>();
+  const seenDisks = new Set<number>();
   let totalDiskUsed = 0;
   let totalDiskSize = 0;
   for (const s of services) {
-    if (s.disk && s.disk.total !== "N/A" && !seenDisks.has(s.disk.total)) {
-      seenDisks.add(s.disk.total);
+    if (s.disk && s.disk.totalBytes != null && !seenDisks.has(s.disk.totalBytes)) {
+      seenDisks.add(s.disk.totalBytes);
       totalDiskUsed += s.disk.usedBytes ?? 0;
       totalDiskSize += s.disk.totalBytes ?? 0;
     }

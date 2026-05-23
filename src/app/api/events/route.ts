@@ -21,26 +21,27 @@ export async function GET(request: NextRequest) {
 
   const selectedServices = query.services
     ? query.services.split(",").filter(Boolean)
-    : serviceOrder;
+    : [...serviceOrder, "jellyfin"];
   const selectedTypes = query.types
     ? query.types.split(",").filter(Boolean)
     : [];
   const searchText = (query.search ?? "").toLowerCase().trim();
-  const defaultFrom = new Date(Date.now() - 30 * 86400000);
-  const fromDate = query.from ? new Date(query.from) : defaultFrom;
+  const fromDate = query.from ? new Date(query.from) : null;
   const toDate = query.to ? new Date(query.to) : null;
   const validFrom = fromDate && !isNaN(fromDate.getTime());
   const validTo = toDate && !isNaN(toDate.getTime());
   const page = Math.max(1, parseInt(query.page ?? "1", 10) || 1);
   const pageSize = Math.min(200, Math.max(1, parseInt(query.pageSize ?? "100", 10) || 100));
 
+  const arrServiceIds = selectedServices.filter((id) => id !== "jellyfin");
+  const includeJellyfin = !query.services || query.services.split(",").includes("jellyfin");
+
   const [arrResults, jellyfinEvents] = await Promise.all([
-    Promise.allSettled(selectedServices.map((id) => getActivity(id))),
-    getJellyfinActivity(),
+    Promise.allSettled(arrServiceIds.map((id) => getActivity(id))),
+    includeJellyfin ? getJellyfinActivity() : Promise.resolve([]),
   ]);
 
   const allEvents: ActivityEvent[] = [];
-  const includeJellyfin = !query.services || query.services.split(",").includes("jellyfin");
 
   if (includeJellyfin) {
     allEvents.push(...jellyfinEvents.map((e) => ({ ...e, service: "jellyfin" })));
