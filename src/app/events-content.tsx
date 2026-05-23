@@ -75,6 +75,7 @@ export function EventsContent() {
   const [datePreset, setDatePresetState] = useState<number | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const searchRef = useRef<ReturnType<typeof setTimeout>>(null);
+  const filterTimerRef = useRef<ReturnType<typeof setTimeout>>(null);
   const [searchInput, setSearchInput] = useState("");
 
   useEffect(() => {
@@ -112,13 +113,19 @@ export function EventsContent() {
     }
   }, [filters, page]);
 
+  const fetchEventsRef = useRef(fetchEvents);
+  fetchEventsRef.current = fetchEvents;
+
   useEffect(() => {
-    fetchEvents();
+    fetchEventsRef.current();
+  }, [filters, page]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
-      if (document.visibilityState === "visible") fetchEvents();
+      if (document.visibilityState === "visible") fetchEventsRef.current();
     }, 30000);
     return () => clearInterval(interval);
-  }, [fetchEvents]);
+  }, []);
 
   const toggleService = (id: string) => {
     setFilters((f) => {
@@ -150,11 +157,10 @@ export function EventsContent() {
   const setDatePreset = (days: number) => {
     if (datePreset === days) {
       setDatePresetState(null);
-      setFilters((f) => ({ ...f, from: "", to: "" }));
+      setFilters((f) => ({ ...f, from: "" }));
     } else {
-      const to = new Date().toISOString().split("T")[0];
       const from = new Date(Date.now() - days * 86400000).toISOString().split("T")[0];
-      setFilters((f) => ({ ...f, from, to }));
+      setFilters((f) => ({ ...f, from }));
       setDatePresetState(days);
     }
     setPage(1);
@@ -512,7 +518,7 @@ function EventRow({
 
           {isGroup && expanded && !hasSearch && (
           <>
-            {group.events.slice(1, 6).map((event, subIdx) => (
+              {group.events.slice(1, 6).map((event, subIdx) => (
               <div
                 key={event.id}
                 onClick={() => onEventClick(event)}
@@ -527,9 +533,14 @@ function EventRow({
                 onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
               >
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs" style={{ color: "var(--text-secondary)" }}>
-                    {event.message || event.title}
+                  <p className="truncate text-xs font-medium" style={{ color: "var(--text-secondary)" }}>
+                    {event.title}
                   </p>
+                  {event.message && (
+                    <p className="truncate text-[11px]" style={{ color: "var(--text-muted)" }}>
+                      {event.message}
+                    </p>
+                  )}
                 </div>
                 <span className="flex-shrink-0 text-xs" style={{ color: "var(--text-muted)" }}>
                   {formatTime(event.timestamp)}
