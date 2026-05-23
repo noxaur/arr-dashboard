@@ -61,8 +61,16 @@ export async function getDashboardData(): Promise<DashboardResponse> {
   const totalQueue = services.flatMap((s) => s.queue).length;
   const activeDownloads = services.flatMap((s) => s.queue).filter((q) => q.status === "downloading").length;
   const healthAlerts = services.filter((s) => s.health.status === "warning" || s.health.status === "error").length;
-  const totalDiskUsed = services.reduce((sum, s) => sum + (s.disk?.usedBytes || 0), 0);
-  const totalDiskSize = services.reduce((sum, s) => sum + (s.disk?.totalBytes || 0), 0);
+  const seenDiskTotals = new Set<number>();
+  let totalDiskUsed = 0;
+  let totalDiskSize = 0;
+  for (const s of services) {
+    if (s.disk?.totalBytes != null && !seenDiskTotals.has(s.disk.totalBytes)) {
+      seenDiskTotals.add(s.disk.totalBytes);
+      totalDiskUsed += s.disk.usedBytes ?? 0;
+      totalDiskSize += s.disk.totalBytes;
+    }
+  }
 
   const allActivity = services
     .flatMap((s) => s.activity.map((e) => ({ ...e, service: s.id })))
