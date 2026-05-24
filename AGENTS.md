@@ -4,7 +4,7 @@
 
 A Next.js 15 dashboard for managing the *arr media ecosystem (Radarr, Sonarr, Prowlarr, Bazarr, Jellyseerr) with Jellyfin integration. Client-side polling, aggregated API layer, light/dark OKLCH theming.
 
-Key technologies: **Next.js 15 (App Router) · TypeScript strict · Tailwind CSS 3.4 (OKLCH) · Rubik font · Vitest 4 · ESLint 9 · Zustand · Zod**
+Key technologies: **Next.js 15 (App Router) · TypeScript strict · Tailwind CSS 3.4 (OKLCH) · Noto Sans · Vitest 4 · ESLint 9 · Zustand · Zod**
 
 ## Setup Commands
 
@@ -68,7 +68,10 @@ Rules: `react-hooks/rules-of-hooks` (error), `react-hooks/exhaustive-deps` (warn
 - Semantic color tokens: `surface`, `border`, `text`, `accent`, `status`
 - Custom spacing scale: `xxs` (2px) through `section` (96px)
 - Animation tokens: `fade-in`, `slide-up`, `pulse`
-- Rubik font at weights 400/500/600/700
+- **Noto Sans** at weights 300 (data-display headings) / 400 (body) / 500 (nav) / 700 (buttons, strong)
+- Pill-shaped buttons (30 px radius) are the signature interactive geometry
+- See **DESIGN.md** for the full design token reference (colors, typography, components, elevation)
+- See **PRODUCT.md** for brand personality, design principles, and anti-references
 
 ## Build and Deployment
 
@@ -111,7 +114,7 @@ docker compose up -d --build  # Build + run Docker container
 src/
 ├── app/              # Next.js App Router pages + API routes
 │   ├── api/          # Route handlers: dashboard, health, queues, actions, etc.
-│   ├── layout.tsx    # Root layout with Rubik font, theme class
+│   ├── layout.tsx    # Root layout with Noto Sans, theme class
 │   └── page.tsx      # Home page → dashboard-content.tsx
 ├── components/       # React components (no default exports)
 │   ├── header.tsx
