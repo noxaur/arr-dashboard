@@ -72,7 +72,7 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
             </div>
           </Tooltip>
         )}
-        {disk?.total !== "N/A" && disk?.percent > 0 && (
+        {data.id !== "radarr" && data.id !== "sonarr" && disk?.total !== "N/A" && disk?.percent > 0 && (
           <div className="flex flex-1 items-center gap-2">
             <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-hover)]">
               <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk!.percent > 80 ? "oklch(62% 0.22 25)" : disk!.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
