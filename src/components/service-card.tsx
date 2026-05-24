@@ -82,12 +82,42 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
 
       <ServiceActions serviceId={data.id} hasQueue={queue.length > 0} />
 
-      <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
-        <span className="text-xs text-text-muted">
-          {data.activity?.length ? `${data.activity.length} recent events` : "No recent activity"}
-        </span>
-        <Link href={`/${data.id}`} className="btn-ghost" aria-label={`Open ${service.name} settings`}>
-          Open Settings
+      <div className="flex items-center justify-between border-t border-[var(--border)] pt-3 min-h-[2.5rem]">
+        {data.activity?.length ? (
+          <div className="flex flex-col gap-1">
+            <div className="flex flex-wrap items-center gap-1.5">
+              {(["download", "import", "search", "refresh", "error", "request"] as const).map((t) => {
+                const count = data.activity.filter((e) => e.type === t).length;
+                if (count === 0) return null;
+                const tc: Record<string, string> = {
+                  download: "oklch(72% 0.16 145)",
+                  import: "oklch(72% 0.16 145)",
+                  search: "var(--accent)",
+                  refresh: "var(--text-muted)",
+                  error: "oklch(62% 0.22 25)",
+                  request: "var(--accent)",
+                };
+                const tl: Record<string, string> = {
+                  download: "\u2193", import: "\u2713", search: "\u2295", refresh: "\u21BB", error: "!", request: "+",
+                };
+                const label: Record<string, string> = {
+                  download: "downloads", import: "imports", search: "searches", refresh: "refreshes", error: "errors", request: "requests",
+                };
+                return (
+                  <Tooltip key={t} content={`${count} ${label[t]}`}>
+                    <span className="inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-[10px] font-medium" style={{ backgroundColor: "var(--surface-hover)", color: tc[t] }}>
+                      {tl[t]} {count}
+                    </span>
+                  </Tooltip>
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <span className="text-xs text-text-muted">No events yet</span>
+        )}
+        <Link href={`/${data.id}`} className="btn-ghost text-xs flex-shrink-0" aria-label={`Open ${service.name} settings`}>
+          Settings
         </Link>
       </div>
     </article>
