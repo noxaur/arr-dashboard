@@ -17,13 +17,45 @@ interface EventModalProps {
 
 export function EventModal({ event, onClose }: EventModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    previousFocusRef.current = document.activeElement as HTMLElement;
+    modalRef.current?.focus();
+
     const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+
+      if (e.key === "Tab" && modalRef.current) {
+        const focusable = modalRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last?.focus();
+          }
+        } else {
+          if (document.activeElement === last) {
+            e.preventDefault();
+            first?.focus();
+          }
+        }
+      }
     };
+
     window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
+    return () => {
+      window.removeEventListener("keydown", handler);
+      previousFocusRef.current?.focus();
+    };
   }, [onClose]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
@@ -69,9 +101,12 @@ export function EventModal({ event, onClose }: EventModalProps) {
       }}
     >
       <div
+        ref={modalRef}
         className="card"
         role="dialog"
         aria-modal="true"
+        aria-labelledby="modal-title"
+        tabIndex={-1}
         style={{
           width: "100%",
           maxWidth: "520px",
@@ -116,14 +151,8 @@ export function EventModal({ event, onClose }: EventModalProps) {
           <button
             onClick={onClose}
             aria-label="Close"
-            className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded text-sm"
+            className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded text-sm hover:bg-[var(--surface-hover)]"
             style={{ color: "var(--text-muted)" }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-hover)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-            }}
           >
             ✕
           </button>
@@ -131,7 +160,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
 
         {/* Body */}
         <div className="px-5 py-4">
-          <h3 className="mb-1 text-sm font-medium" style={{ color: "var(--text-primary)" }}>
+          <h3 id="modal-title" className="mb-1 text-sm font-medium" style={{ color: "var(--text-primary)" }}>
             {event.title}
           </h3>
           {event.message && (

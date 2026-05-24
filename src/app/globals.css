@@ -11,8 +11,8 @@
     --border: #e5e7eb;
     --border-strong: #cfcfdb;
     --text-primary: #1f1633;
-    --text-secondary: #1f1633;
-    --text-muted: #79628c;
+    --text-secondary: oklch(40% 0.04 290);
+    --text-muted: oklch(55% 0.05 290);
     --accent: #6a5fc1;
     --accent-soft: #79628c;
     --accent-bg: oklch(65% 0.12 280 / 0.08);
@@ -47,7 +47,7 @@
     --border-strong: #79628c;
     --text-primary: #ffffff;
     --text-secondary: #bdb8c0;
-    --text-muted: #bdb8c0;
+    --text-muted: oklch(55% 0.02 290);
     --accent: #6a5fc1;
     --accent-soft: #79628c;
     --accent-bg: oklch(65% 0.12 280 / 0.15);
@@ -137,7 +137,7 @@
     line-height: 1.14;
     letter-spacing: 0.2px;
     text-transform: uppercase;
-    color: #ffffff;
+    color: var(--text-on-primary);
     background-color: var(--primary);
     border: none;
     border-radius: var(--radius-md);
@@ -172,7 +172,7 @@
     letter-spacing: 0.2px;
     text-transform: uppercase;
     color: var(--text-primary);
-    background-color: #ffffff;
+    background-color: var(--bg);
     border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
@@ -184,7 +184,7 @@
   }
 
   .btn-inverted:active {
-    background-color: #f0f0f0;
+    background-color: var(--surface-hover);
     color: var(--ink-press);
     transform: scale(0.98);
   }
@@ -192,6 +192,15 @@
   .btn-inverted:focus-visible {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
+  }
+
+  [data-theme="dark"] .btn-inverted {
+    background-color: var(--surface);
+    color: var(--text-primary);
+  }
+
+  [data-theme="dark"] .btn-inverted:hover {
+    background-color: var(--surface-hover);
   }
 
   .btn-secondary {
@@ -268,16 +277,16 @@
     line-height: 1.29;
     letter-spacing: 0.2px;
     text-transform: uppercase;
-    color: #ffffff;
-    background-color: #79628c;
-    border: 1px solid #422082;
+    color: var(--text-primary);
+    background-color: var(--text-muted);
+    border: 1px solid var(--primary);
     border-radius: var(--radius-xl);
     cursor: pointer;
     transition: background-color 150ms ease, border-color 150ms ease;
   }
 
   .btn-violet-token:hover {
-    background-color: #6a5fc1;
+    background-color: var(--accent);
   }
 
   .btn-violet-token:focus-visible {
@@ -298,9 +307,9 @@
   }
 
   .card-dark {
-    background-color: #1f1633;
-    color: #ffffff;
-    border: 1px solid #362d59;
+    background-color: var(--bg);
+    color: var(--text-primary);
+    border: 1px solid var(--surface);
     border-radius: var(--radius-xxl);
   }
 
@@ -325,8 +334,8 @@
     font-size: 14px;
     font-weight: 400;
     line-height: 1.43;
-    color: #ffffff;
-    background-color: #150f23;
+    color: var(--text-primary);
+    background-color: var(--bg);
     border-radius: var(--radius-xs);
   }
 
@@ -341,6 +350,10 @@
   .card-grid {
     content-visibility: auto;
     contain: content;
+  }
+
+  .services-split-events li:nth-child(n+4) {
+    display: none;
   }
 
   .eyebrow {

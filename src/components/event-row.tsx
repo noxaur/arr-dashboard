@@ -28,16 +28,17 @@ export function EventRow({ group, isGroup, hasSearch, onEventClick }: EventRowPr
     <>
       <div
         onClick={handlePrimaryClick}
-        className="flex items-center gap-3 px-5 py-3"
-        style={{ cursor: "pointer", transition: "background-color 150ms ease" }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-hover)";
-          setShowInfo(true);
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handlePrimaryClick();
+          }
         }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor = "transparent";
-          setShowInfo(false);
-        }}
+        className="flex cursor-pointer items-center gap-3 px-5 py-3 transition-[background-color] duration-150 hover:bg-[var(--surface-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
+        onMouseEnter={() => setShowInfo(true)}
+        onMouseLeave={() => setShowInfo(false)}
       >
         <span
           className="flex h-5 w-5 flex-shrink-0 items-center justify-center text-[20px] font-bold leading-none"
@@ -78,10 +79,8 @@ export function EventRow({ group, isGroup, hasSearch, onEventClick }: EventRowPr
             <Tooltip content="View details">
               <button
                 onClick={(e) => { e.stopPropagation(); onEventClick(primary); }}
-                className="flex h-5 w-5 items-center justify-center rounded text-xs"
+                className="flex h-5 w-5 items-center justify-center rounded text-xs hover:bg-[var(--surface-hover)]"
                 style={{ color: "var(--text-muted)" }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-hover)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
               >
                 ⓘ
               </button>
@@ -110,16 +109,20 @@ export function EventRow({ group, isGroup, hasSearch, onEventClick }: EventRowPr
             <div
               key={event.id}
               onClick={() => onEventClick(event)}
-              className="flex items-center gap-3 px-5 py-2.5"
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  onEventClick(event);
+                }
+              }}
+              className="flex cursor-pointer items-center gap-3 px-5 py-2.5 transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent)]"
               style={{
                 borderTop: subIdx > 0 ? "1px solid var(--border)" : undefined,
                 borderLeft: `3px solid ${serviceColors[primary.service]}`,
                 backgroundColor: "var(--bg-elevated)",
-                cursor: "pointer",
-                transition: "opacity 150ms ease",
               }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = "0.8"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = "1"; }}
             >
               <div className="min-w-0 flex-1">
                 <p className="truncate text-xs" style={{ color: "var(--text-secondary)" }}>

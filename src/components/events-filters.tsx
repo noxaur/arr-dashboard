@@ -1,5 +1,4 @@
 "use client";
-import { motion, AnimatePresence } from "motion/react";
 import { serviceOrder } from "@/lib/services";
 import { serviceNames, typeLabels, type EventType } from "@/lib/events";
 
@@ -32,40 +31,31 @@ export function EventsFilters({
 }: EventsFiltersProps) {
   return (
     <>
-      <motion.div className="mb-4 flex items-center gap-4" layout>
-        <motion.button
-          layout
+      <div className="mb-4 flex items-center gap-4">
+        <button
           onClick={onToggleFiltersOpen}
           aria-expanded={filtersOpen}
-          className="btn-ghost flex items-center gap-1.5 px-3 py-1.5 text-xs"
+          className="btn-ghost flex items-center gap-1.5 px-3 py-1.5 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
         >
-          <motion.span animate={{ rotate: filtersOpen ? 90 : 0 }} transition={{ duration: 0.15 }}>
+          <span className={`transition-transform duration-200 ${filtersOpen ? "rotate-90" : ""}`}>
             ▶
-          </motion.span>
+          </span>
           Filters
-          <AnimatePresence>
-            {hasActiveFilters && (
-              <motion.span
-                key="filter-badge"
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.5 }}
-                transition={{ duration: 0.15 }}
-                className="ml-1 rounded px-1.5 text-[10px] font-medium inline-flex items-center"
-                style={{
-                  backgroundColor: "var(--accent-bg)",
-                  color: "var(--accent)",
-                  height: 18,
-                }}
-              >
-                {filters.services.length + filters.types.length + (searchInput ? 1 : 0) + (datePreset ? 1 : 0)}
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.button>
+          {hasActiveFilters && (
+            <span
+              className="ml-1 rounded px-1.5 text-[10px] font-medium inline-flex items-center transition-transform duration-150 scale-100"
+              style={{
+                backgroundColor: "var(--accent-bg)",
+                color: "var(--accent)",
+                height: 18,
+              }}
+            >
+              {filters.services.length + filters.types.length + (searchInput ? 1 : 0) + (datePreset ? 1 : 0)}
+            </span>
+          )}
+        </button>
         <div className="h-5 w-px bg-[var(--border)]" />
-        <motion.input
-          layout
+        <input
           type="text"
           placeholder="Search events..."
           aria-label="Search events"
@@ -74,7 +64,7 @@ export function EventsFilters({
           className="max-w-xs flex-1 rounded-md border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs outline-none placeholder:text-[var(--text-muted)]"
           style={{ color: "var(--text-primary)" }}
         />
-      </motion.div>
+      </div>
 
       {filtersOpen && (
         <div className="mb-4 flex flex-wrap items-center gap-1.5">
@@ -85,7 +75,7 @@ export function EventsFilters({
               <button
                 key={id}
                 onClick={() => onToggleService(id)}
-                className="btn-ghost px-2.5 py-1 text-xs"
+                className="btn-ghost px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
                 style={{
                   backgroundColor: active ? "var(--accent-bg)" : undefined,
                   color: active ? "var(--accent)" : undefined,
@@ -98,7 +88,7 @@ export function EventsFilters({
           })}
           <button
             onClick={() => onToggleService("jellyfin")}
-            className="btn-ghost px-2.5 py-1 text-xs"
+            className="btn-ghost px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
             style={{
               backgroundColor: filters.services.includes("jellyfin") ? "var(--accent-bg)" : undefined,
               color: filters.services.includes("jellyfin") ? "var(--accent)" : undefined,
@@ -117,7 +107,7 @@ export function EventsFilters({
               <button
                 key={t}
                 onClick={() => onToggleType(t)}
-                className="btn-ghost px-2.5 py-1 text-xs"
+                className="btn-ghost px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
                 style={{
                   backgroundColor: active ? "var(--accent-bg)" : undefined,
                   color: active ? "var(--accent)" : undefined,
@@ -133,7 +123,7 @@ export function EventsFilters({
 
           <button
             onClick={() => onSetDatePreset(1)}
-            className="btn-ghost px-2.5 py-1 text-xs"
+            className="btn-ghost px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
             style={{
               backgroundColor: datePreset === 1 ? "var(--accent-bg)" : undefined,
               color: datePreset === 1 ? "var(--accent)" : undefined,
@@ -142,7 +132,7 @@ export function EventsFilters({
           >24h</button>
           <button
             onClick={() => onSetDatePreset(7)}
-            className="btn-ghost px-2.5 py-1 text-xs"
+            className="btn-ghost px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
             style={{
               backgroundColor: datePreset === 7 ? "var(--accent-bg)" : undefined,
               color: datePreset === 7 ? "var(--accent)" : undefined,
@@ -151,7 +141,7 @@ export function EventsFilters({
           >7d</button>
           <button
             onClick={() => onSetDatePreset(30)}
-            className="btn-ghost px-2.5 py-1 text-xs"
+            className="btn-ghost px-2.5 py-1 text-xs focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none"
             style={{
               backgroundColor: datePreset === 30 ? "var(--accent-bg)" : undefined,
               color: datePreset === 30 ? "var(--accent)" : undefined,

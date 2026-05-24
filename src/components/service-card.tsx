@@ -83,7 +83,7 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
 
       <ServiceActions serviceId={data.id} hasQueue={queue.length > 0} />
 
-      <div className="flex items-center justify-between border-t border-[var(--border)] pt-3 min-h-[2.5rem]">
+      <div className="mt-auto flex items-center justify-between border-t border-[var(--border)] pt-3 min-h-[2.5rem]">
         {data.activity?.length ? (
           <div className="flex flex-col gap-1">
             <div className="flex flex-wrap items-center gap-1.5">

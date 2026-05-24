@@ -99,7 +99,7 @@ export function ActivityCard({
         </ul>
       )}
 
-      <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
+      <div className="mt-auto flex items-center justify-between border-t border-[var(--border)] pt-3">
         <span className="text-xs text-text-muted">
           {loading ? "—" : `${events.length} event${events.length !== 1 ? "s" : ""}`}
         </span>

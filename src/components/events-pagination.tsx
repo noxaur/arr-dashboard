@@ -33,11 +33,11 @@ export function EventsPagination({
           <button
             key={pageNum}
             onClick={() => onSetPage(pageNum)}
-            className="rounded px-2.5 py-1 text-xs font-medium"
-            style={{
-              backgroundColor: pageNum === page ? "var(--accent-bg)" : "transparent",
-              color: pageNum === page ? "var(--accent)" : "var(--text-muted)",
-            }}
+            className={`rounded px-2.5 py-1 text-xs font-medium focus-visible:ring-2 focus-visible:ring-[var(--ring)] focus-visible:outline-none ${
+              pageNum === page
+                ? "bg-[var(--accent-bg)] text-[var(--accent)]"
+                : "text-[var(--text-muted)] hover:bg-[var(--accent-bg)] hover:text-[var(--accent)]"
+            }`}
           >
             {pageNum}
           </button>
