@@ -24,8 +24,8 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--accent-bg)" }}>
-            <AppIcon className="h-5 w-5 text-[var(--text-primary)]" />
+          <div className="flex items-center rounded-md px-1.5 py-1" style={{ backgroundColor: "var(--accent-bg)" }}>
+            <AppIcon className="text-[var(--text-primary)]" />
           </div>
           <h1 className="text-base font-semibold">*arr Dashboard</h1>
           <nav className="ml-4 flex items-center gap-1">
