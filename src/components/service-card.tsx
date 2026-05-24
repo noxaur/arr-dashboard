@@ -21,9 +21,9 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const healthColorMap: Record<string, string> = {
-  healthy: "oklch(72% 0.16 145)",
-  warning: "oklch(78% 0.16 85)",
-  error: "oklch(62% 0.22 25)",
+  healthy: "var(--success)",
+  warning: "var(--warning)",
+  error: "var(--error)",
   offline: "oklch(48% 0.008 175)",
 };
 
@@ -32,13 +32,14 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
   const health = data.health;
   const queue = data.queue;
   const disk = data.disk;
-  const healthColor = health ? (healthColorMap[health.status] || healthColorMap.offline) : healthColorMap.offline;
+  const healthStatus = health?.status ?? "offline";
+  const healthColor = healthColorMap[healthStatus] || healthColorMap.offline;
   const ServiceIcon = iconMap[data.id];
 
   return (
     <article className="card flex flex-col gap-3 p-4">
       <div className="flex items-start justify-between">
-        <Link href={`/${data.id}`} className="flex items-center gap-3">
+        <Link href={`/${data.id}`} className="flex items-center gap-3 rounded-sm focus-visible:outline-2 focus-visible:outline-[var(--ring)] focus-visible:outline-offset-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-md">
             {ServiceIcon && <ServiceIcon className="h-5 w-5" />}
           </div>
@@ -48,8 +49,8 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
           </div>
         </Link>
         <div className="flex items-center gap-2">
-          <Tooltip content={`Status: ${health?.status ?? "unknown"}`}>
-            <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
+          <Tooltip content={`Status: ${healthStatus}`}>
+            <span className={`status-dot ${healthStatus}`} style={{ backgroundColor: healthColor }} />
           </Tooltip>
           <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
         </div>
@@ -73,7 +74,7 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
         {data.id !== "radarr" && data.id !== "sonarr" && disk?.total !== "N/A" && disk?.percent > 0 && (
           <div className="flex flex-1 items-center gap-2">
             <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-hover)]">
-              <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk!.percent > 80 ? "oklch(62% 0.22 25)" : disk!.percent > 60 ? "oklch(78% 0.16 85)" : "oklch(72% 0.16 145)" }} />
+              <div className="h-full rounded-full transition-all duration-300" style={{ width: `${disk.percent}%`, backgroundColor: disk!.percent > 80 ? "var(--error)" : disk!.percent > 60 ? "var(--warning)" : "var(--success)" }} />
             </div>
             <span className="text-xs text-text-muted">{disk.used}</span>
           </div>
@@ -90,11 +91,11 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
                 const count = data.activity.filter((e) => e.type === t).length;
                 if (count === 0) return null;
                 const tc: Record<string, string> = {
-                  download: "oklch(72% 0.16 145)",
-                  import: "oklch(72% 0.16 145)",
+                  download: "var(--success)",
+                  import: "var(--success)",
                   search: "var(--accent)",
                   refresh: "var(--text-muted)",
-                  error: "oklch(62% 0.22 25)",
+                  error: "var(--error)",
                   request: "var(--accent)",
                 };
                 const tl: Record<string, string> = {
