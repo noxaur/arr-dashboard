@@ -13,7 +13,7 @@ export function HostSystemCard({ data }: { data: DashboardResponse | null }) {
           </div>
           <div>
             <h3 className="text-sm font-medium text-text-primary">{data?.jellyfin?.serverName || "Jellyfin"}</h3>
-            <p className="text-xs text-text-muted">{data?.jellyfin?.os || "Loading..."} · {data?.jellyfin?.architecture || ""}</p>
+            <p className="text-xs text-text-muted">{data?.jellyfin?.os || "—"} · {data?.jellyfin?.architecture || ""}</p>
           </div>
           <div className="ml-auto flex items-center gap-4">
             <div className="flex items-baseline gap-1.5">

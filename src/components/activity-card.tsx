@@ -63,7 +63,7 @@ export function ActivityCard({
             <circle cx="12" cy="12" r="10" />
             <polyline points="12 6 12 12 16 14" />
           </svg>
-          <p className="text-xs text-text-muted">No events in the last 24 hours</p>
+          <p className="text-xs text-text-muted">No recent events</p>
         </div>
       ) : (
         <ul className="space-y-1">
@@ -101,7 +101,7 @@ export function ActivityCard({
 
       <div className="flex items-center justify-between border-t border-[var(--border)] pt-3">
         <span className="text-xs text-text-muted">
-          {loading ? "Loading..." : `${events.length} event${events.length !== 1 ? "s" : ""} in the last 24h`}
+          {loading ? "—" : `${events.length} event${events.length !== 1 ? "s" : ""}`}
         </span>
         <Link href="/events" className="btn-ghost text-xs" aria-label="View all events">
           View All \u2192

@@ -36,7 +36,8 @@ export function ServiceActions({ serviceId, hasQueue }: { serviceId: string; has
         const data = await res.json().catch(() => ({}));
         throw new Error(data.error || `Action failed: ${res.status}`);
       }
-      showFeedback("success", `${action} started`);
+      const messages: Record<string, string> = { pause: "Downloads paused", refresh: "Refresh queued", search: "Search triggered" };
+      showFeedback("success", messages[action] || `${action} started`);
     } catch (error) {
       const message = error instanceof Error ? error.message : "Action failed";
       console.error(`Action ${action} failed for ${serviceId}:`, error);

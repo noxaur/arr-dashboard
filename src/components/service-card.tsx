@@ -115,7 +115,7 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
             </div>
           </div>
         ) : (
-          <span className="text-xs text-text-muted">No events yet</span>
+          <span className="text-xs text-text-muted">No recent events</span>
         )}
         <Link href={`/${data.id}`} className="btn-ghost text-xs flex-shrink-0" aria-label={`Open ${service.name} settings`}>
           Settings
