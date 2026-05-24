@@ -55,9 +55,7 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
         </div>
       </div>
 
-      {loading ? (
-        <div className="h-6 animate-pulse rounded-md bg-[var(--surface-hover)]" />
-      ) : health?.message && health.message !== "All systems operational" ? (
+      {health?.message && health.message !== "All systems operational" ? (
         <div className="rounded-md border border-[var(--warning)]/20 bg-[var(--warning)]/5 px-3 py-2">
           <p className="text-xs text-[var(--warning)]">{health.message}</p>
         </div>
