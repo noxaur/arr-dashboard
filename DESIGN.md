@@ -1,136 +1,135 @@
 ---
 version: alpha
-name: Sentri-design-analysis
-description: An inspired interpretation of Sentri's design language — a developer-tools brand built on a deep purple-violet midnight canvas, electric lime accents, and a slightly subversive illustrated personality. The system pairs a custom display sans (chunky, playful, near-condensed) with the open Rubik family for UI copy and Monaco for code, then leans on dark-on-light pricing surfaces, sticker-style mascots, and a single-color CTA hierarchy where black-violet buttons read as the primary action against either polarity.
+name: Jellyfin-Wired-Design
+description: Jellyfin's media-server brand fused with Wired's editorial structure. Jellyfin brings a dark-navy canvas, a teal-cyan primary, a purple-to-cyan gradient brandmark, pill-shaped buttons, and Noto Sans typography. Wired contributes its magazine-grid layout, editorial serif pairing, square-geometry counterpoints, and story-card hierarchy. The hybrid reads as a dark-theme SaaS marketing surface with editorial DNA.
 
 colors:
-  primary: "#150f23"
-  ink-deep: "#1f1633"
+  primary: "#007ca6"
+  primary-light: "#00afeb"
+  primary-dark: "#006385"
+  primary-darker: "#003c50"
   on-primary: "#ffffff"
-  accent-lime: "#c2ef4e"
-  accent-pink: "#fa7faa"
-  accent-violet: "#6a5fc1"
-  accent-violet-deep: "#422082"
-  accent-violet-mid: "#79628c"
-  surface-canvas-dark: "#1f1633"
-  surface-canvas-light: "#ffffff"
-  surface-night: "#150f23"
-  surface-press-light: "#f0f0f0"
-  surface-press-stronger: "#efefef"
-  hairline-violet: "#362d59"
-  hairline-cool: "#cfcfdb"
-  hairline-cloud: "#e5e7eb"
-  ink: "#1f1633"
-  ink-press: "#1a1a1a"
-  on-dark-muted: "#bdb8c0"
-  on-dark-faint: "#3f3849"
-  ring-focus: "#9dc1f5"
+  accent-gradient-start: "#AA5CC3"
+  accent-gradient-end: "#00A4DC"
+  ink: "#ffffff"
+  ink-soft: "#ebedf0"
+  body: "#e3e3e3"
+  body-muted: "#bec3c9"
+  hairline: "#444950"
+  canvas: "#000b25"
+  canvas-surface: "#242526"
+  canvas-card: "#172138"
+  canvas-soft: "#1c1e21"
+  canvas-elevated: "#333c44"
+  link: "#007ca6"
+  link-hover: "#00afeb"
+  success: "#00a400"
+  danger: "#fa383e"
+  warning: "#ffba00"
 
 typography:
   display-hero:
-    fontFamily: "Sentri Display, Rubik, system-ui, sans-serif"
-    fontSize: 88px
-    fontWeight: 700
-    lineHeight: 1.2
-    letterSpacing: 0
-  display-large:
-    fontFamily: "Sentri Display, Rubik, system-ui, sans-serif"
-    fontSize: 60px
-    fontWeight: 500
-    lineHeight: 1.1
-    letterSpacing: 0
-  heading-xl:
-    fontFamily: "Rubik, -apple-system, system-ui, Segoe UI, Helvetica, Arial, sans-serif"
-    fontSize: 30px
-    fontWeight: 500
-    lineHeight: 1.2
-    letterSpacing: 0
-  heading-lg:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 27px
-    fontWeight: 500
-    lineHeight: 1.25
-    letterSpacing: 0
-  heading-md:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 33px
+    fontWeight: 300
+    lineHeight: 45px
+  display-lg:
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 28px
+    fontWeight: 300
+    lineHeight: 38px
+  display-md:
+    fontFamily: "Noto Sans", sans-serif
     fontSize: 24px
-    fontWeight: 500
-    lineHeight: 1.25
-    letterSpacing: 0
-  heading-sm:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
+    fontWeight: 700
+    lineHeight: 32px
+  display-sm:
+    fontFamily: "Noto Sans", sans-serif
     fontSize: 20px
-    fontWeight: 600
-    lineHeight: 1.25
-    letterSpacing: 0
+    fontWeight: 700
+    lineHeight: 28px
+  display-xs:
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 16px
+    fontWeight: 700
+    lineHeight: 22px
   body-lg:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 16px
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 18px
     fontWeight: 400
-    lineHeight: 2.0
-    letterSpacing: 0
-  body-strong:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 16px
-    fontWeight: 600
-    lineHeight: 1.5
-    letterSpacing: 0
+    lineHeight: 30px
   body-md:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
+    fontFamily: "Noto Sans", sans-serif
     fontSize: 16px
-    fontWeight: 500
-    lineHeight: 1.5
-    letterSpacing: 0
-  eyebrow:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 15px
-    fontWeight: 500
-    lineHeight: 1.4
-    letterSpacing: 0
-  button-cap:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
+    fontWeight: 400
+    lineHeight: 27px
+  body-md-strong:
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 16px
+    fontWeight: 700
+    lineHeight: 27px
+  body-sm:
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 21px
+  body-sm-strong:
+    fontFamily: "Noto Sans", sans-serif
     fontSize: 14px
     fontWeight: 700
-    lineHeight: 1.14
-    letterSpacing: 0.2px
-  button-cap-light:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 14px
-    fontWeight: 500
-    lineHeight: 1.29
-    letterSpacing: 0.2px
+    lineHeight: 21px
   caption:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 14px
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 12px
     fontWeight: 400
-    lineHeight: 1.43
-    letterSpacing: 0
-  micro-cap:
-    fontFamily: "Rubik, -apple-system, system-ui, sans-serif"
-    fontSize: 10px
-    fontWeight: 600
-    lineHeight: 1.8
-    letterSpacing: 0.25px
-  code:
-    fontFamily: "Monaco, Menlo, Ubuntu Mono, monospace"
-    fontSize: 16px
-    fontWeight: 400
-    lineHeight: 1.5
-    letterSpacing: 0
-  code-strong:
-    fontFamily: "Monaco, Menlo, Ubuntu Mono, monospace"
+    lineHeight: 16px
+  button-md:
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 19px
+    fontWeight: 700
+    lineHeight: 27px
+  button-sm:
+    fontFamily: "Noto Sans", sans-serif
     fontSize: 16px
     fontWeight: 700
-    lineHeight: 1.5
-    letterSpacing: 0
+    lineHeight: 22px
+  editor-heading:
+    fontFamily: "Noto Sans", sans-serif
+    fontSize: 33px
+    fontWeight: 300
+    lineHeight: 45px
+    letterSpacing: -0.5px
+  editor-display:
+    fontFamily: WiredDisplay, "Times New Roman", Georgia, serif
+    fontSize: 64px
+    fontWeight: 400
+    lineHeight: 59.52px
+    letterSpacing: -0.5px
+  editor-lg:
+    fontFamily: WiredDisplay, "Times New Roman", Georgia, serif
+    fontSize: 48px
+    fontWeight: 400
+    lineHeight: 50.4px
+    letterSpacing: -0.4px
+  editor-md:
+    fontFamily: WiredDisplay, "Times New Roman", Georgia, serif
+    fontSize: 32px
+    fontWeight: 400
+    lineHeight: 35.2px
+    letterSpacing: -0.3px
+  editor-body-serif:
+    fontFamily: BreveText, Georgia, "Times New Roman", serif
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 24px
+    letterSpacing: 0.09px
 
 rounded:
-  xs: 4px
-  sm: 6px
+  none: 0px
+  sm: 4px
   md: 8px
-  lg: 10px
-  xl: 12px
-  xxl: 18px
+  lg: 12px
+  pill: 30px
   full: 9999px
 
 spacing:
@@ -139,257 +138,307 @@ spacing:
   sm: 8px
   md: 12px
   lg: 16px
-  xl: 24px
-  xxl: 32px
-  section: 96px
+  xl: 20px
+  2xl: 24px
+  3xl: 32px
+  4xl: 48px
 
 components:
+  nav-bar:
+    backgroundColor: "{colors.canvas}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-sm-strong}"
+    height: 60px
+    padding: "{spacing.sm} {spacing.lg}"
+  nav-link:
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    fontWeight: 500
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
-    typography: "{typography.button-cap}"
-    rounded: "{rounded.md}"
-    padding: 12px 16px
-  button-primary-pressed:
-    backgroundColor: "{colors.surface-press-stronger}"
-    textColor: "{colors.ink-press}"
-    typography: "{typography.button-cap}"
-    rounded: "{rounded.md}"
-    padding: 12px 16px
-  button-inverted:
-    backgroundColor: "{colors.on-primary}"
-    textColor: "{colors.ink-deep}"
-    typography: "{typography.button-cap}"
-    rounded: "{rounded.md}"
-    padding: 12px 16px
-  button-inverted-pressed:
-    backgroundColor: "{colors.surface-press-light}"
-    textColor: "{colors.ink-press}"
-    typography: "{typography.button-cap}"
-    rounded: "{rounded.md}"
-    padding: 12px 16px
-  button-ghost-on-dark:
-    backgroundColor: "{colors.on-dark-faint}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.button-cap}"
-    rounded: "{rounded.xl}"
-    padding: 8px
-  button-violet-token:
-    backgroundColor: "{colors.accent-violet-mid}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.button-cap-light}"
-    rounded: "{rounded.xl}"
-    padding: 8px 16px
-  button-disabled:
-    backgroundColor: "{colors.hairline-cloud}"
-    textColor: "{colors.on-dark-muted}"
-    typography: "{typography.button-cap}"
-    rounded: "{rounded.md}"
-    padding: 12px 16px
-  pill-neutral-dark:
-    backgroundColor: "{colors.surface-night}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.xs}"
-    padding: 4px 8px
-  chip-lime-keyword:
-    backgroundColor: "{colors.accent-lime}"
-    textColor: "{colors.ink-deep}"
-    typography: "{typography.display-hero}"
-    rounded: "{rounded.xs}"
-    padding: 0 12px
+    typography: "{typography.button-md}"
+    rounded: "{rounded.pill}"
+    padding: "{spacing.sm} {spacing.3xl}"
+    border: "1px solid {colors.primary}"
+  button-outline:
+    backgroundColor: transparent
+    textColor: "{colors.ink}"
+    borderColor: "{colors.ink-soft}"
+    typography: "{typography.button-md}"
+    rounded: "{rounded.pill}"
+    padding: "{spacing.sm} {spacing.3xl}"
+    border: "1px solid {colors.ink-soft}"
+  button-ghost:
+    backgroundColor: transparent
+    textColor: "{colors.primary}"
+    typography: "{typography.button-sm}"
+    rounded: "{rounded.pill}"
+    padding: "{spacing.xs} {spacing.lg}"
+  button-icon-square:
+    backgroundColor: transparent
+    textColor: "{colors.ink}"
+    rounded: "{rounded.none}"
+    padding: "{spacing.sm}"
   text-input:
-    backgroundColor: "{colors.surface-canvas-light}"
-    textColor: "{colors.ink-deep}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.sm}"
-    padding: 8px 12px
-  text-input-focused:
-    backgroundColor: "{colors.surface-canvas-light}"
-    textColor: "{colors.ink-deep}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.sm}"
-    padding: 8px 12px
-  select-violet:
-    backgroundColor: "{colors.accent-violet-deep}"
-    textColor: "{colors.on-primary}"
+    backgroundColor: "{colors.canvas-surface}"
+    textColor: "{colors.ink}"
+    borderColor: "{colors.hairline}"
     typography: "{typography.body-md}"
     rounded: "{rounded.md}"
-    padding: 8px 16px
-  card-pricing:
-    backgroundColor: "{colors.surface-canvas-light}"
-    textColor: "{colors.ink-deep}"
+    padding: "{spacing.sm} {spacing.lg}"
+  card:
+    backgroundColor: "{colors.canvas-card}"
+    textColor: "{colors.ink}"
     typography: "{typography.body-md}"
-    rounded: "{rounded.xl}"
-    padding: 32px
-  card-pricing-featured:
-    backgroundColor: "{colors.surface-night}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xl}"
-    padding: 32px
-  card-feature-dark:
-    backgroundColor: "{colors.ink-deep}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.body-lg}"
-    rounded: "{rounded.xxl}"
-    padding: 32px
-  card-spotlight-violet:
-    backgroundColor: "{colors.accent-violet-deep}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.body-lg}"
-    rounded: "{rounded.xxl}"
-    padding: 32px
-  code-block:
-    backgroundColor: "{colors.surface-night}"
-    textColor: "{colors.on-primary}"
-    typography: "{typography.code}"
     rounded: "{rounded.md}"
-    padding: 16px
-  link-on-dark:
-    backgroundColor: "{colors.surface-canvas-dark}"
+    padding: "{spacing.lg}"
+    boxShadow: none
+  card-elevated:
+    backgroundColor: "{colors.canvas-elevated}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  feature-card:
+    backgroundColor: transparent
+    textColor: "{colors.ink}"
+    typography: "{typography.body-md}"
+    padding: "{spacing.none} {spacing.lg}"
+  hero-band:
+    backgroundColor: "{colors.canvas-surface}"
+    textColor: "{colors.ink}"
+    typography: "{typography.display-hero}"
+    padding: "{spacing.4xl} {spacing.xl}"
+    textAlign: center
+  hero-subtitle:
+    textColor: "{colors.ink-soft}"
+    typography: "{typography.body-lg}"
+    textAlign: center
+  section-heading:
+    textColor: "{colors.ink}"
+    typography: "{typography.display-lg}"
+    textAlign: center
+  hairline-divider:
+    borderColor: "{colors.hairline}"
+  footer:
+    backgroundColor: "{colors.canvas-elevated}"
+    textColor: "{colors.ink}"
+    typography: "{typography.body-sm}"
+    padding: "{spacing.3xl}"
+  badge:
+    backgroundColor: "{colors.primary}"
     textColor: "{colors.on-primary}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xs}"
-    padding: 0px
-  link-on-light:
-    backgroundColor: "{colors.surface-canvas-light}"
-    textColor: "{colors.ink-deep}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xs}"
-    padding: 0px
-  nav-bar-light:
-    backgroundColor: "{colors.surface-canvas-light}"
-    textColor: "{colors.ink-deep}"
-    typography: "{typography.body-md}"
-    rounded: "{rounded.xs}"
-    padding: 16px 24px
-  footer-light:
-    backgroundColor: "{colors.surface-canvas-light}"
-    textColor: "{colors.ink-deep}"
     typography: "{typography.caption}"
-    rounded: "{rounded.xs}"
-    padding: 32px 24px
+    rounded: "{rounded.sm}"
+    padding: "{spacing.xxs} {spacing.sm}"
+
+  # ─── Examples (illustrative) ───
+  ex-pricing-tier:
+    description: "Default Pricing tier card."
+    backgroundColor: "{colors.canvas-card}"
+    textColor: "{colors.ink}"
+    borderColor: "{colors.hairline}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  ex-pricing-tier-featured:
+    description: "Featured/highlighted tier — primary gradient border."
+    backgroundColor: "{colors.canvas-card}"
+    textColor: "{colors.ink}"
+    borderColor: "{colors.primary}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  ex-app-shell-row:
+    description: "Sidebar nav row. Active state uses brand primary as indicator."
+    backgroundColor: "{colors.canvas}"
+    activeIndicator: "{colors.primary}"
+    rounded: "{rounded.sm}"
+    padding: "{spacing.md} {spacing.lg}"
+  ex-data-table-cell:
+    description: "Default data-table th + td chrome."
+    headerBackground: "{colors.canvas-surface}"
+    headerTypography: "{typography.caption}"
+    bodyTypography: "{typography.body-sm}"
+    cellPadding: "{spacing.md} {spacing.lg}"
+    rowBorder: "{colors.hairline}"
+  ex-auth-form-card:
+    description: "Sign-in / sign-up card."
+    backgroundColor: "{colors.canvas-card}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  ex-modal-card:
+    description: "Modal dialog surface."
+    backgroundColor: "{colors.canvas-surface}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.lg}"
+  ex-empty-state-card:
+    description: "Empty-state illustration frame."
+    backgroundColor: "{colors.canvas-card}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.3xl}"
+    captionTypography: "{typography.body-md}"
+  ex-toast:
+    description: "Toast notification surface."
+    backgroundColor: "{colors.canvas-elevated}"
+    rounded: "{rounded.md}"
+    padding: "{spacing.md} {spacing.lg}"
+    typography: "{typography.body-sm}"
+  ex-page-header:
+    description: "Marketing page hero section."
+    backgroundColor: "{colors.canvas-surface}"
+    textColor: "{colors.ink}"
+    padding: "{spacing.4xl} {spacing.xl}"
+    textAlign: center
+
 ---
+
 
 ## Overview
 
-Sentri's design language reads like a debugging console wearing a leather jacket. The home and product surfaces sit on a near-black violet midnight (`{colors.surface-canvas-dark}` / `{colors.surface-night}`), strewn with starfield textures and floating sticker-style mascots — astronauts, monsters, traffic cones — that puncture the seriousness of an observability product. Headlines run in a chunky proprietary display sans where the most important keywords are wrapped in lime-green highlight chips (`{colors.accent-lime}`), as if the copy itself has been marked up by a developer redlining their own console output.
+Jellyfin is the volunteer-built, free-software media system. Its web surface (built on Docusaurus / Infima) is a **dark-theme-first** marketing site: a deep-navy canvas (`{colors.canvas}` `#000b25`), a teal-cyan primary (`{colors.primary}` `#007ca6`), a signature purple-to-cyan brand gradient (visible in the logo), pill-shaped buttons (`{rounded.pill}` 30 px), and `Noto Sans` as the sole typeface across headings and body.
 
-The palette is deliberately narrow: deep midnight as the dominant canvas, electric lime as the primary attention-grabber, hot pink (`{colors.accent-pink}`) as a secondary punctuation, and a violet-mid (`{colors.accent-violet-mid}`) for tag chips and hairline strokes. White appears in two roles — as text on dark, and as the canvas for pricing, contact, and content-heavy pages where developers need to scan dense tables. The "single primary CTA" is visually inverted depending on context: filled black-violet (`{colors.primary}`) with white type on light surfaces, or filled white with dark type on dark surfaces. The button always reads as the strongest UI affordance regardless of polarity.
+The brand lives in the contrast between the near-black canvas and the glowing teal interactive elements. The hero/subtitle combo sits centred with a light 300-weight heading. Feature cards are transparent on the dark canvas with a soft icon + heading + description layout. Pill-shaped CTAs (solid primary fill or white-outline) carry the call-to-action rhythm.
 
-Typography splits cleanly between three families: a custom display sans for hero and section openers (chunky, near-condensed, slightly playful), Rubik for every UI text role (body, captions, eyebrow caps, button labels), and Monaco for code. Buttons and eyebrows almost always run in uppercase with a 0.2px tracking lift to give them the snap of console output.
+Wired's editorial DNA is preserved as an **optional editorial layer** — a serif display system (`WiredDisplay` / `BreveText`) for editorial content pages, magazine-style story grids, and article detail views within the same app. The two modes share the same spacing scale and component vocabulary.
 
 **Key Characteristics:**
-- Two-polarity canvas system: deep violet midnight (`{colors.surface-canvas-dark}`) for marketing hero and product feature pages, white (`{colors.surface-canvas-light}`) for pricing, contact, and dense reference content — the system never tries to blur the two.
-- Lime keyword highlight (`{colors.accent-lime}`) treated as a typographic device, not a color swatch — it wraps single words inside the display headline to act as a syntax highlight on the reading flow.
-- Sticker illustration system: floating mascot characters with hand-drawn outlines, appearing at section junctions, never inside cards — they create rhythm and personality between dense info blocks.
-- Uppercase eyebrow + button caps in `{typography.button-cap}` and `{typography.eyebrow}`, with a consistent 0.2px tracking lift, give the brand its "developer console" cadence.
-- Single-primary CTA hierarchy: every page has one filled button reading either `{colors.primary}` on light or `{colors.on-primary}` on dark; outlined and ghost variants are downgraded.
-- Card surfaces follow the canvas: dark sections nest dark cards (`{colors.ink-deep}` with subtle hairline) and light sections nest white cards with `{colors.hairline-cloud}` borders — chrome stays consistent, only the polarity flips.
-- A pricing-page color rhythm of cream-white tiers with one dark inverted "featured" tier (`{colors.surface-night}`), avoiding the typical accent-bordered featured pattern.
+- Dark theme: canvas `#000b25`, surface `#242526`, card `#172138`, elevated `#333c44`.
+- Brand primary `{colors.primary}` (`#007ca6`) — a teal-blue used for links, filled buttons, active states, and the accent gradient.
+- Purple-to-cyan gradient (`#AA5CC3` → `#00A4DC`) in the logo and brandmark only.
+- Single typeface: `"Noto Sans", sans-serif` at weights 300 / 400 / 500 / 700 across both headings and body.
+- Pill-shaped buttons (`{rounded.pill}` 30 px) — the brand's signature interactive shape. Square geometry (`{rounded.none}`) reserved for icon buttons and editorial surfaces.
+- Marketing layout: centred hero + feature grid + screenshot carousel + value prop columns + centred CTA.
+- Cards have subtle radius (`{rounded.md}` 8 px) and sit on contrast surfaces without drop-shadows.
+- Light value (70%) contrast between body text and canvas; 90%+ for headings.
 
 ## Colors
 
-> **Source pages:** home (`/welcome/`), product/error-monitoring, contact/enterprise, pricing.
-
 ### Brand & Accent
-- **Midnight Violet** (`{colors.primary}` — `#150f23`): The system's primary action color and the deepest surface tone. Used for filled primary buttons on light surfaces, code-block backgrounds, and the strongest dark cards.
-- **Ink Violet** (`{colors.ink-deep}` — `#1f1633`): Slightly lifted from primary, this is the marketing hero canvas and the default body-text color on light surfaces — a single token doing double duty as background and ink.
-- **Electric Lime** (`{colors.accent-lime}` — `#c2ef4e`): The signature highlight color. Wrapped around individual headline keywords as a syntax-highlight chip (`{rounded.xs}` corner, no padding-y, 12px padding-x). Also used as the squiggly footer divider stroke. Never a button background.
-- **Hot Pink** (`{colors.accent-pink}` — `#fa7faa`): Secondary punctuation color used for sticker outlines, chart points, and supporting accents — never on buttons, never on type at body size.
-- **Violet Link** (`{colors.accent-violet}` — `#6a5fc1`): Inline link color when emphasis is needed beyond underline.
-- **Deep Violet** (`{colors.accent-violet-deep}` — `#422082`): The select-dropdown fill on contact forms; also used on spotlight cards inside dark sections.
-- **Mid Violet** (`{colors.accent-violet-mid}` — `#79628c`): Tag-chip fill and faint accent on dark surfaces.
+- **Teal Blue** (`{colors.primary}` — `#007ca6`): The brand's primary accent. Used for filled buttons, links, active nav items, badges, and the gradient brandmark.
+- **Primary Light** (`{colors.primary-light}` — `#00afeb`): Hover / highlight variant for primary actions.
+- **Primary Dark** (`{colors.primary-dark}` — `#006385`): Pressed / active state variant.
+- **Primary Darker** (`{colors.primary-darker}` — `#003c50`): Deep variant used in internal gradients.
+
+### Brand Gradient
+- **Purple → Cyan** (`{colors.accent-gradient-start}` `#AA5CC3` → `{colors.accent-gradient-end}` `#00A4DC`): The signature Jellyfin gradient. Used in the SVG logo mark only. Not applied to UI chrome.
 
 ### Surface
-- **Dark Canvas** (`{colors.surface-canvas-dark}` — `#1f1633`): Hero, product, and feature-page background. Carries the deepest atmospheric weight.
-- **Night** (`{colors.surface-night}` — `#150f23`): Cards on dark canvas, code blocks, and the "featured" pricing tier.
-- **Light Canvas** (`{colors.surface-canvas-light}` — `#ffffff`): Pricing, contact, and dense-reference page background.
-- **Surface Press Light** (`{colors.surface-press-light}` — `#f0f0f0`) and **Press Stronger** (`{colors.surface-press-stronger}` — `#efefef`): The pressed/active fill of inverted buttons on dark surfaces.
-- **Hairline Violet** (`{colors.hairline-violet}` — `#362d59`): 1px borders on dark cards.
-- **Hairline Cool** (`{colors.hairline-cool}` — `#cfcfdb`): 1px borders on text inputs and form fields.
-- **Hairline Cloud** (`{colors.hairline-cloud}` — `#e5e7eb`): Pricing-table dividers and pricing-card borders on light canvas.
+- **Canvas** (`{colors.canvas}` — `#000b25`): The default page background. A very dark navy, nearly black.
+- **Canvas Surface** (`{colors.canvas-surface}` — `#242526`): Elevated surfaces — hero section, dropdowns, modals, search inputs.
+- **Canvas Card** (`{colors.canvas-card}` — `#172138`): Card backgrounds, code blocks, search input fills.
+- **Canvas Elevated** (`{colors.canvas-elevated}` — `#333c44`): Footer background, elevated surfaces.
+- **Canvas Soft** (`{colors.canvas-soft}` — `#1c1e21`): Subtle contrast surfaces, table headers.
+- **Hairline** (`{colors.hairline}` — `#444950`): 1 px dividers, table borders, TOC borders.
 
 ### Text
-- **On Primary** (`{colors.on-primary}` — `#ffffff`): All text on dark canvas, all CTA labels on filled dark buttons.
-- **Ink** (`{colors.ink}` — `#1f1633`): Body text on light canvas; identical hex to the dark canvas, repurposed as type.
-- **Ink Press** (`{colors.ink-press}` — `#1a1a1a`): Reserved for the pressed/active state of inverted buttons.
-- **On Dark Muted** (`{colors.on-dark-muted}` — `rgba(255,255,255,0.72)`): Secondary text, captions, and table cell values on dark canvas.
-- **On Dark Faint** (`{colors.on-dark-faint}` — `rgba(255,255,255,0.18)`): Translucent surface-on-dark — used for ghost button fills and dimmed nav items.
+- **Ink** (`{colors.ink}` — `#ffffff`): All headings, body text on dark canvas.
+- **Ink Soft** (`{colors.ink-soft}` — `#ebedf0`): Primary content text (slightly off-white for reduced eye strain).
+- **Body** (`{colors.body}` — `#e3e3e3`): Body copy grey on dark canvas.
+- **Body Muted** (`{colors.body-muted}` — `#bec3c9`): Secondary metadata, placeholder text, muted labels.
 
 ### Semantic
-- **Focus Ring** (`{colors.ring-focus}` — `rgba(59,130,246,0.5)`): Translucent blue focus ring — the only blue in the system, reserved for keyboard focus on form fields.
+- **Link** (`{colors.link}` — `#007ca6`): All inline links and interactive text. Matches primary.
+- **Link Hover** (`{colors.link-hover}` — `#00afeb`): Link hover state.
+- **Success** (`{colors.success}` — `#00a400`): Positive states, success badges.
+- **Danger** (`{colors.danger}` — `#fa383e`): Destructive actions, error states.
+- **Warning** (`{colors.warning}` — `#ffba00`): Warning states, alert banners.
 
 ## Typography
 
 ### Font Family
+Jellyfin uses a single typeface across the entire system:
 
-The display tier is a proprietary geometric sans with chunky, near-condensed proportions and a slightly subversive personality (closing apertures, optical-stress letterforms). When unavailable, fall back to **Rubik** at heavier weights for visual continuity.
+1. **Noto Sans** — the sole typeface for headings, body, buttons, navigation, captions, and all UI text. Weights 300 (thin headings), 400 (body), 500 (nav links), 700 (buttons, strong labels). The monospace variant (`SFMono-Regular, Menlo, Monaco, Consolas...`) is used for code blocks and inline code only.
 
-The UI tier is **Rubik** — an open-source Hebrew/Latin sans on Google Fonts — with system fallbacks (`-apple-system, system-ui, Segoe UI, Helvetica, Arial`). Rubik handles every body, caption, button, and eyebrow role.
-
-The code tier is **Monaco** with Menlo and Ubuntu Mono fallbacks — used in code blocks, install snippets, and inline tokens.
+### Editorial Layer (Wired)
+A secondary editorial type system is available for content-rich pages (articles, blog posts, documentation long-form):
+1. **WiredDisplay** — proprietary tall-narrow high-contrast serif for editorial headlines (64 px hero scaling to 26 px sub-display).
+2. **BreveText** — proprietary humanist serif for long-form body and bylines.
+3. Best open-source approximations: *Playfair Display* for WiredDisplay, *Lora* / *Source Serif Pro* for BreveText, *Inter* or *Manrope* as Apercu equivalents.
 
 ### Hierarchy
 
+| Token | Size | Weight | Line Height | Use |
+|---|---|---|---|---|
+| `{typography.display-hero}` | 33px | 300 | 44.8px | Hero heading (h1). |
+| `{typography.display-lg}` | 28px | 300 | 38px | Major section headings (h2). |
+| `{typography.display-md}` | 24px | 700 | 32px | Feature card headings (h3). |
+| `{typography.display-sm}` | 20px | 700 | 28px | Subsection headings (h4). |
+| `{typography.display-xs}` | 16px | 700 | 22px | Minor headings (h5). |
+| `{typography.body-lg}` | 18px | 400 | 30px | Hero subtitle / lead body. |
+| `{typography.body-md}` | 16px | 400 | 27.2px | Default body text. |
+| `{typography.body-md-strong}` | 16px | 700 | 27.2px | Bold body. |
+| `{typography.body-sm}` | 14px | 400 | 21px | Secondary body, footer text. |
+| `{typography.body-sm-strong}` | 14px | 700 | 21px | Bold caption, nav-link. |
+| `{typography.caption}` | 12px | 400 | 16px | Fine print, image captions, badges. |
+| `{typography.button-md}` | 19px | 700 | 27px | Primary hero CTAs. |
+| `{typography.button-sm}` | 16px | 700 | 22px | Secondary / inline buttons. |
+
+### Editorial Hierarchy (Wired)
+
 | Token | Size | Weight | Line Height | Letter Spacing | Use |
 |---|---|---|---|---|---|
-| `{typography.display-hero}` | 88px | 700 | 1.2 | 0 | Marketing hero headline (single line of attention) |
-| `{typography.display-large}` | 60px | 500 | 1.1 | 0 | Section openers on dark surfaces |
-| `{typography.heading-xl}` | 30px | 500 | 1.2 | 0 | Page titles on light surfaces (e.g., "Pricing plans for dev teams of all sizes") |
-| `{typography.heading-lg}` | 27px | 500 | 1.25 | 0 | Sub-section headings, large card titles |
-| `{typography.heading-md}` | 24px | 500 | 1.25 | 0 | Card titles, in-page section headings |
-| `{typography.heading-sm}` | 20px | 600 | 1.25 | 0 | Compact card title, list-group title |
-| `{typography.body-lg}` | 16px | 400 | 2.0 | 0 | Marketing-paragraph body — the airy, two-line-leading variant used in hero subtext |
-| `{typography.body-strong}` | 16px | 600 | 1.5 | 0 | Emphasized body run, lead sentence |
-| `{typography.body-md}` | 16px | 500 | 1.5 | 0 | Default UI body, table cells, form labels |
-| `{typography.eyebrow}` | 15px | 500 | 1.4 | 0 | Section eyebrow above large headings, all-caps |
-| `{typography.button-cap}` | 14px | 700 | 1.14 | 0.2px | Filled button labels (uppercase) |
-| `{typography.button-cap-light}` | 14px | 500 | 1.29 | 0.2px | Ghost / outline button labels (uppercase) |
-| `{typography.caption}` | 14px | 400 | 1.43 | 0 | Footer text, fine print, helper copy |
-| `{typography.micro-cap}` | 10px | 600 | 1.8 | 0.25px | Status labels, badge text, micro-eyebrow |
-| `{typography.code}` | 16px | 400 | 1.5 | 0 | Code block content |
-| `{typography.code-strong}` | 16px | 700 | 1.5 | 0 | Highlighted code keyword |
+| `{typography.editor-display}` | 64px | 400 | 59.5px | -0.5px | Cover-story headline. |
+| `{typography.editor-lg}` | 48px | 400 | 50.4px | -0.4px | Major feature headline. |
+| `{typography.editor-md}` | 32px | 400 | 35.2px | -0.3px | Section sub-headline. |
+| `{typography.editor-body-serif}` | 16px | 400 | 24px | 0.09px | Article body (BreveText). |
 
 ### Principles
-- **Two leading worlds.** Marketing copy uses 2.0 line-height on `{typography.body-lg}` — extremely airy, generous breathing room. Functional UI copy uses 1.5 line-height on `{typography.body-md}` — denser, closer to console output. The choice is deliberate: marketing reads like prose, the product reads like a log.
-- **Caps with tracking.** All button labels and eyebrows are uppercase with 0.2px tracking. This is the brand's typographic signature — a console-prompt cadence applied to UI affordances.
-- **Headlines as syntax.** The hero display is structured so a single keyword can be wrapped in a `{colors.accent-lime}` highlight chip without disrupting the reading order. Treat the lime chip as a glyph-level decoration, not a separate component.
-
-### Note on Font Substitutes
-Rubik is open-source on Google Fonts and is the safe default for everything except the hero display. For the proprietary display sans, suitable open substitutes are **Space Grotesk** (heavier weights), **Archivo** (semi-condensed weights), or **Hubot Sans** with optical-size axis at heavier ends — all carry the same chunky, near-condensed silhouette. Adjust line-height down by 0.05 when substituting, since the proprietary face has tighter leading at large sizes.
+- **Single face, multiple weights.** Noto Sans carries the entire UI at 300 / 400 / 500 / 700. Weight-300 headings on dark canvas create an elegant, airy hero.
+- **All-caps for semantic labels.** Badges use `{typography.caption}` with uppercase CSS transform.
+- **Buttons are 700-weight.** The only bold text outside headings — CTAs must stand out against body copy.
+- **Editorial serif layer is optional.** Use `{typography.editor-*}` tokens for content-rich pages only.
 
 ## Layout
 
 ### Spacing System
-- **Base unit**: 8px
-- **Tokens**: `{spacing.xxs}` 2px · `{spacing.xs}` 4px · `{spacing.sm}` 8px · `{spacing.md}` 12px · `{spacing.lg}` 16px · `{spacing.xl}` 24px · `{spacing.xxl}` 32px · `{spacing.section}` 96px
-- **Section padding**: `{spacing.section}` 96px between major page bands on desktop, collapsing to `{spacing.xxl}` 32px–48px on mobile.
-- **Card internal padding**: `{spacing.xxl}` 32px on pricing cards and large feature cards; `{spacing.lg}` 16px on compact tag/badge groups.
-- **Form field padding**: `{spacing.sm}` 8px vertical, `{spacing.md}` 12px horizontal — matches the text-input token directly.
+- **Base unit**: 4 px.
+- **Tokens**: `{spacing.xxs}` 2 px · `{spacing.xs}` 4 px · `{spacing.sm}` 8 px · `{spacing.md}` 12 px · `{spacing.lg}` 16 px · `{spacing.xl}` 20 px · `{spacing.2xl}` 24 px · `{spacing.3xl}` 32 px · `{spacing.4xl}` 48 px.
+- **Section padding**: hero uses `{spacing.4xl}` 48 px top/bottom on desktop.
 
 ### Grid & Container
-- Marketing pages use a wide centered container with generous outer gutters; max width sits around 1152px (one of the extracted breakpoints), with content inside flexing across 12 conceptual columns.
-- Pricing splits into a 4-tier card row at desktop, collapsing to 2-up at mid widths and 1-up on mobile.
-- The contact form uses a 2-column field layout (first/last name side-by-side) inside a single light-canvas panel.
-- Breakpoints stair-step at 1440 → 1152 → 992 → 768 → 640 → 576 — see Responsive Behavior.
+- **Container default**: 1140 px max-width (Infima `--ifm-container-width`).
+- **Container wide**: 1320 px max-width (`--ifm-container-width-xl`).
+- Marketing layout: 1-col centred hero → 3/4-col feature grid → 2-col screenshot row → 4-col value prop → centred CTA.
+- Feature cards (Movies, Shows, Music, etc.): arranged in a 3-column grid at desktop, collapsing to 2-col at tablet, 1-col at mobile.
 
-### Whitespace Philosophy
-The dark canvas absorbs whitespace differently from light. On dark surfaces the brand stretches `{spacing.section}` generously between bands so floating mascots and starfield textures have room to breathe. On light surfaces (pricing, contact) the whitespace tightens — content density takes priority because users are scanning, comparing, and acting. Rule of thumb: hero and feature surfaces are spacious, transactional surfaces are dense.
+### Responsive Strategy
+
+#### Breakpoints
+
+| Name | Width | Key Changes |
+|---|---|---|
+| Mobile | < 768px | 1-col grids; hamburger nav; reduced heading sizes. |
+| Tablet | 768–996px | 2-col feature grid. |
+| Desktop | ≥ 997px | Full 3/4-col grids; expanded nav. |
+
+#### Touch Targets
+- Buttons render ~44 px tall. WCAG AAA at all viewports.
+- Nav items have `{spacing.sm}` vertical padding for comfortable tap targets.
+
+#### Collapsing Strategy
+- Nav: full link row at desktop (left logo, centre links, right search/CTA). Hamburger sidebar at mobile (83vw width).
+- Feature grid: 3-col → 2-col → 1-col.
+- Screenshot carousel: side-by-side at desktop, swipeable stack at mobile.
+
+#### Image Behavior
+- Screenshot images: contained inside card frames with rounded corners.
+- Feature icons: SVG illustrations at consistent sizes inside transparent cards.
+- Logo SVG: white + gradient mark, responsive width.
 
 ## Elevation & Depth
 
 | Level | Treatment | Use |
 |---|---|---|
-| 0 | Flat on canvas, no shadow | Default surface, dark or light |
-| 1 | `box-shadow: rgba(0,0,0,0.08) 0 2px 8px 0` | Inverted buttons on dark canvas (light fill lifting off dark surface) |
-| 2 | `box-shadow: rgba(0,0,0,0.1) 0 10px 15px -3px, rgba(0,0,0,0.1) 0 4px 6px -4px` | Floating cards on light canvas, modals |
-| 3 | `box-shadow: rgb(21,15,35) 0 0 8px 6px` | Glow halo around primary CTA on dark hero — the dark color itself becomes the shadow, creating a vignette of canvas around the button |
-| 4 | `box-shadow: rgba(0,0,0,0.18) 0 0.5rem 1.5rem` | Pressed inverted button on dark canvas |
+| Level 0 — Flat | No shadow, no border. | Default — most surfaces. |
+| Level 1 — Hairline | 1 px solid `{colors.hairline}` border. | Dividers, table borders, TOC, inputs. |
+| Level 2 — Surface Contrast | Subtle background shift (`{colors.canvas-surface}` or `{colors.canvas-card}`). | Cards, dropdowns, hero, search panel. |
+| Level 3 — Elevated | Background `{colors.canvas-elevated}`. | Footer, toasts. |
+| Drop Shadow (light) | `0 1px 2px 0 #0000001a` (`--ifm-global-shadow-lw`). | Alert banners, pagination. |
+| Drop Shadow (tl) | `0 12px 28px 0 #0003, 0 2px 4px 0 #0000001a` (`--ifm-global-shadow-tl`). | Modals, dropdown menus. |
+| Drop Shadow (md) | `0 5px 40px #0003` (`--ifm-global-shadow-md`). | Elevated cards, dialogs. |
 
-### Decorative Depth
-Sentri's depth doesn't come from drop shadows — it comes from the **starfield texture** on the hero canvas (subtle white-on-violet pinpricks at low opacity), the **floating sticker mascots** (drawn with hand-rendered outlines and saturated fills, layered above the canvas with no shadow), and the **lime squiggly divider** above the footer. These illustrative elements do the work that shadow stacks do in flatter design systems — they tell the eye where one section ends and another begins.
+Jellyfin uses surface contrast (background colour shifts) as its primary elevation cue. Drop-shadows are reserved for overlays and interactive surfaces.
 
 ## Shapes
 
@@ -397,155 +446,121 @@ Sentri's depth doesn't come from drop shadows — it comes from the **starfield 
 
 | Token | Value | Use |
 |---|---|---|
-| `{rounded.xs}` | 4px | Badges, status pills, lime keyword highlight chips |
-| `{rounded.sm}` | 6px | Text inputs, search boxes |
-| `{rounded.md}` | 8px | Primary and inverted buttons, code blocks, select dropdowns |
-| `{rounded.lg}` | 10px | Generic divs, container blocks |
-| `{rounded.xl}` | 12px | Pricing cards, feature cards, navigation pill chrome |
-| `{rounded.xxl}` | 18px | Image containers, large hero illustrations |
-| `{rounded.full}` | 9999px | Avatars, circular icon buttons |
+| `{rounded.none}` | 0px | Icon buttons, editorial surfaces, Wired-mode cards. |
+| `{rounded.sm}` | 4px | Badges, small indicators. |
+| `{rounded.md}` | 8px | Cards, inputs, modals, toasts — default UI chrome. |
+| `{rounded.lg}` | 12px | Larger container surfaces (optional). |
+| `{rounded.pill}` | 30px | Primary and outline buttons — the brand's signature interactive shape. |
+| `{rounded.full}` | 9999px | Avatars, icon containers. |
 
-### Photography Geometry
-The site doesn't use traditional photography — it uses **illustrated stickers and product UI screenshots** in roughly equivalent geometric roles. Product UI mocks sit inside `{rounded.xxl}` 18px containers, often tilted slightly off-axis, against the dark canvas with no border. Sticker mascots have no container at all — they are layered directly on canvas, often overlapping section boundaries to break the grid. Avatar treatments (in customer-logo strips) are simple greyscale wordmarks, not photos.
+Jellyfin's signature is **pill-shaped buttons** (30 px radius) combined with **moderately rounded cards** (8 px). Square geometry is reserved for editorial mode and icon buttons. This contrasts with Wired's all-square approach.
 
 ## Components
 
-> **No hover states documented.** Every spec below shows only Default and Pressed/Active states. Variants are formal entries in the front-matter `components:` block.
-
 ### Buttons
 
-**`button-primary`** — the dominant CTA across light surfaces.
-- Background `{colors.primary}`, text `{colors.on-primary}`, type `{typography.button-cap}` (uppercase, 14px / 700, 0.2px tracking), padding `{spacing.md} {spacing.lg}` (12px 16px), rounded `{rounded.md}`. On dark hero surfaces, add the level-3 glow halo for emphasis.
-- Pressed state lives in `button-primary-pressed`: background flips to `{colors.surface-press-stronger}`, text to `{colors.ink-press}`. The button effectively swaps polarities on press.
+**`button-primary`** — the filled teal CTA.
+- Background `{colors.primary}`, text `{colors.on-primary}`, label `{typography.button-md}` (Noto Sans 19 px / 700), border `1 px solid {colors.primary}`, padding `{spacing.sm} {spacing.3xl}`, shape `{rounded.pill}` 30 px.
 
-**`button-inverted`** — the dominant CTA on dark canvas; visually identical hierarchy, polarity-flipped.
-- Background `{colors.on-primary}` (white), text `{colors.ink-deep}`, same `{typography.button-cap}`, rounded `{rounded.md}`.
-- Pressed in `button-inverted-pressed`: background drops to `{colors.surface-press-light}`, text to `{colors.ink-press}`.
+**`button-outline`** — the white outline CTA.
+- Background transparent, text `{colors.ink}`, 1 px solid `{colors.ink-soft}` border, same typography, shape `{rounded.pill}` 30 px, padding `{spacing.sm} {spacing.3xl}`.
 
-**`button-ghost-on-dark`** — secondary CTA on dark canvas (e.g., "Get Demo" beside "Get Started").
-- Translucent fill `{colors.on-dark-faint}`, text `{colors.on-primary}`, type `{typography.button-cap}`, padding `{spacing.sm}` (8px), rounded `{rounded.xl}`. The translucent fill lets the canvas texture show through.
+**`button-ghost`** — the minimal text CTA.
+- Background transparent, text `{colors.primary}`, label `{typography.button-sm}` (Noto Sans 16 px / 700), padding `{spacing.xs} {spacing.lg}`, shape `{rounded.pill}`.
 
-**`button-violet-token`** — pill-shaped tag/category button used inline in product navs.
-- Background `{colors.accent-violet-mid}`, text `{colors.on-primary}`, type `{typography.button-cap-light}`, padding `{spacing.sm} {spacing.lg}` (8px 16px), rounded `{rounded.xl}`, 1px hairline border in a slightly deeper violet.
-
-**`button-disabled`**
-- Background `{colors.hairline-cloud}`, text `{colors.on-dark-muted}`, otherwise identical to `button-primary`.
+**`button-icon-square`** — the square icon button.
+- Background transparent, text `{colors.ink}`, shape `{rounded.none}`, padding `{spacing.sm}`.
 
 ### Cards & Containers
 
-**`card-pricing`** — the standard tier card on the pricing page.
-- Background `{colors.surface-canvas-light}`, text `{colors.ink-deep}`, padding `{spacing.xxl}` 32px, rounded `{rounded.xl}` 12px, 1px `{colors.hairline-cloud}` border. Headline at top in `{typography.heading-md}`, price in `{typography.display-large}`, feature list in `{typography.body-md}`, primary CTA pinned to the bottom of the card.
+**`card`** — the default content card.
+- Background `{colors.canvas-card}` (`#172138`), text `{colors.ink}`, padding `{spacing.lg}`, shape `{rounded.md}` 8 px. No border or shadow — background contrast does the work.
 
-**`card-pricing-featured`** — the dark inverted "featured" tier (Sentri uses the Business tier as the featured one).
-- Background `{colors.surface-night}`, text `{colors.on-primary}`, otherwise identical structure to `card-pricing`. The inversion (rather than an accent-bordered light card) is the brand's distinctive choice — the featured tier reads as the brand's voice, not as a marketing decoration.
+**`card-elevated`** — the elevated surface (footer, overlays).
+- Background `{colors.canvas-elevated}` (`#333c44`), same typography / padding / shape.
 
-**`card-feature-dark`** — large feature-band card on dark surfaces, used to anchor product feature explanations.
-- Background `{colors.ink-deep}`, text `{colors.on-primary}`, padding `{spacing.xxl}` 32px, rounded `{rounded.xxl}` 18px. Often holds a UI mock plus a 27px headline plus 16px body.
-
-**`card-spotlight-violet`** — accent feature card with deeper violet fill, used for "Sentry-only" capability bands.
-- Background `{colors.accent-violet-deep}`, text `{colors.on-primary}`, padding `{spacing.xxl}`, rounded `{rounded.xxl}`. The deep violet reads as a feature highlight without breaking out of the brand's purple family.
-
-**`code-block`** — code/install snippets.
-- Background `{colors.surface-night}`, text `{colors.on-primary}` rendered in `{typography.code}`. Padding `{spacing.lg}` 16px, rounded `{rounded.md}`. On dark canvas the code block is barely lifted from canvas — only the slightly deeper fill differentiates it.
+**`feature-card`** — the transparent feature grid card.
+- Background transparent, text `{colors.ink}`, padding `{spacing.none} {spacing.lg}`. Rendered as text + icon on the dark canvas without a container.
 
 ### Inputs & Forms
 
-**`text-input`** — the contact-form first/last/email/etc. fields.
-- Background `{colors.surface-canvas-light}`, text `{colors.ink-deep}`, type `{typography.body-md}`, padding `{spacing.sm} {spacing.md}` (8px 12px), rounded `{rounded.sm}` 6px, 1px `{colors.hairline-cool}` border.
-- Focus state in `text-input-focused`: same fill, but adds an inset shadow `rgba(0,0,0,0.15) 0 2px 10px inset` to suggest depth pressed inward.
-
-**`select-violet`** — the dropdown variant used inside dark contact panels.
-- Background `{colors.accent-violet-deep}`, text `{colors.on-primary}`, type `{typography.body-md}`, padding `{spacing.sm} {spacing.lg}`, rounded `{rounded.md}`. Distinctive because it doesn't mimic a plain text input — it reads as a deliberate brand surface.
+**`text-input`** — the standard text input.
+- Background `{colors.canvas-surface}` (`#242526`), text `{colors.ink}`, 1 px solid `{colors.hairline}` border, body in `{typography.body-md}`, padding `{spacing.sm} {spacing.lg}`, shape `{rounded.md}` 8 px.
 
 ### Navigation
 
-**`nav-bar-light`** — the standard top nav across light pages (pricing, contact, docs).
-- Background `{colors.surface-canvas-light}`, text `{colors.ink-deep}`, type `{typography.body-md}`. Logo wordmark on the left at ~145×32px, primary nav items mid-bar with dropdown carets, and a `Get Demo` ghost + `Get Started` filled `button-primary` pair on the right. Padding `{spacing.lg} {spacing.xl}` (16px 24px).
+**`nav-bar`** — the dark top nav.
+- Background `{colors.canvas}` (`#000b25`), text `{colors.ink}`, padding `{spacing.sm} {spacing.lg}`, height 60 px. Layout: logo left, link row centre, search/CTA right.
 
-**Top Nav (dark variant)** — used on the home page; same structure but inverted polarity, sitting on `{colors.surface-canvas-dark}`. The right-side button becomes `button-inverted`.
+**`nav-link`** — link items inside nav.
+- Text `{colors.ink}`, set in `{typography.body-md}` (Noto Sans 16 / 500). Active state highlights in `{colors.primary}`.
 
-**Mobile nav** — collapses to a hamburger toggle below the 768px breakpoint; dropdown carets become full-width accordion items.
-
-### Pills, Badges, and Highlight Chips
-
-**`pill-neutral-dark`** — small status / category pill on dark surfaces.
-- Background `{colors.surface-night}`, text `{colors.on-primary}`, type `{typography.caption}` 12px, padding `{spacing.xs} {spacing.sm}` (4px 8px), rounded `{rounded.xs}` 4px.
-
-**`chip-lime-keyword`** — the signature inline highlight wrapping single words inside the hero display headline.
-- Background `{colors.accent-lime}`, text `{colors.ink-deep}`, type matches the surrounding `{typography.display-hero}`, rounded `{rounded.xs}` 4px, padding `0 {spacing.md}` (12px horizontal, 0 vertical so the chip hugs the cap-height).
+**`footer`** — the elevated footer band.
+- Background `{colors.canvas-elevated}` (`#333c44`), text `{colors.ink}`, padding `{spacing.3xl}`. Body in `{typography.body-sm}` (Noto Sans 14 / 400). Links in white, hover in `{colors.primary}`.
 
 ### Signature Components
 
-**Sticker Mascot Layer** — illustrated characters (astronauts, cartoon monsters, traffic cones, debugging avatars) drawn with hand-rendered outlines and saturated `{colors.accent-pink}` / `{colors.accent-lime}` fills. Mascots are placed at section junctions, often overlapping section boundaries by 30–40% of their height, with no container or shadow. They function as decorative section markers and brand personality carriers — never inside cards, never as buttons.
+**`hero-band`** — the dark hero section.
+- Background `{colors.canvas-surface}` (`#242526`), text `{colors.ink}`, padding `{spacing.4xl} {spacing.xl}`. Heading in `{typography.display-hero}` (Noto Sans 33 px / 300), subtitle in `{typography.body-lg}` (Noto Sans 18 px / 400), centred. Two CTAs side by side below.
 
-**Lime Squiggly Footer Divider** — a hand-drawn `{colors.accent-lime}` squiggle line, ~3px stroke, sitting above the footer at full container width. Replaces what would otherwise be a 1px hairline divider with a personality-laden flourish.
+**`hero-subtitle`** — the hero description copy.
+- Text `{colors.ink-soft}` (`#ebedf0`), set in `{typography.body-lg}` (Noto Sans 18 / 400), centred.
 
-**Starfield Hero Texture** — a faint white-on-violet pinprick pattern overlaid on the hero canvas at very low opacity. Adds atmospheric depth to the dark canvas without visible decoration. Implemented as a background image, not as repeating CSS.
+**`section-heading`** — major section title.
+- Text `{colors.ink}`, set in `{typography.display-lg}` (Noto Sans 28 px / 300), centred.
 
-**Window-Chrome UI Mock** — product UI screenshots framed in `{rounded.xxl}` containers, often tilted ±2–3 degrees off axis, positioned overlapping section boundaries on the dark feature pages. The chrome itself is just a rounded image with a subtle hairline; the content is the actual product UI.
+**`hairline-divider`** — the 1 px separator.
+- 1 px solid `{colors.hairline}`.
 
-**`link-on-dark`** — inline links in body copy on dark surfaces. Default text is `{colors.on-primary}` rendered in `{typography.body-md}` with a persistent underline; the underline is the entire affordance, no color change. Sits flush in copy with no padding, no rounded corners beyond the inherited `{rounded.xs}`.
+**`badge`** — semantic label.
+- Background `{colors.primary}`, text `{colors.on-primary}`, set in `{typography.caption}` (Noto Sans 12 / 400, uppercase), shape `{rounded.sm}` 4 px, padding `{spacing.xxs} {spacing.sm}`.
 
-**`link-on-light`** — inline links in body copy on light surfaces. Same shape contract as `link-on-dark`, but text is `{colors.ink-deep}`. Used across pricing, contact, and docs surfaces.
+### Examples (illustrative)
 
-**`footer-light`** — site-wide footer on the light-canvas template (pricing, contact, docs).
-- Background `{colors.surface-canvas-light}`, text `{colors.ink-deep}`, type `{typography.caption}`, padding `{spacing.xxl} {spacing.xl}` (32px 24px). Topped by the lime squiggly divider — see Signature Components. Holds three to four columns of link groups, social icons in a horizontal strip at the bottom right, and a small legal/copyright row at the very bottom in `{typography.caption}`.
+Each `ex-*` entry references brand-native primitives so downstream consumers render consistent surfaces.
+
+**`ex-pricing-tier`** — Default pricing tier card with canvas-card surface and hairline border.
+- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
+
+**`ex-pricing-tier-featured`** — Featured tier with primary border highlight.
+- Properties: `backgroundColor`, `textColor`, `borderColor`, `rounded`, `padding`
+
+**`ex-app-shell-row`** — Sidebar nav row inside the app shell. Active state uses brand primary as the indicator.
+- Properties: `backgroundColor`, `activeIndicator`, `rounded`, `padding`
+
+**`ex-data-table-cell`** — Default data-table th + td chrome.
+- Properties: `headerBackground`, `headerTypography`, `bodyTypography`, `cellPadding`, `rowBorder`
+
+**`ex-auth-form-card`** — Sign-in / sign-up card on canvas-card surface.
+- Properties: `backgroundColor`, `rounded`, `padding`
+
+**`ex-modal-card`** — Modal dialog on canvas-surface with elevated shadow.
+- Properties: `backgroundColor`, `rounded`, `padding`
+
+**`ex-empty-state-card`** — Empty-state illustration frame.
+- Properties: `backgroundColor`, `rounded`, `padding`, `captionTypography`
+
+**`ex-toast`** — Toast notification on elevated surface.
+- Properties: `backgroundColor`, `rounded`, `padding`, `typography`
+
+**`ex-page-header`** — Marketing page hero section.
+- Properties: `backgroundColor`, `textColor`, `padding`, `textAlign`
+
 
 ## Do's and Don'ts
 
 ### Do
-- Reserve `{colors.accent-lime}` for keyword-highlight chips inside display headlines and the footer squiggle divider — never use it as a button background, never as body text.
-- Pair every `button-primary` with `{typography.button-cap}` in uppercase with 0.2px tracking — the cadence is part of the brand, not a stylistic option.
-- Treat the dark canvas (`{colors.surface-canvas-dark}`) and light canvas (`{colors.surface-canvas-light}`) as two complete worlds — let one own marketing/feature pages and the other own transactional pages, with no half-measures.
-- Use sticker mascots to break section boundaries — let them overlap, tilt, and float; constraining them inside cards drains their personality.
-- Use `card-pricing-featured` (dark inverted tier) instead of an accent-bordered light tier for the featured pricing column.
-- Default body line-height to 1.5 on functional UI surfaces and 2.0 on marketing surfaces — the difference is intentional.
+- Use `{colors.primary}` (`#007ca6`) for all filled CTAs, active links, and interactive highlights. The teal-blue against the dark-navy canvas IS the brand signature.
+- Set hero headings in `{typography.display-hero}` (Noto Sans 33 px weight 300) centred on the dark surface. The light weight on dark canvas creates the brand's airy, open feel.
+- Use `{rounded.pill}` 30 px on all primary and outline CTAs. The pill shape is Jellyfin's signature interactive geometry.
+- Layer surfaces by background colour, not shadows: canvas → surface → card → elevated.
+- Keep the brand gradient (`#AA5CC3` → `#00A4DC`) reserved for the logo mark only. Never use it as a UI chrome gradient.
+- Use Noto Sans at weights 300 (headings), 400 (body), 500 (nav), 700 (CTAs) across the entire UI.
 
 ### Don't
-- Don't introduce additional accent colors beyond `{colors.accent-lime}` and `{colors.accent-pink}` — adding teal, orange, or yellow dilutes the violet-and-lime signature.
-- Don't apply drop shadows to cards on dark canvas — depth comes from texture and illustration, not from light-on-dark shadows that would muddy the violet.
-- Don't use `{typography.display-hero}` (88px) for anything except the marketing hero — even sub-pages cap at `{typography.display-large}` (60px).
-- Don't put body text in `{colors.accent-lime}` — it's a chip color, not a type color, and breaks contrast at body sizes.
-- Don't soften the `{colors.primary}` button to a brand-violet — the near-black is the point; it reads as the most authoritative action regardless of canvas polarity.
-- Don't put illustrated mascots inside cards or constrained containers — their job is to break grid, not occupy it.
-
-## Responsive Behavior
-
-### Breakpoints
-
-| Name | Width | Key Changes |
-|---|---|---|
-| 4K / Wide | ≥ 1440px | Full 4-tier pricing row, hero illustration sits beside headline at full scale |
-| Desktop | 1152–1440px | Default content max-width sits at 1152px, all 4-tier patterns hold |
-| Laptop | 992–1151px | Pricing collapses to 2-up rows, nav remains horizontal |
-| Tablet | 768–991px | 2-column feature grids collapse to 1-up; nav still horizontal but compresses |
-| Mobile Large | 640–767px | Hamburger nav appears; hero display drops from 88px to ~56px |
-| Mobile | 576–639px | Single-column everything; section padding collapses from 96px to 32–48px |
-| Small Mobile | 1–575px | Compact mode; sticker mascots drop in size or hide entirely to preserve content priority |
-
-### Touch Targets
-- Primary buttons hit a minimum 44×44px on mobile (12px vertical padding × 16px font + line-height = ~44px). Maintains WCAG AAA touch-target spec.
-- Pill tags and badges in nav and feature surfaces stay above 32×32px even at small mobile breakpoints; they enlarge if necessary rather than shrink.
-- Form fields stay at the 44px minimum height on mobile contact pages.
-
-### Collapsing Strategy
-- **Hero display headline** drops from 88px → 60px → 48px across the breakpoint stair; the lime keyword chip preserves padding and corner radius at every step.
-- **Pricing tiers** stair-step from 4-up → 2-up → 1-up. The featured dark tier always remains visually distinguished — it never loses its inversion at any breakpoint.
-- **Sticker mascots** are progressively de-emphasized: at desktop they overlap section boundaries; at tablet they shift to inline within section padding; at small mobile most are hidden via `display: none` to keep the content scan-able.
-- **Top nav** collapses to a hamburger below 768px; the dropdown menu uses the same canvas polarity as the page (dark on hero, light on pricing).
-- **Code blocks** preserve 16px Monaco at every breakpoint — they never scale down — but switch to horizontal scroll on overflow rather than wrap.
-
-### Image Behavior
-- Product UI mocks scale proportionally; on small mobile they often anchor to one edge with horizontal overflow rather than shrink to illegibility.
-- Sticker mascots scale by 50–70% at mobile breakpoints, preserving their personality but ceding screen space to content.
-- The lime footer squiggle scales the SVG to container width while keeping stroke width visually consistent.
-
-## Iteration Guide
-
-1. Focus on ONE component at a time. Don't rebuild the system — extend it.
-2. Reference component names and tokens directly (`{colors.accent-lime}`, `{button-primary}-pressed`, `{rounded.xxl}`) — do not paraphrase.
-3. Run `npx @google/design.md lint DESIGN.md` after edits — `broken-ref`, `contrast-ratio`, and `orphaned-tokens` warnings flag issues automatically.
-4. Add new variants as separate component entries (`-pressed`, `-disabled`, `-focused`) — do not bury them inside prose.
-5. Default to `{typography.body-md}` for product UI body and `{typography.body-lg}` for marketing prose — the leading difference is intentional and load-bearing.
-6. Keep `{colors.accent-lime}` scarce — one lime element per viewport. The signature only works because it's rare.
-7. When polarizing a new surface, choose one canvas (`{colors.surface-canvas-dark}` or `{colors.surface-canvas-light}`) and commit to it; don't blend the two on a single page band.
+- Don't use light mode as the default. The brand canvas is `#000b25` — a very dark navy, not white.
+- Don't deviate from the single-typeface system. Noto Sans carries the brand; serifs belong only in the editorial layer.
+- Don't use square corners on primary CTAs. Jellyfin's buttons are pill-shaped (`{rounded.pill}` 30 px).
+- Don't apply the purple-cyan gradient to buttons, backgrounds, or decorative UI chrome. The gradient is logo-only.
+- Don't add drop-shadows to cards. Surface contrast (background colour shifts) is the elevation system.
+- Don't use the editorial serif layer (`WiredDisplay` / `BreveText`) on marketing/surface UI. Reserve serifs for content-rich editorial pages only.
