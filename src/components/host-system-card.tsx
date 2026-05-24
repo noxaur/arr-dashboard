@@ -8,7 +8,7 @@ export function HostSystemCard({ data }: { data: DashboardResponse | null }) {
       <h2 className="eyebrow mb-4">Host System</h2>
       <article className="card p-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: "oklch(62% 0.14 340 / 0.18)" }}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-md">
             <JellyfinIcon className="h-5 w-5" />
           </div>
           <div>

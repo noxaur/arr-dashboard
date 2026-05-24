@@ -39,7 +39,7 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
     <article className="card flex flex-col gap-3 p-4">
       <div className="flex items-start justify-between">
         <Link href={`/${data.id}`} className="flex items-center gap-3">
-          <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: `${service.color.slice(0, -1)} / 0.18)` }}>
+          <div className="flex h-9 w-9 items-center justify-center rounded-md">
             {ServiceIcon && <ServiceIcon className="h-5 w-5" />}
           </div>
           <div>

@@ -31,7 +31,7 @@ export function ActivityCard({
   return (
     <article className="card flex flex-col gap-3 p-4">
       <Link href="/events" className="flex items-center gap-3">
-        <div className="flex h-9 w-9 items-center justify-center rounded-md" style={{ backgroundColor: "oklch(62% 0.14 340 / 0.18)" }}>
+        <div className="flex h-9 w-9 items-center justify-center rounded-md">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="oklch(62% 0.14 340)" strokeWidth="2">
             <circle cx="12" cy="12" r="10" />
             <polyline points="12 6 12 12 16 14" />
