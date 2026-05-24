@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { Tooltip } from "@/components/tooltip";
 
 export function ServiceActions({ serviceId, hasQueue }: { serviceId: string; hasQueue: boolean }) {
   const [loading, setLoading] = useState<string | null>(null);
@@ -49,29 +50,35 @@ export function ServiceActions({ serviceId, hasQueue }: { serviceId: string; has
     <div className="flex flex-col gap-1">
       <div className="flex flex-wrap gap-2 pt-1">
         {hasQueue && (
-          <button
-            className="btn-ghost"
-            onClick={() => handleAction("pause")}
-            disabled={loading === "pause"}
-          >
-            {loading === "pause" ? "..." : "Pause"}
-          </button>
+          <Tooltip content="Pause active downloads">
+            <button
+              className="btn-ghost"
+              onClick={() => handleAction("pause")}
+              disabled={loading === "pause"}
+            >
+              {loading === "pause" ? "..." : "Pause"}
+            </button>
+          </Tooltip>
         )}
-        <button
-          className="btn-ghost"
-          onClick={() => handleAction("refresh")}
-          disabled={loading === "refresh"}
-        >
-          {loading === "refresh" ? "..." : "Refresh"}
-        </button>
-        {(serviceId === "radarr" || serviceId === "sonarr") && (
+        <Tooltip content="Refresh service data">
           <button
             className="btn-ghost"
-            onClick={() => handleAction("search")}
-            disabled={loading === "search"}
+            onClick={() => handleAction("refresh")}
+            disabled={loading === "refresh"}
           >
-            {loading === "search" ? "..." : "Search"}
+            {loading === "refresh" ? "..." : "Refresh"}
           </button>
+        </Tooltip>
+        {(serviceId === "radarr" || serviceId === "sonarr") && (
+          <Tooltip content="Search for releases">
+            <button
+              className="btn-ghost"
+              onClick={() => handleAction("search")}
+              disabled={loading === "search"}
+            >
+              {loading === "search" ? "..." : "Search"}
+            </button>
+          </Tooltip>
         )}
       </div>
       {feedback && (

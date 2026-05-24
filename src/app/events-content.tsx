@@ -73,7 +73,7 @@ export function EventsContent() {
             </p>
           </div>
         ) : (
-          <div className="card divide-y divide-[var(--border)]" style={{ overflow: "hidden", borderRadius: "var(--radius-xl)" }}>
+          <div className="card divide-y divide-[var(--border)]" style={{ overflow: "hidden" }}>
             {groupedEvents.map((group, gi) => {
               const primary = group.events[0];
               const isGroup = group.count > 1;

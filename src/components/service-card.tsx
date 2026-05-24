@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { ServiceActions } from "@/components/service-actions";
+import { Tooltip } from "@/components/tooltip";
 import { services as serviceConfig } from "@/lib/services";
 import {
   RadarrIcon,
@@ -47,7 +48,9 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
           </div>
         </Link>
         <div className="flex items-center gap-2">
-          <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
+          <Tooltip content={`Status: ${health?.status ?? "unknown"}`}>
+            <span className="status-dot" style={{ backgroundColor: healthColor, boxShadow: `0 0 6px ${healthColor}40` }} />
+          </Tooltip>
           <span className="text-xs text-text-muted">{loading ? "—" : `${health?.responseTime ?? 0}ms`}</span>
         </div>
       </div>
@@ -62,10 +65,12 @@ export function ServiceCard({ data, loading }: { data: DashboardServiceData; loa
 
       <div className="flex items-center gap-4">
         {queue.length > 0 && (
-          <div className="flex items-baseline gap-1.5">
-            <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
-            <span className="text-xs text-text-muted">in queue</span>
-          </div>
+          <Tooltip content="Items in queue">
+            <div className="flex items-baseline gap-1.5">
+              <span className="metric-value text-lg font-semibold text-text-primary">{queue.length}</span>
+              <span className="text-xs text-text-muted">in queue</span>
+            </div>
+          </Tooltip>
         )}
         {disk?.total !== "N/A" && disk?.percent > 0 && (
           <div className="flex flex-1 items-center gap-2">

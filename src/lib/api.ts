@@ -167,7 +167,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       percent,
       usedBytes,
       totalBytes,
-      mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace) })),
+      mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace), usedBytes: m.totalSpace - m.freeSpace, totalBytes: m.totalSpace })),
     };
   } catch {
     return { used: "0 MB", total: "N/A", percent: 0 };
@@ -226,13 +226,13 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
 
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   if (isMock())
-    return mockActivity.filter((a) => a.service === serviceId).slice(0, 200);
+    return mockActivity.filter((a) => a.service === serviceId).slice(0, 5000);
 
   try {
     let res: Response;
 
     if (serviceId === "prowlarr") {
-      res = await arrFetch(serviceId, "/history?pageSize=2000");
+      res = await arrFetch(serviceId, "/history?pageSize=5000");
       if (!res.ok) return [];
       const histData = await res.json();
       const records = (histData.records || []) as any[];
@@ -257,17 +257,17 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
           case "indexerRss":
             type = "refresh";
             title = `${indexerName} RSS`;
-            message = `← ${data.source || "?"} (${data.queryType || "?"}, ${data.queryResults || 0} results)`;
+            message = `\u2190 ${data.source || "?"} (${data.queryType || "?"}, ${data.queryResults || 0} results)`;
             break;
           case "indexerQuery":
             type = "search";
             title = data.query || "Search";
-            message = `→ ${indexerName} (${data.source || "?"}, ${data.queryResults || 0} results)`;
+            message = `\u2192 ${indexerName} (${data.source || "?"}, ${data.queryResults || 0} results)`;
             break;
           case "releaseGrabbed":
             type = "download";
             title = data.grabTitle || "Release grabbed";
-            message = `→ ${indexerName} via ${data.source || "?"}`;
+            message = `\u2192 ${indexerName} via ${data.source || "?"}`;
             break;
         }
 
@@ -281,20 +281,40 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
         };
       });
     } else if (serviceId === "bazarr") {
-      res = await arrFetch(serviceId, "/system/logs?start=0&limit=2000");
+      const [moviesRes, episodesRes] = await Promise.all([
+        arrFetch(serviceId, "/movies/history?start=0&length=5000"),
+        arrFetch(serviceId, "/episodes/history?start=0&length=5000"),
+      ]);
+      const moviesData = moviesRes.ok ? (await moviesRes.json()).data || [] : [];
+      const episodesData = episodesRes.ok ? (await episodesRes.json()).data || [] : [];
+      const allItems = [...moviesData, ...episodesData];
+      allItems.sort((a: any, b: any) => new Date(b.parsed_timestamp || 0).getTime() - new Date(a.parsed_timestamp || 0).getTime());
+      return allItems.map((item: any, i: number) => {
+        const lang = item.language?.name || "";
+        const hi = item.language?.hi ? " HI" : "";
+        const forced = item.language?.forced ? " forced" : "";
+        const mediaTitle = item.title || item.seriesTitle || "Unknown";
+        const episodeInfo = item.seriesTitle && item.episode_number ? ` \u2014 ${item.episode_number} ${item.episodeTitle || ""}` : "";
+        return {
+          id: i,
+          service: serviceId,
+          type: "download" as const,
+          title: `Subtitle: ${mediaTitle}${episodeInfo}`,
+          message: item.description || `${lang}${hi}${forced} subtitles downloaded from ${item.provider || "unknown"}`,
+          timestamp: item.parsed_timestamp || new Date().toISOString(),
+          subtitle: { language: lang, type: (item.language?.hi ? "HI" : item.language?.forced ? "forced" : "normal") },
+          size: item.score,
+          source: item.provider,
+        };
+      });
     } else if (serviceId === "jellyseerr") {
       res = await arrFetch(serviceId, "/request?take=5000&skip=0&sort=added");
-    } else {
-      res = await arrFetch(serviceId, "/history?pageSize=2000");
-    }
+      if (!res.ok) return [];
 
-    if (!res.ok) return [];
-
-    const data = await res.json();
-
-    if (serviceId === "jellyseerr") {
+      const data = await res.json();
       const items = data.results || data.items || [];
       const titleCache = new Map<number, string>();
+
       const statusLabels: Record<number, string> = {
         1: "Pending Approval",
         2: "Approved",
@@ -341,36 +361,57 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
         service: serviceId,
         type: item.status === 3 ? "error" as const : "request" as const,
         title: statusLabels[item.status] || "Request",
-        message: `${mediaTitle}${seasonInfo} — requested by ${item.requestedBy?.displayName || "Unknown"}`,
+        message: `${mediaTitle}${seasonInfo} \u2014 requested by ${item.requestedBy?.displayName || "Unknown"}`,
         timestamp: item.createdAt || new Date().toISOString(),
       }));
+    } else {
+      res = await arrFetch(serviceId, "/history?pageSize=5000");
     }
 
-    if (serviceId === "bazarr") {
-      return (data.data || []).map((item: any, i: number) => ({
+    if (!res.ok) return [];
+
+    const events = (await res.json()) as any;
+    const records = (events.records || events || []) as any[];
+
+    return records.map((item: any, i: number) => {
+      const mediaTitle = item.movie?.title || item.series?.title || item.data?.title || item.sourceTitle || "";
+      const eventLabels: Record<string, string> = {
+        downloadFolderImported: "Imported",
+        grabbed: "Downloaded",
+        downloadFailed: "Failed",
+        movieFileDeleted: "Deleted",
+        episodeFileDeleted: "Deleted",
+        movieFileRenamed: "Renamed",
+        episodeFileRenamed: "Renamed",
+        movieInfoUpdated: "Updated",
+        seriesInfoUpdated: "Updated",
+      };
+      const label = eventLabels[item.eventType] || item.eventType || "History";
+      const title = mediaTitle ? `${label}: ${mediaTitle}` : label;
+      const languages = item.languages?.length ? item.languages.map((l: any) => l.name).join(", ") : undefined;
+      const customFormats = item.customFormats?.length ? item.customFormats.map((f: any) => f.name).join(", ") : undefined;
+      return {
         id: i,
         service: serviceId,
-        type: item.action?.includes("download") ? "download" as const : "import" as const,
-        title: item.action || "Subtitle action",
-        message: item.message || item.title || "",
-        timestamp: item.timestamp || new Date().toISOString(),
-      }));
-    }
-
-    const events = (data.records || data || []) as any[];
-    return events
-      .map((item: any, i: number) => ({
-      id: i,
-      service: serviceId,
-      type: item.eventType === "downloadFolderImported" ? "import" as const :
-            item.eventType === "grabbed" ? "download" as const :
-            item.eventType === "downloadFailed" ? "error" as const :
-            item.eventType === "indexerSearch" ? "search" as const :
-            "refresh" as const,
-      title: item.eventType || "History event",
-      message: item.data?.message || item.data?.title || "",
-      timestamp: item.date || new Date().toISOString(),
-    }));
+        type: item.eventType === "downloadFolderImported" ? "import" as const :
+              item.eventType === "grabbed" ? "download" as const :
+              item.eventType === "downloadFailed" ? "error" as const :
+              item.eventType === "indexerSearch" ? "search" as const :
+              "refresh" as const,
+        title,
+        message: item.data?.message || item.data?.title || item.sourceTitle || item.eventType || "",
+        quality: item.quality?.quality?.name,
+        qualityVersion: item.quality?.revision?.version,
+        size: item.data?.size ? formatBytes(item.data.size) : undefined,
+        indexer: item.data?.indexer,
+        downloadClient: item.data?.downloadClient || item.data?.downloadClientName,
+        score: item.customFormatScore,
+        languages,
+        customFormats,
+        releaseGroup: item.data?.releaseGroup,
+        timestamp: item.date || new Date().toISOString(),
+      };
+    });
   } catch {
     return [];
   }

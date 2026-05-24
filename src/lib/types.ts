@@ -20,6 +20,9 @@ export interface ActivityEvent {
   series?: { title: string; season?: number; episode?: number; episodeTitle?: string };
   subtitle?: { language: string; type?: string };
   duration?: string;
+  languages?: string;
+  customFormats?: string;
+  releaseGroup?: string;
 }
 
 export interface EventGroup {
@@ -51,7 +54,7 @@ export interface DiskSpace {
   percent: number;
   usedBytes?: number;
   totalBytes?: number;
-  mounts?: Array<{ path: string; used: string; total: string }>;
+  mounts?: Array<{ path: string; used: string; total: string; usedBytes?: number; totalBytes?: number }>;
 }
 
 export interface SystemInfo {

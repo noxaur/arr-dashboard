@@ -23,9 +23,9 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--bg)]/80 backdrop-blur-sm">
       <div className="mx-auto flex h-14 max-w-[1152px] items-center justify-between px-6">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md" style={{ backgroundColor: "var(--accent-bg)" }}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="h-8 w-8">
-              <text x="16" y="23" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="22" fontWeight="700" fill="var(--text)">J</text>
+              <text x="16" y="23" textAnchor="middle" fontFamily="system-ui, sans-serif" fontSize="22" fontWeight="700" fill="var(--text-primary)">J</text>
             </svg>
           </div>
           <h1 className="text-base font-semibold">*arr Dashboard</h1>

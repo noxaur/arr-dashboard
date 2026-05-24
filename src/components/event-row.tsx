@@ -2,6 +2,7 @@
 import { useState } from "react";
 import type { ActivityEvent } from "@/lib/events";
 import { serviceColors, serviceNames, typeColors, typeIcons, formatTime } from "@/lib/events";
+import { Tooltip } from "@/components/tooltip";
 
 interface EventRowProps {
   group: { events: ActivityEvent[]; count: number };
@@ -64,24 +65,27 @@ export function EventRow({ group, isGroup, hasSearch, onEventClick }: EventRowPr
 
         <div className="flex items-center gap-2 flex-shrink-0">
           {isGroup && !hasSearch && (
-            <span
-              className="rounded px-1.5 py-0.5 text-[10px] font-medium"
-              style={{ backgroundColor: "var(--accent-bg)", color: "var(--accent)" }}
-            >
-              +{group.count - 1}
-            </span>
+            <Tooltip content="More events">
+              <span
+                className="rounded px-1.5 py-0.5 text-[10px] font-medium"
+                style={{ backgroundColor: "var(--accent-bg)", color: "var(--accent)" }}
+              >
+                +{group.count - 1}
+              </span>
+            </Tooltip>
           )}
           {isGroup && showInfo && !hasSearch && (
-            <button
-              onClick={(e) => { e.stopPropagation(); onEventClick(primary); }}
-              className="flex h-5 w-5 items-center justify-center rounded text-xs"
-              style={{ color: "var(--text-muted)" }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-hover)"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
-              title="View details"
-            >
-              ⓘ
-            </button>
+            <Tooltip content="View details">
+              <button
+                onClick={(e) => { e.stopPropagation(); onEventClick(primary); }}
+                className="flex h-5 w-5 items-center justify-center rounded text-xs"
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "var(--surface-hover)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.backgroundColor = "transparent"; }}
+              >
+                ⓘ
+              </button>
+            </Tooltip>
           )}
           <span className="text-xs flex-shrink-0" style={{ color: "var(--text-muted)" }}>
             {formatTime(primary.timestamp)}

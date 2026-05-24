@@ -97,7 +97,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
             <span
               className="rounded px-1.5 py-0.5 text-xs font-medium"
               style={{
-                backgroundColor: `${serviceColors[event.service].replace(")", " / 0.15)")}`,
+                backgroundColor: "var(--accent-bg)",
                 color: serviceColors[event.service],
               }}
             >
@@ -106,7 +106,7 @@ export function EventModal({ event, onClose }: EventModalProps) {
             <span
               className="rounded px-1.5 py-0.5 text-xs font-medium"
               style={{
-                backgroundColor: `${typeColors[event.type].replace(")", " / 0.1)")}`,
+                backgroundColor: "var(--accent-bg)",
                 color: typeColors[event.type],
               }}
             >
