@@ -144,10 +144,10 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       return { used: "0 MB", total: "N/A", percent: 0 };
     }
 
-    const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
+    const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
     for (const mount of data) {
-      if (!uniqueDisks.has(mount.totalSpace)) {
-        uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+      if (!uniqueDisks.has(mount.path)) {
+        uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
     }
 
@@ -224,15 +224,17 @@ export async function getQueue(serviceId: string): Promise<QueueItem[]> {
   }
 }
 
+const ACTIVITY_PAGE_SIZE = 200;
+
 export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
   if (isMock())
-    return mockActivity.filter((a) => a.service === serviceId).slice(0, 5000);
+    return mockActivity.filter((a) => a.service === serviceId).slice(0, ACTIVITY_PAGE_SIZE);
 
   try {
     let res: Response;
 
     if (serviceId === "prowlarr") {
-      res = await arrFetch(serviceId, "/history?pageSize=5000");
+      res = await arrFetch(serviceId, `/history?pageSize=${ACTIVITY_PAGE_SIZE}`);
       if (!res.ok) return [];
       const histData = await res.json();
       const records = (histData.records || []) as any[];
@@ -282,8 +284,8 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
       });
     } else if (serviceId === "bazarr") {
       const [moviesRes, episodesRes] = await Promise.all([
-        arrFetch(serviceId, "/movies/history?start=0&length=5000"),
-        arrFetch(serviceId, "/episodes/history?start=0&length=5000"),
+        arrFetch(serviceId, `/movies/history?start=0&length=${ACTIVITY_PAGE_SIZE}`),
+        arrFetch(serviceId, `/episodes/history?start=0&length=${ACTIVITY_PAGE_SIZE}`),
       ]);
       const moviesData = moviesRes.ok ? (await moviesRes.json()).data || [] : [];
       const episodesData = episodesRes.ok ? (await episodesRes.json()).data || [] : [];
@@ -308,7 +310,7 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
         };
       });
     } else if (serviceId === "jellyseerr") {
-      res = await arrFetch(serviceId, "/request?take=5000&skip=0&sort=added");
+      res = await arrFetch(serviceId, `/request?take=${ACTIVITY_PAGE_SIZE}&skip=0&sort=added`);
       if (!res.ok) return [];
 
       const data = await res.json();
@@ -365,7 +367,7 @@ export async function getActivity(serviceId: string): Promise<ActivityEvent[]> {
         timestamp: item.createdAt || new Date().toISOString(),
       }));
     } else {
-      res = await arrFetch(serviceId, "/history?pageSize=5000");
+      res = await arrFetch(serviceId, `/history?pageSize=${ACTIVITY_PAGE_SIZE}`);
     }
 
     if (!res.ok) return [];
