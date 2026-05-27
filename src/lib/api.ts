@@ -167,6 +167,7 @@ export async function getDiskSpace(serviceId: string): Promise<DiskSpace> {
       percent,
       usedBytes,
       totalBytes,
+      path: data.map((m) => m.path).sort().join("|"),
       mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace), usedBytes: m.totalSpace - m.freeSpace, totalBytes: m.totalSpace })),
     };
   } catch {
