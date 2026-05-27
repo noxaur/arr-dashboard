@@ -119,6 +119,7 @@ export class ArrAdapter implements ServiceAdapter {
         percent,
         usedBytes,
         totalBytes,
+        path: data.map(m => m.path).sort().join("|"),
         mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace) })),
       };
     } catch {

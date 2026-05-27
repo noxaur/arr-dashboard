@@ -61,14 +61,14 @@ export async function getDashboardData(): Promise<DashboardResponse> {
   const totalQueue = services.flatMap((s) => s.queue).length;
   const activeDownloads = services.flatMap((s) => s.queue).filter((q) => q.status === "downloading").length;
   const healthAlerts = services.filter((s) => s.health.status === "warning" || s.health.status === "error").length;
-  const seenDiskTotals = new Set<number>();
+  const seenDiskPaths = new Set<string>();
   let totalDiskUsed = 0;
   let totalDiskSize = 0;
   for (const s of services) {
-    if (s.disk?.totalBytes != null && !seenDiskTotals.has(s.disk.totalBytes)) {
-      seenDiskTotals.add(s.disk.totalBytes);
+    if (s.disk?.path !== undefined && !seenDiskPaths.has(s.disk.path)) {
+      seenDiskPaths.add(s.disk.path);
       totalDiskUsed += s.disk.usedBytes ?? 0;
-      totalDiskSize += s.disk.totalBytes;
+      totalDiskSize += s.disk.totalBytes ?? 0;
     }
   }
 

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Rubik } from "next/font/google";
+import { Noto_Sans } from "next/font/google";
 import "./globals.css";
 
-const rubik = Rubik({
-  subsets: ["latin", "hebrew"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-rubik",
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-noto-sans",
   display: "swap",
 });
 
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className={rubik.variable}>
+    <html lang="en" suppressHydrationWarning className={notoSans.variable}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script
