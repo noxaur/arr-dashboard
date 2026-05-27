@@ -35,7 +35,7 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-rubik)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "system-ui", "sans-serif"],
+        sans: ["var(--font-noto-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "system-ui", "sans-serif"],
         mono: ["Monaco", "Menlo", "Ubuntu Mono", "monospace"],
       },
       fontSize: {
