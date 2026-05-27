@@ -16,7 +16,7 @@ describe("GET /api/queues", () => {
     expect(body).toEqual({ error: "Invalid service: invalid" });
   });
   it("accepts valid service id", async () => {
-    vi.mocked(getQueue).mockResolvedValue([{ id: 1, title: "Test", status: "completed" }]);
+    vi.mocked(getQueue).mockResolvedValue([{ id: 1, title: "Test", progress:0 , status: "queued", size: "", sizeLeft: "", eta: "", service: "" }]);
     const request = new Request("http://localhost:5487/api/queues?service=sonarr");
     const response = await GET(request);
     expect(response.status).toBe(200);

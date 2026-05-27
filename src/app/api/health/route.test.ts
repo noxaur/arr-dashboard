@@ -16,7 +16,7 @@ describe("GET /api/health", () => {
     expect(body).toEqual({ error: "Invalid service: invalid" });
   });
   it("accepts valid service id", async () => {
-    vi.mocked(checkHealth).mockResolvedValue({ status: "ok", version: "4.0.0", responseTime: 42 });
+    vi.mocked(checkHealth).mockResolvedValue({ status: "healthy", message: "Service id is healthy", version: "4.0.0", responseTime: 42 });
     const request = new Request("http://localhost:5487/api/health?service=radarr");
     const response = await GET(request);
     expect(response.status).toBe(200);
@@ -24,7 +24,7 @@ describe("GET /api/health", () => {
     expect(body).toEqual({ radarr: { status: "ok", version: "4.0.0", responseTime: 42 } });
   });
   it("works without service parameter", async () => {
-    vi.mocked(checkHealth).mockResolvedValue({ status: "ok", version: "4.0.0", responseTime: 42 });
+    vi.mocked(checkHealth).mockResolvedValue({ status: "healthy", message: "Endpoint works without service parameter", version: "4.0.0", responseTime: 42 });
     const request = new Request("http://localhost:5487/api/health");
     const response = await GET(request);
     expect(response.status).toBe(200);
