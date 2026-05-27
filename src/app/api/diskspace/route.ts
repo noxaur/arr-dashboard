@@ -7,15 +7,15 @@ export async function GET() {
   try {
     const entries = await fetchAllServices<DiskSpace>("disk");
 
-    // Deduplicate by totalBytes — Radarr and Sonarr report the same underlying disk
-    const seenTotals = new Set<number>();
+    // Deduplicate by path — Radarr and Sonarr report the same underlying disk
+    const seenPaths = new Set<string>();
     let totalBytes = 0;
     let usedBytes = 0;
 
     for (const disk of Object.values(entries)) {
-      if (disk.totalBytes !== undefined && !seenTotals.has(disk.totalBytes)) {
-        seenTotals.add(disk.totalBytes);
-        totalBytes += disk.totalBytes;
+      if (disk.path !== undefined && !seenPaths.has(disk.path)) {
+        seenPaths.add(disk.path);
+        totalBytes += disk.totalBytes ?? 0;
         usedBytes += disk.usedBytes ?? 0;
       }
     }

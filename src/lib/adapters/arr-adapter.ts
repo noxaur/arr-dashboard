@@ -99,9 +99,9 @@ export class ArrAdapter implements ServiceAdapter {
       const data: Array<{ path: string; freeSpace: number; totalSpace: number }> = await res.json();
       if (!Array.isArray(data) || data.length === 0) return { used: "0 MB", total: "N/A", percent: 0 };
 
-      const uniqueDisks = new Map<number, { freeSpace: number; totalSpace: number }>();
+      const uniqueDisks = new Map<string, { freeSpace: number; totalSpace: number }>();
       for (const mount of data) {
-        if (!uniqueDisks.has(mount.totalSpace)) uniqueDisks.set(mount.totalSpace, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
+        if (!uniqueDisks.has(mount.path)) uniqueDisks.set(mount.path, { freeSpace: mount.freeSpace, totalSpace: mount.totalSpace });
       }
 
       let totalBytes = 0;
@@ -119,6 +119,7 @@ export class ArrAdapter implements ServiceAdapter {
         percent,
         usedBytes,
         totalBytes,
+        path: data.map(m => m.path).sort().join("|"),
         mounts: data.map(m => ({ path: m.path, used: formatBytes(m.totalSpace - m.freeSpace), total: formatBytes(m.totalSpace) })),
       };
     } catch {
