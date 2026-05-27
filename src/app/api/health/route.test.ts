@@ -7,6 +7,14 @@ vi.mock("@/lib/api", () => ({
   checkHealth: vi.fn(),
 }));
 import { checkHealth } from "@/lib/api";
+
+const healthyRadarr = {
+  status: "healthy" as const,
+  message: "Service id is healthy",
+  version: "4.0.0",
+  responseTime: 42,
+};
+
 describe("GET /api/health", () => {
   it("returns 400 for invalid service id", async () => {
     const request = new Request("http://localhost:5487/api/health?service=invalid");
@@ -16,17 +24,31 @@ describe("GET /api/health", () => {
     expect(body).toEqual({ error: "Invalid service: invalid" });
   });
   it("accepts valid service id", async () => {
-    vi.mocked(checkHealth).mockResolvedValue({ status: "healthy", message: "Service id is healthy", version: "4.0.0", responseTime: 42 });
+    vi.mocked(checkHealth).mockResolvedValue(healthyRadarr);
     const request = new Request("http://localhost:5487/api/health?service=radarr");
     const response = await GET(request);
     expect(response.status).toBe(200);
     const body = await response.json();
-    expect(body).toEqual({ radarr: { status: "ok", version: "4.0.0", responseTime: 42 } });
+    expect(body).toEqual({ radarr: healthyRadarr });
   });
   it("works without service parameter", async () => {
-    vi.mocked(checkHealth).mockResolvedValue({ status: "healthy", message: "Endpoint works without service parameter", version: "4.0.0", responseTime: 42 });
+    const allServicesHealth = {
+      status: "healthy" as const,
+      message: "Endpoint works without service parameter",
+      version: "4.0.0",
+      responseTime: 42,
+    };
+    vi.mocked(checkHealth).mockResolvedValue(allServicesHealth);
     const request = new Request("http://localhost:5487/api/health");
     const response = await GET(request);
     expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toEqual({
+      radarr: allServicesHealth,
+      sonarr: allServicesHealth,
+      prowlarr: allServicesHealth,
+      bazarr: allServicesHealth,
+      jellyseerr: allServicesHealth,
+    });
   });
 });
